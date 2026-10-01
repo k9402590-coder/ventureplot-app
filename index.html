@@ -166,11 +166,53 @@ input::placeholder{color:#a1adbd}
 .sep{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}.sep h3{font-size:15px;margin:0 0 8px}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
 .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,8px);background:#111827;color:#fff;padding:10px 14px;border-radius:12px;opacity:0;transition:.2s;z-index:200;box-shadow:0 12px 30px rgba(15,23,42,.25)}.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Professional venture command center */
+.workspace{padding-bottom:88px}
+.workspacepane{display:none}.workspacepane.active{display:block}
+.hero{
+  margin:14px;border-radius:22px;padding:20px;color:#fff;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(255,255,255,.18),transparent 32%),
+    linear-gradient(135deg,#0f766e,#0f8a6a 48%,#2563eb 135%);
+  box-shadow:0 18px 40px rgba(15,118,110,.18)
+}
+.hero-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.hero h2{margin:4px 0 4px;font-size:25px;letter-spacing:-.7px}.hero p{margin:0;color:rgba(255,255,255,.78);font-size:12px}
+.hero-badge{padding:7px 10px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.11);border-radius:999px;font-size:10px;font-weight:800;white-space:nowrap}
+.progress-wrap{margin-top:18px}.progress-top{display:flex;justify-content:space-between;font-size:11px;font-weight:750;margin-bottom:7px}
+.progress{height:9px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden}.progress>span{display:block;height:100%;width:0;background:#fff;border-radius:999px;transition:.35s}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 14px 12px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;box-shadow:var(--shadow-sm)}
+.kpi .kicon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;margin-bottom:9px;font-size:15px}
+.kpi b{font-size:21px;display:block;letter-spacing:-.45px}.kpi span{display:block;font-size:9px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.kpi.green .kicon{background:#e9f9f1;color:#07855c}.kpi.orange .kicon{background:#fff3e5;color:#d26400}.kpi.blue .kicon{background:#edf4ff;color:#2563eb}.kpi.purple .kicon{background:#f2edff;color:#7048d4}
+.dash-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;padding:0 14px 12px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow-sm)}
+.panel h3{margin:0 0 12px;font-size:16px;letter-spacing:-.25px}.panel-sub{font-size:10px;color:var(--muted);margin-top:-8px;margin-bottom:12px}
+.money-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.money{background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:11px}.money b{display:block;font-size:16px}.money span{font-size:9px;color:var(--muted);font-weight:750}
+.attention{display:grid;gap:8px}.alertrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border-radius:13px;background:#f8fafc;border:1px solid var(--line)}
+.alertrow strong{font-size:12px}.alertrow small{display:block;color:var(--muted);font-size:9px;margin-top:2px}.alertnum{min-width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:850;font-size:12px}
+.alertnum.red{background:#fff0f2;color:#b4233c}.alertnum.amber{background:#fff7df;color:#a87500}.alertnum.blue{background:#edf4ff;color:#2563eb}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.quick{border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px;text-align:left}.quick b{display:block;font-size:12px}.quick span{display:block;font-size:9px;color:var(--muted);margin-top:4px}
+.activity{display:grid;gap:0}.activity-item{display:grid;grid-template-columns:34px 1fr;gap:9px;padding:10px 0;border-bottom:1px solid #edf1f6}.activity-item:last-child{border-bottom:0}.activity-icon{width:32px;height:32px;border-radius:10px;background:#eef6ff;display:grid;place-items:center;font-size:13px}.activity-item b{font-size:11px}.activity-item small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
+.follow-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 14px 10px}.follow-mini{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px}.follow-mini b{font-size:18px;display:block}.follow-mini span{font-size:9px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.moregrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}.morecard{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:var(--shadow-sm)}.morecard h3{margin:0 0 6px;font-size:15px}.morecard p{margin:0 0 12px;font-size:10px;color:var(--muted);line-height:1.45}
+.bottomnav{
+  position:fixed;z-index:80;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,760px);
+  padding:7px 10px calc(7px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);box-shadow:0 -10px 30px rgba(15,23,42,.08)
+}
+.navbtn{border:0;background:transparent;border-radius:12px;padding:7px 4px;color:#718096;font-size:9px;font-weight:800;display:grid;gap:3px;place-items:center}.navbtn i{font-style:normal;font-size:19px;line-height:1}.navbtn.active{color:var(--brand);background:#edf9f5}
+.filterbar{display:flex;gap:7px;overflow-x:auto;padding:0 14px 9px;scrollbar-width:none}.filterbar::-webkit-scrollbar{display:none}.filterbar select,.filterbar input{width:auto;min-width:118px;padding:9px 10px;font-size:11px;background:#fff}
 @media(max-width:720px){
   #ventureList{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}
   .statuses{grid-template-columns:repeat(3,1fr)}
   .dashhead{align-items:flex-start;flex-direction:column}
   .auth{margin-top:18px}
+  .kpi-grid{grid-template-columns:1fr 1fr}.dash-grid{grid-template-columns:1fr}
+  .hero{padding:18px}.hero h2{font-size:22px}.hero-row{align-items:center}
+  .quick-grid{grid-template-columns:1fr 1fr 1fr}.moregrid{grid-template-columns:1fr}
 }
 @media(min-width:900px){
   header{padding-left:max(24px,calc((100vw - 1080px)/2));padding-right:max(24px,calc((100vw - 1080px)/2))}
@@ -194,15 +236,76 @@ input::placeholder{color:#a1adbd}
 <div class="grid2"><div class="card"><h3>Create venture</h3><div class="form"><label>Name</label><input id="newName" placeholder="Green Meadows"><label>Location</label><input id="newLoc" placeholder="Guntur"><button id="createVenture" class="btn primary">Create</button></div></div>
 <div class="card"><h3>Join venture</h3><div class="form"><label>6-character join code</label><input id="joinCode" maxlength="6" placeholder="A1B2C3"><button id="joinVenture" class="btn secondary">Join</button></div></div></div><div id="ventureMsg" class="msg"></div></div></section>
 
-<section id="layout" class="hidden">
+<section id="layout" class="hidden workspace">
 <div class="topbar"><button id="back" class="btn secondary small">‹ Ventures</button><div><b id="vname"></b><div id="vloc" class="muted"></div></div><button id="shareCode" class="btn secondary small">Share code</button></div>
-<div class="stats"><div class="stat"><b id="ctotal">0</b><span>Total</span></div><div class="stat"><b id="cavail">0</b><span>Available</span></div><div class="stat"><b id="chold">0</b><span>Hold</span></div><div class="stat"><b id="cbook">0</b><span>Booked</span></div><div class="stat"><b id="csold">0</b><span>Sold/Reg.</span></div></div>
-<div class="tools"><button id="liveView" class="btn primary small">▦ Digital layout</button><button id="mapView" class="btn secondary small">⚙ Layout setup</button><label id="uploadLabel" class="btn secondary small upload hidden">📄 Change reference PDF<input id="pdfInput" type="file" accept="application/pdf"></label><button id="mark" class="btn secondary small hidden">＋ Add plot area</button><button id="fit" class="btn secondary small hidden">Fit</button><button id="zin" class="btn secondary small hidden">＋</button><button id="zout" class="btn secondary small hidden">−</button></div>
-<div class="legend"><span><i class="dot av"></i>Available</span><span><i class="dot hold"></i>Hold</span><span><i class="dot book"></i>Booked</span><span><i class="dot sold"></i>Sold</span><span><i class="dot reg"></i>Registered</span></div>
-<div id="hint" class="hint">Digital layout: tap only a numbered plot box. Roads, park and empty space are not clickable.</div>
-<div id="cleanViewer" class="cleanviewer"><div id="cleanStage" class="cleanstage"><div id="cleanEmpty" class="cleanempty"><div><div class="big">▦</div><h3>Plots will appear here</h3><p>Owner/manager can use Admin map once to trace plots from the PDF.</p></div></div></div></div>
-<div id="pdfViewer" class="viewer hidden"><div id="empty" class="empty"><div class="big">📐</div><h3>No venture layout uploaded</h3><p>Upload the PDF from iPhone Files.</p></div><div id="stage" class="stage hidden"><canvas id="canvas"></canvas><div id="overlay" class="overlay"></div></div></div>
-<div class="follow"><h3>Upcoming follow-ups · <span style="color:#078b5d;font-size:10px">● Live</span></h3><div id="followups"></div></div>
+
+<div id="dashboardPane" class="workspacepane active">
+  <div class="hero">
+    <div class="hero-row"><div><div class="eyebrow" style="color:#d7fff3">Venture overview</div><h2 id="heroName">Venture dashboard</h2><p id="heroLocation">Live sales and inventory overview</p></div><div class="hero-badge"><span style="color:#7df2c9">●</span> Live</div></div>
+    <div class="progress-wrap"><div class="progress-top"><span>Sales progress</span><span id="salesPct">0%</span></div><div class="progress"><span id="salesBar"></span></div></div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi green"><div class="kicon">▦</div><b id="dashAvailable">0</b><span>Available</span></div>
+    <div class="kpi orange"><div class="kicon">◷</div><b id="dashHold">0</b><span>On Hold</span></div>
+    <div class="kpi blue"><div class="kicon">✓</div><b id="dashBooked">0</b><span>Booked</span></div>
+    <div class="kpi purple"><div class="kicon">⌂</div><b id="dashSold">0</b><span>Sold / Reg.</span></div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="panel"><h3>Financial overview</h3><div class="panel-sub">Calculated from plot dimensions, rate and recorded collections.</div>
+      <div class="money-grid">
+        <div class="money"><b id="inventoryValue">₹0</b><span>Inventory value</span></div>
+        <div class="money"><b id="bookedValue">₹0</b><span>Booked / sold value</span></div>
+        <div class="money"><b id="receivedValue">₹0</b><span>Amount collected</span></div>
+        <div class="money"><b id="pendingValue">₹0</b><span>Estimated pending</span></div>
+      </div>
+    </div>
+    <div class="panel"><h3>Needs attention</h3><div id="attentionList" class="attention"></div></div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="panel"><h3>Quick actions</h3>
+      <div class="quick-grid">
+        <button class="quick" id="quickPlots"><b>▦ Plot map</b><span>Open live inventory</span></button>
+        <button class="quick" id="quickFollow"><b>☑ Follow-ups</b><span>Today's customer calls</span></button>
+        <button class="quick" id="quickShare"><b>↗ Share</b><span>Share venture code</span></button>
+      </div>
+    </div>
+    <div class="panel"><h3>Recent activity</h3><div id="recentActivity" class="activity"></div></div>
+  </div>
+</div>
+
+<div id="plotsPane" class="workspacepane">
+  <div class="stats"><div class="stat"><b id="ctotal">0</b><span>Total</span></div><div class="stat"><b id="cavail">0</b><span>Available</span></div><div class="stat"><b id="chold">0</b><span>Hold</span></div><div class="stat"><b id="cbook">0</b><span>Booked</span></div><div class="stat"><b id="csold">0</b><span>Sold/Reg.</span></div></div>
+  <div class="filterbar"><input id="plotSearch" placeholder="Search plot no."><select id="statusFilter"><option value="">All status</option><option value="available">Available</option><option value="hold">Hold</option><option value="booked">Booked</option><option value="sold">Sold</option><option value="registered">Registered</option></select><select id="facingFilter"><option value="">All facing</option><option>East</option><option>West</option><option>North</option><option>South</option></select></div>
+  <div class="tools"><button id="liveView" class="btn primary small">▦ Digital layout</button><button id="mapView" class="btn secondary small">⚙ Layout setup</button><label id="uploadLabel" class="btn secondary small upload hidden">📄 Change reference PDF<input id="pdfInput" type="file" accept="application/pdf"></label><button id="mark" class="btn secondary small hidden">＋ Add plot area</button><button id="fit" class="btn secondary small hidden">Fit</button><button id="zin" class="btn secondary small hidden">＋</button><button id="zout" class="btn secondary small hidden">−</button></div>
+  <div class="legend"><span><i class="dot av"></i>Available</span><span><i class="dot hold"></i>Hold</span><span><i class="dot book"></i>Booked</span><span><i class="dot sold"></i>Sold</span><span><i class="dot reg"></i>Registered</span></div>
+  <div id="hint" class="hint">Digital layout: tap only a numbered plot box. Roads, park and empty space are not clickable.</div>
+  <div id="cleanViewer" class="cleanviewer"><div id="cleanStage" class="cleanstage"><div id="cleanEmpty" class="cleanempty"><div><div class="big">▦</div><h3>Plots will appear here</h3><p>Owner/manager can use Layout setup once to trace plots from the PDF.</p></div></div></div></div>
+  <div id="pdfViewer" class="viewer hidden"><div id="empty" class="empty"><div class="big">📐</div><h3>No venture layout uploaded</h3><p>Upload the PDF from iPhone Files.</p></div><div id="stage" class="stage hidden"><canvas id="canvas"></canvas><div id="overlay" class="overlay"></div></div></div>
+</div>
+
+<div id="followPane" class="workspacepane">
+  <div class="follow-summary"><div class="follow-mini"><b id="followOverdue">0</b><span>Overdue</span></div><div class="follow-mini"><b id="followToday">0</b><span>Today</span></div><div class="follow-mini"><b id="followUpcoming">0</b><span>Upcoming</span></div></div>
+  <div class="follow"><h3>Customer follow-ups · <span style="color:#078b5d;font-size:10px">● Live</span></h3><div id="followups"></div></div>
+</div>
+
+<div id="morePane" class="workspacepane">
+  <div class="moregrid">
+    <div class="morecard"><h3>Venture access</h3><p>Share the company join code with authorized team members.</p><button id="moreShare" class="btn primary">Share join code</button></div>
+    <div class="morecard"><h3>Layout administration</h3><p>Owner and manager can maintain the plot geometry and reference PDF.</p><button id="moreLayout" class="btn secondary">Open layout setup</button></div>
+    <div class="morecard"><h3>Switch venture</h3><p>Return to your venture portfolio and open another project.</p><button id="moreVentures" class="btn secondary">My ventures</button></div>
+    <div class="morecard"><h3>Account</h3><p id="moreAccount">Signed in to VenturePlot.</p><button id="moreLogout" class="btn danger">Sign out</button></div>
+  </div>
+</div>
+
+<div class="bottomnav">
+  <button class="navbtn active" data-tab="dashboard"><i>⌂</i><span>Dashboard</span></button>
+  <button class="navbtn" data-tab="plots"><i>▦</i><span>Plots</span></button>
+  <button class="navbtn" data-tab="follow"><i>☑</i><span>Follow-ups</span></button>
+  <button class="navbtn" data-tab="more"><i>•••</i><span>More</span></button>
+</div>
 </section>
 
 <div id="sheet" class="sheet hidden"><div id="shade" class="shade"></div><div class="sheetbox"><div class="sheethead"><div><h2 id="sheetTitle">Plot</h2><div id="area" class="muted"></div></div><button id="close" class="btn secondary">×</button></div>
@@ -231,7 +334,7 @@ const indianLocal=v=>{
 };
 const validIndianMobile=v=>/^[6-9][0-9]{9}$/.test(String(v||''));
 const indianE164=v=>validIndianMobile(v)?'+91'+v:null;
-let session=null,mode='login',memberships=[],membership=null,current=null,plots=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,tempStatus='available',viewMode='live';
+let session=null,mode='login',memberships=[],membership=null,current=null,plots=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,tempStatus='available',viewMode='live',workspaceTab='dashboard';
 
 function setMode(m){mode=m;$('#loginTab').classList.toggle('active',m==='login');$('#signupTab').classList.toggle('active',m==='signup');$('#authGo').textContent=m==='login'?'Sign in':'Create account';$('#forgotPassword').classList.toggle('hidden',m!=='login');$('#authMsg').textContent=''}
 function showResetPanel(){
@@ -372,11 +475,16 @@ $('#joinVenture').onclick=async()=>{
 async function openVenture(i){
  membership=memberships[i];current=membership.venture;
  $('#vname').textContent=current.name;$('#vloc').textContent=current.location||'';$('#sub').textContent=current.name;
+ $('#heroName').textContent=current.name;
+ $('#heroLocation').textContent=(current.location||'Location not set')+' · Live sales and inventory overview';
+ $('#moreAccount').textContent='Signed in as '+(session.user.email||'user')+'.';
  const admin=['owner','manager'].includes(membership.role);
  $('#mapView').classList.toggle('hidden',!admin);
+ $('#moreLayout').classList.toggle('hidden',!admin);
  show('#layout');await loadPlots();
  if(current.layout_storage_path)await loadPdfPath(current.layout_storage_path);else emptyLayout();
  setViewMode('live');
+ setWorkspaceTab('dashboard');
  subscribe();
 }
 $('#back').onclick=()=>{cleanup();current=null;membership=null;$('#sub').textContent='Real-time plot management';show('#ventures')};
@@ -389,9 +497,73 @@ $('#shareCode').onclick=async()=>{
 async function loadPlots(){
  const {data,error}=await sb.from('plots').select('*').eq('venture_id',current.id).order('plot_no');
  if(error){toast(error.message);return}
- plots=data||[];counts();renderOverlay();renderCleanLayout();renderFollowups();
+ plots=data||[];counts();renderDashboard();renderOverlay();renderCleanLayout();renderFollowups();
 }
-function counts(){const c=s=>plots.filter(p=>p.status===s).length;$('#ctotal').textContent=plots.length;$('#cavail').textContent=c('available');$('#chold').textContent=c('hold');$('#cbook').textContent=c('booked');$('#csold').textContent=c('sold')+c('registered')}
+function counts(){
+ const n=s=>plots.filter(p=>p.status===s).length;
+ $('#ctotal').textContent=plots.length;$('#cavail').textContent=n('available');$('#chold').textContent=n('hold');$('#cbook').textContent=n('booked');$('#csold').textContent=n('sold')+n('registered');
+ $('#dashAvailable').textContent=n('available');$('#dashHold').textContent=n('hold');$('#dashBooked').textContent=n('booked');$('#dashSold').textContent=n('sold')+n('registered');
+}
+
+const formatINR=value=>{
+ const n=Math.max(0,Number(value)||0);
+ if(n>=10000000)return '₹'+(n/10000000).toFixed(n>=100000000?0:2)+' Cr';
+ if(n>=100000)return '₹'+(n/100000).toFixed(n>=1000000?1:2)+' L';
+ if(n>=1000)return '₹'+(n/1000).toFixed(n>=10000?0:1)+'K';
+ return '₹'+Math.round(n).toLocaleString('en-IN');
+};
+const plotAreaSqYd=p=>{
+ const w=Number(p.width_ft||0),d=Number(p.depth_ft||0);
+ return w&&d?(w*d/9):0;
+};
+const plotValue=p=>plotAreaSqYd(p)*Number(p.rate_per_sqyd||0);
+const localDate=()=>new Date().toISOString().slice(0,10);
+
+function renderDashboard(){
+ const total=plots.length;
+ const sold=plots.filter(p=>['sold','registered'].includes(p.status)).length;
+ const pct=total?Math.round((sold/total)*100):0;
+ $('#salesPct').textContent=pct+'%';
+ $('#salesBar').style.width=pct+'%';
+
+ const inventory=plots.reduce((s,p)=>s+plotValue(p),0);
+ const committed=plots.filter(p=>['booked','sold','registered'].includes(p.status)).reduce((s,p)=>s+plotValue(p),0);
+ const received=plots.reduce((s,p)=>s+Number(p.amount_paid||0),0);
+ $('#inventoryValue').textContent=formatINR(inventory);
+ $('#bookedValue').textContent=formatINR(committed);
+ $('#receivedValue').textContent=formatINR(received);
+ $('#pendingValue').textContent=formatINR(Math.max(0,committed-received));
+
+ const today=localDate();
+ const overdue=plots.filter(p=>p.followup_date&&p.followup_date<today&&p.customer_name).length;
+ const dueToday=plots.filter(p=>p.followup_date===today&&p.customer_name).length;
+ const missing=plots.filter(p=>['hold','booked','sold','registered'].includes(p.status)&&(!p.customer_name||!validIndianMobile(indianLocal(p.customer_mobile)))).length;
+ const holds=plots.filter(p=>p.status==='hold').length;
+ $('#attentionList').innerHTML=
+   '<div class="alertrow"><div><strong>Overdue follow-ups</strong><small>Customers needing immediate contact</small></div><span class="alertnum red">'+overdue+'</span></div>'+
+   '<div class="alertrow"><div><strong>Follow-ups today</strong><small>Scheduled customer conversations</small></div><span class="alertnum blue">'+dueToday+'</span></div>'+
+   '<div class="alertrow"><div><strong>Plots on hold</strong><small>Review and convert or release</small></div><span class="alertnum amber">'+holds+'</span></div>'+
+   '<div class="alertrow"><div><strong>Incomplete customer data</strong><small>Booked/hold plots missing valid contact</small></div><span class="alertnum red">'+missing+'</span></div>';
+
+ const recent=[...plots].filter(p=>p.customer_name||p.status!=='available').sort((a,b)=>String(b.updated_at||b.created_at||'').localeCompare(String(a.updated_at||a.created_at||''))).slice(0,5);
+ const act=$('#recentActivity');
+ if(!recent.length){act.innerHTML='<div class="muted">No activity yet.</div>'}
+ else act.innerHTML=recent.map(p=>{
+   const label=p.status==='registered'?'Registered':p.status==='sold'?'Sold':p.status==='booked'?'Booked':p.status==='hold'?'On hold':'Updated';
+   return '<div class="activity-item"><div class="activity-icon">▦</div><div><b>Plot '+esc(p.plot_no)+' · '+label+'</b><small>'+esc(p.customer_name||'No customer assigned')+'</small></div></div>';
+ }).join('');
+}
+
+function setWorkspaceTab(tab){
+ workspaceTab=tab;
+ const map={dashboard:'#dashboardPane',plots:'#plotsPane',follow:'#followPane',more:'#morePane'};
+ Object.values(map).forEach(s=>$(s).classList.remove('active'));
+ $(map[tab]||map.dashboard).classList.add('active');
+ $('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ window.scrollTo({top:0,behavior:'smooth'});
+ if(tab==='plots')renderCleanLayout();
+ if(tab==='follow')renderFollowups();
+}
 function subscribe(){cleanup();channel=sb.channel('venture-'+current.id).on('postgres_changes',{event:'*',schema:'public',table:'plots',filter:'venture_id=eq.'+current.id},()=>loadPlots()).subscribe()}
 function cleanup(){if(channel)sb.removeChannel(channel);channel=null}
 
@@ -443,7 +615,11 @@ function renderCleanLayout(){
 
  if(!plots.length){empty.classList.remove('hidden');return}
  empty.classList.add('hidden');
- plots.forEach(p=>{
+ const q=($('#plotSearch')?.value||'').trim().toLowerCase();
+ const sf=$('#statusFilter')?.value||'';
+ const ff=$('#facingFilter')?.value||'';
+ const visiblePlots=plots.filter(p=>(!q||String(p.plot_no).toLowerCase().includes(q))&&(!sf||p.status===sf)&&(!ff||p.facing===ff));
+ visiblePlots.forEach(p=>{
    const el=document.createElement('div');
    el.className='cleanplot '+(p.status||'available');
    Object.assign(el.style,{left:(p.x_pct*w)+'px',top:(p.y_pct*h)+'px',width:(p.w_pct*w)+'px',height:(p.h_pct*h)+'px',zIndex:'2'});
@@ -533,11 +709,26 @@ function wa(name,mobile,pno,note){
 $('#whatsapp').onclick=()=>wa($('#cname').value.trim(),$('#mobile').value.trim(),$('#pno').value.trim(),$('#fnote').value.trim());
 
 function renderFollowups(){
- const a=plots.filter(p=>p.followup_date&&p.customer_name).sort((x,y)=>String(x.followup_date).localeCompare(String(y.followup_date))).slice(0,20),el=$('#followups');
+ const today=localDate();
+ const all=plots.filter(p=>p.followup_date&&p.customer_name).sort((x,y)=>String(x.followup_date).localeCompare(String(y.followup_date)));
+ $('#followOverdue').textContent=all.filter(p=>p.followup_date<today).length;
+ $('#followToday').textContent=all.filter(p=>p.followup_date===today).length;
+ $('#followUpcoming').textContent=all.filter(p=>p.followup_date>today).length;
+ const a=all.slice(0,40),el=$('#followups');
  if(!a.length){el.innerHTML='<p class="muted">No follow-ups scheduled.</p>';return}
- el.innerHTML=a.map(p=>{const d=new Date(p.followup_date+'T00:00:00');return '<div class="fitem"><div class="fdate"><b>'+String(d.getDate()).padStart(2,'0')+'</b>'+d.toLocaleString('en',{month:'short'})+'</div><div><strong>Plot '+esc(p.plot_no)+' · '+esc(p.customer_name)+'</strong><small>'+esc(p.followup_note||'Follow-up')+'</small></div><button class="btn wa small" data-id="'+p.id+'">WhatsApp</button></div>'}).join('');
+ el.innerHTML=a.map(p=>{const d=new Date(p.followup_date+'T00:00:00');const timing=p.followup_date<today?'Overdue':p.followup_date===today?'Today':'Upcoming';return '<div class="fitem"><div class="fdate"><b>'+String(d.getDate()).padStart(2,'0')+'</b>'+d.toLocaleString('en',{month:'short'})+'</div><div><strong>Plot '+esc(p.plot_no)+' · '+esc(p.customer_name)+'</strong><small>'+timing+' · '+esc(p.followup_note||'Follow-up')+'</small></div><button class="btn wa small" data-id="'+p.id+'">WhatsApp</button></div>'}).join('');
  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.id);wa(p.customer_name,p.customer_mobile,p.plot_no,p.followup_note)})
 }
+
+$('.navbtn').forEach(b=>b.onclick=()=>setWorkspaceTab(b.dataset.tab));
+$('#quickPlots').onclick=()=>setWorkspaceTab('plots');
+$('#quickFollow').onclick=()=>setWorkspaceTab('follow');
+$('#quickShare').onclick=()=>$('#shareCode').click();
+$('#moreShare').onclick=()=>$('#shareCode').click();
+$('#moreVentures').onclick=()=>$('#back').click();
+$('#moreLogout').onclick=()=>$('#logout').click();
+$('#moreLayout').onclick=()=>{setWorkspaceTab('plots');setTimeout(()=>setViewMode('map'),80)};
+['#plotSearch','#statusFilter','#facingFilter'].forEach(s=>$(s).addEventListener('input',renderCleanLayout));
 boot();
 </script>
 </body>
