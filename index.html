@@ -912,7 +912,7 @@ function renderFollowups(){
  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.id);wa(p.customer_name,p.customer_mobile,p.plot_no,p.followup_note)})
 }
 
-$('.navbtn').forEach(b=>b.onclick=()=>setWorkspaceTab(b.dataset.tab));
+qsa('.navbtn').forEach(b=>b.onclick=()=>setWorkspaceTab(b.dataset.tab));
 $('#heroOpenPlots').onclick=()=>setWorkspaceTab('plots');
 $('#statusOpenPlots').onclick=()=>setWorkspaceTab('plots');
 $('#attentionOpen').onclick=()=>setWorkspaceTab('follow');
