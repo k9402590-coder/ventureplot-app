@@ -70,6 +70,11 @@ input::placeholder{color:#a1adbd}
 .linkbtn{border:0;background:transparent;color:var(--blue);padding:2px 0 5px;text-align:right;font-weight:750;font-size:12px}
 .linkbtn:disabled{color:#94a3b8}
 .resetbox{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.phonefield{display:grid;grid-template-columns:70px 1fr;align-items:stretch;border:1px solid #d9e1ec;border-radius:13px;background:#fff;overflow:hidden;transition:.18s}
+.phonefield:focus-within{border-color:#7aa8ff;box-shadow:0 0 0 4px rgba(37,99,235,.10)}
+.phoneprefix{display:flex;align-items:center;justify-content:center;background:#f8fafc;border-right:1px solid var(--line);font-weight:800;color:#334155}
+.phonefield input{border:0!important;border-radius:0!important;box-shadow:none!important}
+.phonehint{font-size:10px;color:var(--muted);margin-top:-3px}
 .msg{color:#be123c;font-size:12px;min-height:16px;margin-top:8px;line-height:1.35}
 
 /* Dashboard */
@@ -203,7 +208,7 @@ input::placeholder{color:#a1adbd}
 <div id="sheet" class="sheet hidden"><div id="shade" class="shade"></div><div class="sheetbox"><div class="sheethead"><div><h2 id="sheetTitle">Plot</h2><div id="area" class="muted"></div></div><button id="close" class="btn secondary">×</button></div>
 <div class="statuses"><button data-s="available">Available</button><button data-s="hold">Hold</button><button data-s="booked">Booked</button><button data-s="sold">Sold</button><button data-s="registered">Registered</button></div>
 <div class="form"><div class="grid2"><div><label>Plot number *</label><input id="pno"></div><div><label>Facing</label><select id="facing"><option>East</option><option>West</option><option>North</option><option>South</option></select></div><div><label>Width (ft)</label><input id="width" type="number" step="0.01"></div><div><label>Depth (ft)</label><input id="depth" type="number" step="0.01"></div><div><label>Road width (ft)</label><input id="road" type="number" step="0.01"></div><div><label>Rate / sq yd</label><input id="rate" type="number" step="1"></div></div>
-<div class="sep"><h3>Customer / plot owner</h3><label>Name</label><input id="cname"><label>Mobile</label><input id="mobile" inputmode="tel"><label>Amount paid</label><input id="paid" type="number"></div>
+<div class="sep"><h3>Customer / plot owner</h3><label>Name</label><input id="cname"><label>Mobile number</label><div class="phonefield"><span class="phoneprefix">+91</span><input id="mobile" inputmode="numeric" autocomplete="tel-national" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile"></div><div class="phonehint">Indian mobile number · exactly 10 digits</div><label>Amount paid</label><input id="paid" type="number"></div>
 <div class="sep"><h3>Follow-up</h3><label>Date</label><input id="fdate" type="date"><label>Note</label><textarea id="fnote" rows="2"></textarea></div>
 <div class="actions"><button id="save" class="btn primary">Save</button><button id="whatsapp" class="btn wa">WhatsApp</button><button id="del" class="btn danger">Delete</button><button id="cancel" class="btn secondary">Close</button></div><div id="plotMsg" class="msg"></div></div></div></div>
 <div id="toast" class="toast"></div>
@@ -219,6 +224,13 @@ const show=id=>{['#auth','#ventures','#layout'].forEach(x=>$(x).classList.add('h
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)};
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const num=v=>v===''?null:Number(v), txt=v=>String(v||'').trim()||null;
+const indianLocal=v=>{
+  const d=String(v||'').replace(/\D/g,'');
+  if(d.length===12&&d.startsWith('91'))return d.slice(2);
+  return d.length>10?d.slice(-10):d;
+};
+const validIndianMobile=v=>/^[6-9][0-9]{9}$/.test(String(v||''));
+const indianE164=v=>validIndianMobile(v)?'+91'+v:null;
 let session=null,mode='login',memberships=[],membership=null,current=null,plots=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,tempStatus='available',viewMode='live';
 
 function setMode(m){mode=m;$('#loginTab').classList.toggle('active',m==='login');$('#signupTab').classList.toggle('active',m==='signup');$('#authGo').textContent=m==='login'?'Sign in':'Create account';$('#forgotPassword').classList.toggle('hidden',m!=='login');$('#authMsg').textContent=''}
@@ -472,7 +484,7 @@ function renderOverlay(){
 }
 
 function openSheet(p){
- tempStatus=p?.status||'available';$('#sheetTitle').textContent=p?'Plot '+p.plot_no:'New plot';$('#pno').value=p?.plot_no||'';$('#facing').value=p?.facing||'East';$('#width').value=p?.width_ft??'';$('#depth').value=p?.depth_ft??'';$('#road').value=p?.road_width_ft??'';$('#rate').value=p?.rate_per_sqyd??'';$('#cname').value=p?.customer_name||'';$('#mobile').value=p?.customer_mobile||'';$('#paid').value=p?.amount_paid??'';$('#fdate').value=p?.followup_date||'';$('#fnote').value=p?.followup_note||'';$('#del').classList.toggle('hidden',!p||!['owner','manager'].includes(membership.role));$('#plotMsg').textContent='';statusBtns();calcArea();$('#sheet').classList.remove('hidden')
+ tempStatus=p?.status||'available';$('#sheetTitle').textContent=p?'Plot '+p.plot_no:'New plot';$('#pno').value=p?.plot_no||'';$('#facing').value=p?.facing||'East';$('#width').value=p?.width_ft??'';$('#depth').value=p?.depth_ft??'';$('#road').value=p?.road_width_ft??'';$('#rate').value=p?.rate_per_sqyd??'';$('#cname').value=p?.customer_name||'';$('#mobile').value=indianLocal(p?.customer_mobile);$('#paid').value=p?.amount_paid??'';$('#fdate').value=p?.followup_date||'';$('#fnote').value=p?.followup_note||'';$('#del').classList.toggle('hidden',!p||!['owner','manager'].includes(membership.role));$('#plotMsg').textContent='';statusBtns();calcArea();$('#sheet').classList.remove('hidden')
 }
 function closeSheet(){$('#sheet').classList.add('hidden');selected=null;pending=null;if(viewMode==='live')renderCleanLayout()}
 $('#close').onclick=closeSheet;$('#cancel').onclick=closeSheet;$('#shade').onclick=closeSheet;
@@ -480,10 +492,26 @@ $$('.statuses button').forEach(b=>b.onclick=()=>{tempStatus=b.dataset.s;statusBt
 function statusBtns(){$$('.statuses button').forEach(b=>b.classList.toggle('sel',b.dataset.s===tempStatus))}
 function calcArea(){const w=Number($('#width').value||0),d=Number($('#depth').value||0);$('#area').textContent=w&&d?(w*d/9).toFixed(2)+' sq yd':''}
 $('#width').oninput=calcArea;$('#depth').oninput=calcArea;
+$('#mobile').oninput=e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,10);
+};
 
 $('#save').onclick=async()=>{
  const plotNo=$('#pno').value.trim();if(!plotNo){$('#plotMsg').textContent='Plot number is required.';return}
- const payload={venture_id:current.id,plot_no:plotNo,width_ft:num($('#width').value),depth_ft:num($('#depth').value),facing:$('#facing').value,road_width_ft:num($('#road').value),rate_per_sqyd:num($('#rate').value),status:tempStatus,customer_name:txt($('#cname').value),customer_mobile:txt($('#mobile').value),amount_paid:num($('#paid').value)||0,followup_date:txt($('#fdate').value),followup_note:txt($('#fnote').value),updated_by:session.user.id};
+ const customerName=txt($('#cname').value);
+ const mobile=$('#mobile').value.trim();
+ const customerRequired=!!customerName||['hold','booked','sold','registered'].includes(tempStatus);
+ if(customerRequired&&!validIndianMobile(mobile)){
+   $('#plotMsg').textContent='Enter a valid Indian mobile number: +91 followed by exactly 10 digits.';
+   $('#mobile').focus();
+   return;
+ }
+ if(mobile&&!validIndianMobile(mobile)){
+   $('#plotMsg').textContent='Mobile number must contain exactly 10 digits and start with 6, 7, 8 or 9.';
+   $('#mobile').focus();
+   return;
+ }
+ const payload={venture_id:current.id,plot_no:plotNo,width_ft:num($('#width').value),depth_ft:num($('#depth').value),facing:$('#facing').value,road_width_ft:num($('#road').value),rate_per_sqyd:num($('#rate').value),status:tempStatus,customer_name:customerName,customer_mobile:indianE164(mobile),amount_paid:num($('#paid').value)||0,followup_date:txt($('#fdate').value),followup_note:txt($('#fnote').value),updated_by:session.user.id};
  let r;
  if(selected&&tempStatus==='hold'&&selected.status!=='hold'){
    r=await sb.rpc('hold_plot',{p_plot_id:selected.id,p_minutes:30});
@@ -496,8 +524,9 @@ $('#save').onclick=async()=>{
 $('#del').onclick=async()=>{if(!selected||!confirm('Delete Plot '+selected.plot_no+'?'))return;const r=await sb.from('plots').delete().eq('id',selected.id);if(r.error){$('#plotMsg').textContent=r.error.message;return}closeSheet();await loadPlots();toast('Plot deleted')};
 
 function wa(name,mobile,pno,note){
- if(!mobile){toast('Add mobile number first');return}
- let x=mobile.replace(/\D/g,'');if(x.length===10)x='91'+x;
+ const local=indianLocal(mobile);
+ if(!validIndianMobile(local)){toast('Enter a valid 10-digit Indian mobile number');return}
+ const x='91'+local;
  const msg='Hi '+(name||'there')+', this is a follow-up regarding Plot '+pno+' at '+current.name+'. '+(note||'Please let us know if you need any details.');
  window.open('https://wa.me/'+x+'?text='+encodeURIComponent(msg),'_blank');
 }
