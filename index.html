@@ -281,9 +281,9 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 </style>
 </head>
 <body>
-<header><div class="brandwrap"><div class="brandlogo">V</div><div class="brandcopy"><h1>VenturePlot</h1><small id="sub">Real-time plot management</small></div></div><button id="logout" class="icon hidden">Sign out</button></header>
+<header><div class="brandwrap"><div class="brandlogo">V</div><div class="brandcopy"><h1>VenturePlot</h1><small id="sub">Real-time plot management · v2.2</small></div></div><button id="logout" class="icon hidden">Sign out</button></header>
 
-<section id="auth" class="hidden">
+<section id="auth">
 <div class="page auth"><div class="card"><div class="big">🏘️</div><h2>Company Login</h2><p class="muted">Owner, manager and employees use the same live system.</p>
 <div class="seg"><button id="loginTab" class="active">Sign in</button><button id="signupTab">Create account</button></div>
 <form id="authForm" class="form"><label>Email</label><input id="email" type="email" required><label>Password</label><input id="password" type="password" minlength="6" required><button id="forgotPassword" class="linkbtn" type="button">Forgot password?</button><button id="authGo" class="btn primary">Sign in</button></form>
@@ -425,9 +425,17 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 <div class="actions"><button id="save" class="btn primary">Save</button><button id="whatsapp" class="btn wa">WhatsApp</button><button id="del" class="btn danger">Delete</button><button id="cancel" class="btn secondary">Close</button></div><div id="plotMsg" class="msg"></div></div></div></div>
 <div id="toast" class="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const $=s=>document.querySelector(s); const qsa=s=>[...document.querySelectorAll(s)];
+window.addEventListener('error',e=>{
+  const m=$('#authMsg');
+  if(m){m.textContent='App startup error: '+(e.message||'Unknown error');m.style.color='#b91c1c'}
+});
+window.addEventListener('unhandledrejection',e=>{
+  const m=$('#authMsg');
+  if(m){m.textContent='App connection error: '+(e.reason?.message||e.reason||'Unknown error');m.style.color='#b91c1c'}
+});
 const bootFailure=msg=>{
   ['#auth','#ventures','#layout'].forEach(x=>$(x)?.classList.add('hidden'));
   $('#auth')?.classList.remove('hidden');
@@ -436,7 +444,9 @@ const bootFailure=msg=>{
 if(!window.supabase){
   bootFailure('Unable to load the secure login service. Please reload once or check your internet connection.');
 }
-const sb=window.supabase?.createClient('https://tylttehklzzmjwdpbxvi.supabase.co','sb_publishable_x-FnhstgF1FEDPwPS_bXEg_gZzdFVS_');
+const sb=(window.supabase&&typeof window.supabase.createClient==='function')
+  ? window.supabase.createClient('https://tylttehklzzmjwdpbxvi.supabase.co','sb_publishable_x-FnhstgF1FEDPwPS_bXEg_gZzdFVS_')
+  : null;
 const show=id=>{['#auth','#ventures','#layout'].forEach(x=>$(x)?.classList.add('hidden'));$(id)?.classList.remove('hidden')};
 
 const loadExternalScript=src=>new Promise((resolve,reject)=>{
@@ -618,7 +628,7 @@ async function openVenture(i){
  setWorkspaceTab('dashboard');
  subscribe();
 }
-$('#back').onclick=()=>{cleanup();current=null;membership=null;$('#sub').textContent='Real-time plot management';show('#ventures')};
+$('#back').onclick=()=>{cleanup();current=null;membership=null;$('#sub').textContent='Real-time plot management · v2.2';show('#ventures')};
 $('#shareCode').onclick=async()=>{
  const text='Join '+current.name+' in VenturePlot with code: '+current.join_code;
  if(navigator.share)await navigator.share({title:'VenturePlot',text}).catch(()=>{});
