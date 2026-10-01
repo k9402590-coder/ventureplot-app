@@ -25,8 +25,11 @@ header h1{margin:0;font-size:20px}header small{opacity:.85}.icon{border:0;border
 .av{background:#15965c}.hold{background:#d6a200}.book{background:#e77813}.sold{background:#d53b55}.reg{background:#7c4fe0}
 .hint{font-size:10px;color:#55708f;padding:7px 9px;background:#f7faff;border-block:1px solid #e5edf7}
 .viewer{height:56vh;min-height:420px;overflow:auto;position:relative;background:linear-gradient(#e9eef5 1px,transparent 1px),linear-gradient(90deg,#e9eef5 1px,transparent 1px);background-size:25px 25px}
-.cleanviewer{height:56vh;min-height:420px;overflow:auto;background:#eef3f8;padding:12px}
-.cleanstage{position:relative;margin:auto;background:#fff;border:1px solid var(--bd);border-radius:14px;box-shadow:0 3px 14px #1b35501a;overflow:hidden}
+.cleanviewer{height:auto;min-height:0;overflow:visible;background:#eef3f8;padding:12px}
+.cleanstage{position:relative;margin:auto;background:#dfe6ee;border:1px solid var(--bd);border-radius:14px;box-shadow:0 3px 14px #1b35501a;overflow:hidden}
+.road{position:absolute;background:#7f8a97;color:#fff;display:flex;align-items:center;justify-content:center;font-size:8px;letter-spacing:.08em;text-transform:uppercase;z-index:1}
+.road.vertical{writing-mode:vertical-rl;transform:rotate(180deg)}
+.amenity{position:absolute;background:#d8efc7;border:1px solid #a9ce91;border-radius:10px;color:#4e7e3c;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;font-weight:700;z-index:1}
 .cleanempty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted)}
 .cleanplot{position:absolute;border:2px solid #15965c;background:#e5f8ed;border-radius:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px #00000014;user-select:none;-webkit-user-select:none}
 .cleanplot.hold{border-color:#d6a200;background:#fff3bf}.cleanplot.booked{border-color:#e77813;background:#ffe2c7}.cleanplot.sold{border-color:#d53b55;background:#ffdce2}.cleanplot.registered{border-color:#7c4fe0;background:#e9dfff}
@@ -55,9 +58,9 @@ header h1{margin:0;font-size:20px}header small{opacity:.85}.icon{border:0;border
 <section id="layout" class="hidden">
 <div class="topbar"><button id="back" class="btn secondary small">‹ Ventures</button><div><b id="vname"></b><div id="vloc" class="muted"></div></div><button id="shareCode" class="btn secondary small">Share code</button></div>
 <div class="stats"><div class="stat"><b id="ctotal">0</b><span>Total</span></div><div class="stat"><b id="cavail">0</b><span>Available</span></div><div class="stat"><b id="chold">0</b><span>Hold</span></div><div class="stat"><b id="cbook">0</b><span>Booked</span></div><div class="stat"><b id="csold">0</b><span>Sold/Reg.</span></div></div>
-<div class="tools"><button id="liveView" class="btn primary small">▦ Live layout</button><button id="mapView" class="btn secondary small">✎ Admin map</button><label id="uploadLabel" class="btn secondary small upload hidden">📄 Upload PDF<input id="pdfInput" type="file" accept="application/pdf"></label><button id="mark" class="btn secondary small hidden">＋ Mark plot</button><button id="fit" class="btn secondary small hidden">Fit</button><button id="zin" class="btn secondary small hidden">＋</button><button id="zout" class="btn secondary small hidden">−</button></div>
+<div class="tools"><button id="liveView" class="btn primary small">▦ Digital layout</button><button id="mapView" class="btn secondary small">⚙ Layout setup</button><label id="uploadLabel" class="btn secondary small upload hidden">📄 Change reference PDF<input id="pdfInput" type="file" accept="application/pdf"></label><button id="mark" class="btn secondary small hidden">＋ Add plot area</button><button id="fit" class="btn secondary small hidden">Fit</button><button id="zin" class="btn secondary small hidden">＋</button><button id="zout" class="btn secondary small hidden">−</button></div>
 <div class="legend"><span><i class="dot av"></i>Available</span><span><i class="dot hold"></i>Hold</span><span><i class="dot book"></i>Booked</span><span><i class="dot sold"></i>Sold</span><span><i class="dot reg"></i>Registered</span></div>
-<div id="hint" class="hint">Live layout: tap a plot box to view or update it. Tapping roads or empty space does nothing.</div>
+<div id="hint" class="hint">Digital layout: tap only a numbered plot box. Roads, park and empty space are not clickable.</div>
 <div id="cleanViewer" class="cleanviewer"><div id="cleanStage" class="cleanstage"><div id="cleanEmpty" class="cleanempty"><div><div class="big">▦</div><h3>Plots will appear here</h3><p>Owner/manager can use Admin map once to trace plots from the PDF.</p></div></div></div></div>
 <div id="pdfViewer" class="viewer hidden"><div id="empty" class="empty"><div class="big">📐</div><h3>No venture layout uploaded</h3><p>Upload the PDF from iPhone Files.</p></div><div id="stage" class="stage hidden"><canvas id="canvas"></canvas><div id="overlay" class="overlay"></div></div></div>
 <div class="follow"><h3>Upcoming follow-ups · <span style="color:#078b5d;font-size:10px">● Live</span></h3><div id="followups"></div></div>
@@ -165,7 +168,7 @@ function setViewMode(mode){
  $('#mapView').classList.toggle('primary',!live);$('#mapView').classList.toggle('secondary',live);
  ['#uploadLabel','#mark','#fit','#zin','#zout'].forEach(s=>$(s).classList.toggle('hidden',live||!admin));
  $('#hint').innerHTML=live
-   ? 'Live layout: tap a <b>plot box</b> to open it. Tapping roads or empty space does nothing.'
+   ? 'Digital layout: tap only a <b>numbered plot box</b>. Roads, park and empty space do nothing.'
    : 'Admin mapping mode: the PDF is only a tracing reference. Tap <b>Mark plot</b>, then drag exactly over one plot.';
  if(live) renderCleanLayout();
 }
@@ -174,20 +177,39 @@ $('#mapView').onclick=()=>setViewMode('map');
 
 function renderCleanLayout(){
  const st=$('#cleanStage'),empty=$('#cleanEmpty');
- const baseW=760;
- let ratio=1.25;
- const canvas=$('#canvas');
- if(canvas.width&&canvas.height) ratio=canvas.height/canvas.width;
- const w=Math.max(330,Math.min(window.innerWidth-24,760));
- const h=Math.max(430,w*ratio);
+ const w=Math.max(340,Math.min(window.innerWidth-24,760));
+ const h=Math.round(w*1.32);
  st.style.width=w+'px';st.style.height=h+'px';
- st.querySelectorAll('.cleanplot').forEach(x=>x.remove());
+ st.querySelectorAll('.cleanplot,.road,.amenity').forEach(x=>x.remove());
+
+ const roads=[
+   {x:.17,y:.07,w:.055,h:.86,t:'40 WIDE ROAD',v:true},
+   {x:.455,y:.07,w:.055,h:.86,t:'40 WIDE ROAD',v:true},
+   {x:.735,y:.07,w:.045,h:.86,t:'40 WIDE ROAD',v:true},
+   {x:.915,y:.08,w:.035,h:.76,t:'30 WIDE ROAD',v:true},
+   {x:.22,y:.47,w:.695,h:.05,t:'30 WIDE ROAD',v:false},
+   {x:.04,y:.91,w:.91,h:.05,t:'30 WIDE ROAD',v:false}
+ ];
+ roads.forEach(r=>{
+   const el=document.createElement('div');
+   el.className='road '+(r.v?'vertical':'');
+   Object.assign(el.style,{left:(r.x*w)+'px',top:(r.y*h)+'px',width:(r.w*w)+'px',height:(r.h*h)+'px'});
+   el.textContent=r.t;
+   st.appendChild(el);
+ });
+
+ const park=document.createElement('div');
+ park.className='amenity';
+ Object.assign(park.style,{left:(.955*w)+'px',top:(.33*h)+'px',width:(.04*w)+'px',height:(.26*h)+'px'});
+ park.textContent='PARK';
+ st.appendChild(park);
+
  if(!plots.length){empty.classList.remove('hidden');return}
  empty.classList.add('hidden');
  plots.forEach(p=>{
    const el=document.createElement('div');
    el.className='cleanplot '+(p.status||'available');
-   Object.assign(el.style,{left:(p.x_pct*w)+'px',top:(p.y_pct*h)+'px',width:(p.w_pct*w)+'px',height:(p.h_pct*h)+'px'});
+   Object.assign(el.style,{left:(p.x_pct*w)+'px',top:(p.y_pct*h)+'px',width:(p.w_pct*w)+'px',height:(p.h_pct*h)+'px',zIndex:'2'});
    el.innerHTML='<span class="tag">'+esc(p.plot_no)+'</span>';
    el.onclick=e=>{e.stopPropagation();selected=p;pending=null;openSheet(p)};
    st.appendChild(el);
