@@ -103,13 +103,33 @@ function showAuthForm(){
   setMode('login');
 }
 $('#loginTab').onclick=()=>{showAuthForm();setMode('login')};$('#signupTab').onclick=()=>{showAuthForm();setMode('signup')};
+let resetCooldown;
+function startResetTimer(){
+ let left=60;
+ const b=$('#forgotPassword');
+ b.disabled=true;
+ b.textContent='Resend in 60s';
+ clearInterval(resetCooldown);
+ resetCooldown=setInterval(()=>{
+  left--;
+  if(left<=0){
+   clearInterval(resetCooldown);
+   b.disabled=false;
+   b.textContent='Forgot password?';
+  }else{
+   b.textContent='Resend in '+left+'s';
+  }
+ },1000);
+}
 $('#forgotPassword').onclick=async()=>{
  const email=$('#email').value.trim();
- if(!email){$('#authMsg').textContent='Enter your email address first.';return}
- $('#authMsg').textContent='Sending password reset email…';
+ if(!email){$('#authMsg').textContent='Enter the email used for this account.';return}
+ $('#authMsg').textContent='Sending reset email…';
  const redirectTo=location.origin+location.pathname+'?reset=1';
  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
- $('#authMsg').textContent=error?error.message:'Password reset email sent. Open the email and tap the recovery link.';
+ if(error){$('#authMsg').textContent=error.message;return}
+ startResetTimer();
+ $('#authMsg').textContent='If this email is registered, a reset email has been sent. Check Inbox and Spam.';
 };
 $('#updatePassword').onclick=async()=>{
  const p=$('#newPassword').value,c=$('#confirmPassword').value;
