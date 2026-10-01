@@ -425,14 +425,35 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 <div class="actions"><button id="save" class="btn primary">Save</button><button id="whatsapp" class="btn wa">WhatsApp</button><button id="del" class="btn danger">Delete</button><button id="cancel" class="btn secondary">Close</button></div><div id="plotMsg" class="msg"></div></div></div></div>
 <div id="toast" class="toast"></div>
 
-<script type="module">
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
-import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.mjs';
-pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.worker.min.mjs';
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const $=s=>document.querySelector(s), $=s=>[...document.querySelectorAll(s)];
+const bootFailure=msg=>{
+  ['#auth','#ventures','#layout'].forEach(x=>$(x)?.classList.add('hidden'));
+  $('#auth')?.classList.remove('hidden');
+  if($('#authMsg')) $('#authMsg').textContent=msg;
+};
+if(!window.supabase){
+  bootFailure('Unable to load the secure login service. Please reload once or check your internet connection.');
+}
+const sb=window.supabase?.createClient('https://tylttehklzzmjwdpbxvi.supabase.co','sb_publishable_x-FnhstgF1FEDPwPS_bXEg_gZzdFVS_');
+const show=id=>{['#auth','#ventures','#layout'].forEach(x=>$(x)?.classList.add('hidden'));$(id)?.classList.remove('hidden')};
 
-const sb=createClient('https://tylttehklzzmjwdpbxvi.supabase.co','sb_publishable_x-FnhstgF1FEDPwPS_bXEg_gZzdFVS_');
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const show=id=>{['#auth','#ventures','#layout'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')};
+const loadExternalScript=src=>new Promise((resolve,reject)=>{
+  const existing=[...document.scripts].find(s=>s.src===src);
+  if(existing&&window.pdfjsLib){resolve();return}
+  const s=document.createElement('script');
+  s.src=src;s.async=true;
+  s.onload=()=>resolve();s.onerror=()=>reject(new Error('Could not load required PDF viewer'));
+  document.head.appendChild(s);
+});
+async function ensurePdfLib(){
+  if(window.pdfjsLib)return window.pdfjsLib;
+  await loadExternalScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+  if(!window.pdfjsLib)throw new Error('PDF viewer unavailable');
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  return window.pdfjsLib;
+}
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)};
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const num=v=>v===''?null:Number(v), txt=v=>String(v||'').trim()||null;
@@ -511,6 +532,7 @@ $('#resetBack').onclick=async()=>{
 };
 
 async function boot(){
+ if(!sb){bootFailure('Secure login service did not load. Please refresh the page.');return}
  const resetRequested=
    new URLSearchParams(location.search).get('reset')==='1' ||
    location.hash.includes('type=recovery') ||
@@ -791,7 +813,19 @@ async function loadPdfPath(path){
  try{const r=await sb.storage.from('venture-layouts').download(path);if(r.error)throw r.error;await renderPdf(await r.data.arrayBuffer())}
  catch(e){console.error(e);emptyLayout();toast('Could not load PDF')}
 }
-async function renderPdf(bytes){const doc=await pdfjsLib.getDocument({data:bytes}).promise;pdfPage=await doc.getPage(1);$('#empty').classList.add('hidden');$('#stage').classList.remove('hidden');await fit()}
+async function renderPdf(bytes){
+ try{
+   const pdf=await ensurePdfLib();
+   const doc=await pdf.getDocument({data:bytes}).promise;
+   pdfPage=await doc.getPage(1);
+   $('#empty').classList.add('hidden');
+   $('#stage').classList.remove('hidden');
+   await fit();
+ }catch(e){
+   console.error(e);
+   toast('PDF viewer could not load. Please retry.');
+ }
+}
 async function drawPdf(){if(!pdfPage)return;const vp=pdfPage.getViewport({scale}),c=$('#canvas'),ctx=c.getContext('2d');c.width=vp.width;c.height=vp.height;$('#stage').style.width=vp.width+'px';$('#stage').style.height=vp.height+'px';await pdfPage.render({canvasContext:ctx,viewport:vp}).promise;renderOverlay();renderCleanLayout()}
 async function fit(){if(!pdfPage)return;const b=pdfPage.getViewport({scale:1});scale=Math.max(.35,Math.min(window.innerWidth-8,900)/b.width);await drawPdf()}
 $('#fit').onclick=fit;$('#zin').onclick=async()=>{if(pdfPage){scale*=1.2;await drawPdf()}};$('#zout').onclick=async()=>{if(pdfPage){scale/=1.2;await drawPdf()}};
