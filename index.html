@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#087f5b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>VenturePlot</title>
+<style>
+:root{--g:#087f5b;--b:#2867d8;--bg:#f4f7fb;--text:#14243a;--muted:#6f7d90;--bd:#dce4ef}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}.hidden{display:none!important}
+header{position:sticky;top:0;z-index:50;background:var(--g);color:#fff;padding:14px 15px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:20px}header small{opacity:.85}.icon{border:0;border-radius:9px;padding:8px 11px;background:#ffffff20;color:#fff}
+.page{max-width:920px;margin:auto;padding:12px}.card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px}
+.auth{max-width:420px;margin:32px auto}.big{font-size:42px}.muted{color:var(--muted);font-size:12px}
+.form{display:grid;gap:7px}.form label{font-size:10px;color:var(--muted)}input,select,textarea{width:100%;border:1px solid var(--bd);border-radius:9px;padding:10px;background:#fff}
+.btn{border:0;border-radius:9px;padding:10px 12px;font-weight:700}.primary{background:var(--b);color:#fff}.secondary{background:#eaf0f8;color:#17324e}.wa{background:#128c7e;color:#fff}.danger{background:#ffe5eb;color:#a82d43}.small{padding:7px 9px;font-size:11px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#eef3f8;padding:4px;border-radius:10px;margin:14px 0}.seg button{border:0;background:transparent;padding:8px;border-radius:8px}.seg .active{background:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.venture{display:flex;align-items:center;justify-content:space-between;gap:9px}.venture h3{margin:0 0 3px}.pill{font-size:9px;background:#eef3fa;padding:3px 6px;border-radius:20px}
+.topbar{position:sticky;top:65px;z-index:40;background:#fff;border-bottom:1px solid var(--bd);padding:8px;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;background:#fff;padding:7px}.stat{text-align:center;border:1px solid var(--bd);border-radius:9px;padding:6px 2px}.stat b{display:block}.stat span{font-size:8px;color:var(--muted)}
+.tools{display:flex;gap:6px;flex-wrap:wrap;background:#fff;padding:8px;border-top:1px solid var(--bd)}.upload input{display:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px;padding:7px 9px;background:#fff;color:var(--muted);font-size:9px}.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px}
+.av{background:#15965c}.hold{background:#d6a200}.book{background:#e77813}.sold{background:#d53b55}.reg{background:#7c4fe0}
+.hint{font-size:10px;color:#55708f;padding:7px 9px;background:#f7faff;border-block:1px solid #e5edf7}
+.viewer{height:56vh;min-height:420px;overflow:auto;position:relative;background:linear-gradient(#e9eef5 1px,transparent 1px),linear-gradient(90deg,#e9eef5 1px,transparent 1px);background-size:25px 25px}
+.empty{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:var(--muted);padding:25px}.stage{position:relative;display:inline-block}.stage canvas{display:block;background:#fff}.overlay{position:absolute;inset:0;touch-action:none}
+.plot{position:absolute;border:2px solid #15965c;background:#15a05c2d;display:flex;align-items:center;justify-content:center}.plot.hold{border-color:#d6a200;background:#d6a20033}.plot.booked{border-color:#e77813;background:#e7781338}.plot.sold{border-color:#d53b55;background:#d53b5533}.plot.registered{border-color:#7c4fe0;background:#7c4fe033}.tag{background:#ffffffe8;border-radius:4px;padding:2px 4px;font-size:9px;font-weight:800}
+.follow{background:#fff;padding:11px;border-top:1px solid var(--bd)}.fitem{display:grid;grid-template-columns:48px 1fr auto;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #edf1f6}.fdate{text-align:center;font-size:9px;color:var(--muted)}.fdate b{display:block;font-size:15px;color:#b23349}.fitem small{display:block;color:var(--muted)}
+.sheet{position:fixed;inset:0;z-index:100}.shade{position:absolute;inset:0;background:#0006}.sheetbox{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,620px);max-height:88vh;overflow:auto;background:#fff;border-radius:18px 18px 0 0;padding:15px;padding-bottom:calc(15px + env(safe-area-inset-bottom))}
+.sheethead{display:flex;justify-content:space-between;align-items:flex-start}.sheethead h2{margin:0}.statuses{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:10px 0}.statuses button{border:1px solid var(--bd);background:#fff;border-radius:8px;padding:7px 3px;font-size:9px}.statuses .sel{outline:3px solid #2867d82b;font-weight:800}.sep{border-top:1px solid var(--bd);margin-top:9px;padding-top:9px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}.msg{color:#ad2c43;font-size:11px;min-height:15px}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,8px);background:#17263b;color:#fff;padding:9px 12px;border-radius:8px;opacity:0;transition:.2s;z-index:200}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}.statuses{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header><div><h1>VenturePlot</h1><small id="sub">Real-time plot management</small></div><button id="logout" class="icon hidden">Sign out</button></header>
+
+<section id="auth" class="hidden">
+<div class="page auth"><div class="card"><div class="big">🏘️</div><h2>Company Login</h2><p class="muted">Owner, manager and employees use the same live system.</p>
+<div class="seg"><button id="loginTab" class="active">Sign in</button><button id="signupTab">Create account</button></div>
+<form id="authForm" class="form"><label>Email</label><input id="email" type="email" required><label>Password</label><input id="password" type="password" minlength="6" required><button id="authGo" class="btn primary">Sign in</button></form><div id="authMsg" class="msg"></div></div></div>
+</section>
+
+<section id="ventures" class="hidden"><div class="page"><h2>My Ventures</h2><div id="who" class="muted"></div><div id="ventureList"></div>
+<div class="grid2"><div class="card"><h3>Create venture</h3><div class="form"><label>Name</label><input id="newName" placeholder="Green Meadows"><label>Location</label><input id="newLoc" placeholder="Guntur"><button id="createVenture" class="btn primary">Create</button></div></div>
+<div class="card"><h3>Join venture</h3><div class="form"><label>6-character join code</label><input id="joinCode" maxlength="6" placeholder="A1B2C3"><button id="joinVenture" class="btn secondary">Join</button></div></div></div><div id="ventureMsg" class="msg"></div></div></section>
+
+<section id="layout" class="hidden">
+<div class="topbar"><button id="back" class="btn secondary small">‹ Ventures</button><div><b id="vname"></b><div id="vloc" class="muted"></div></div><button id="shareCode" class="btn secondary small">Share code</button></div>
+<div class="stats"><div class="stat"><b id="ctotal">0</b><span>Total</span></div><div class="stat"><b id="cavail">0</b><span>Available</span></div><div class="stat"><b id="chold">0</b><span>Hold</span></div><div class="stat"><b id="cbook">0</b><span>Booked</span></div><div class="stat"><b id="csold">0</b><span>Sold/Reg.</span></div></div>
+<div class="tools"><label id="uploadLabel" class="btn secondary small upload">📄 Upload PDF<input id="pdfInput" type="file" accept="application/pdf"></label><button id="mark" class="btn primary small">＋ Mark plot</button><button id="fit" class="btn secondary small">Fit</button><button id="zin" class="btn secondary small">＋</button><button id="zout" class="btn secondary small">−</button></div>
+<div class="legend"><span><i class="dot av"></i>Available</span><span><i class="dot hold"></i>Hold</span><span><i class="dot book"></i>Booked</span><span><i class="dot sold"></i>Sold</span><span><i class="dot reg"></i>Registered</span></div>
+<div id="hint" class="hint">Upload a venture PDF, then tap <b>Mark plot</b> and drag over each plot once.</div>
+<div class="viewer"><div id="empty" class="empty"><div class="big">📐</div><h3>No venture layout uploaded</h3><p>Upload the PDF from iPhone Files.</p></div><div id="stage" class="stage hidden"><canvas id="canvas"></canvas><div id="overlay" class="overlay"></div></div></div>
+<div class="follow"><h3>Upcoming follow-ups · <span style="color:#078b5d;font-size:10px">● Live</span></h3><div id="followups"></div></div>
+</section>
+
+<div id="sheet" class="sheet hidden"><div id="shade" class="shade"></div><div class="sheetbox"><div class="sheethead"><div><h2 id="sheetTitle">Plot</h2><div id="area" class="muted"></div></div><button id="close" class="btn secondary">×</button></div>
+<div class="statuses"><button data-s="available">Available</button><button data-s="hold">Hold</button><button data-s="booked">Booked</button><button data-s="sold">Sold</button><button data-s="registered">Registered</button></div>
+<div class="form"><div class="grid2"><div><label>Plot number *</label><input id="pno"></div><div><label>Facing</label><select id="facing"><option>East</option><option>West</option><option>North</option><option>South</option></select></div><div><label>Width (ft)</label><input id="width" type="number" step="0.01"></div><div><label>Depth (ft)</label><input id="depth" type="number" step="0.01"></div><div><label>Road width (ft)</label><input id="road" type="number" step="0.01"></div><div><label>Rate / sq yd</label><input id="rate" type="number" step="1"></div></div>
+<div class="sep"><h3>Customer / plot owner</h3><label>Name</label><input id="cname"><label>Mobile</label><input id="mobile" inputmode="tel"><label>Amount paid</label><input id="paid" type="number"></div>
+<div class="sep"><h3>Follow-up</h3><label>Date</label><input id="fdate" type="date"><label>Note</label><textarea id="fnote" rows="2"></textarea></div>
+<div class="actions"><button id="save" class="btn primary">Save</button><button id="whatsapp" class="btn wa">WhatsApp</button><button id="del" class="btn danger">Delete</button><button id="cancel" class="btn secondary">Close</button></div><div id="plotMsg" class="msg"></div></div></div></div>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.worker.min.mjs';
+
+const sb=createClient('https://tylttehklzzmjwdpbxvi.supabase.co','sb_publishable_x-FnhstgF1FEDPwPS_bXEg_gZzdFVS_');
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const show=id=>{['#auth','#ventures','#layout'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)};
+const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+const num=v=>v===''?null:Number(v), txt=v=>String(v||'').trim()||null;
+let session=null,mode='login',memberships=[],membership=null,current=null,plots=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,tempStatus='available';
+
+function setMode(m){mode=m;$('#loginTab').classList.toggle('active',m==='login');$('#signupTab').classList.toggle('active',m==='signup');$('#authGo').textContent=m==='login'?'Sign in':'Create account';$('#authMsg').textContent=''}
+$('#loginTab').onclick=()=>setMode('login');$('#signupTab').onclick=()=>setMode('signup');
+
+async function boot(){
+ const r=await sb.auth.getSession();session=r.data.session;
+ sb.auth.onAuthStateChange((_e,s)=>{session=s;if(!s){cleanup();$('#logout').classList.add('hidden');show('#auth')}});
+ if(!session){show('#auth');return}
+ $('#logout').classList.remove('hidden');await loadMemberships();
+}
+$('#authForm').onsubmit=async e=>{
+ e.preventDefault();$('#authMsg').textContent='Please wait…';
+ const email=$('#email').value.trim(),password=$('#password').value;
+ const r=mode==='login'?await sb.auth.signInWithPassword({email,password}):await sb.auth.signUp({email,password,options:{data:{display_name:email.split('@')[0]}}});
+ if(r.error){$('#authMsg').textContent=r.error.message;return}
+ if(mode==='signup'&&!r.data.session){$('#authMsg').textContent='Account created. Check your email to confirm, then sign in.';setMode('login');return}
+ session=r.data.session;$('#logout').classList.remove('hidden');await loadMemberships();
+};
+$('#logout').onclick=()=>sb.auth.signOut();
+
+async function loadMemberships(){
+ $('#who').textContent=session.user.email||'';
+ const {data,error}=await sb.from('venture_members').select('venture_id,role,ventures(id,name,location,join_code,layout_storage_path)').eq('user_id',session.user.id);
+ if(error){toast(error.message);return}
+ memberships=(data||[]).map(x=>({venture_id:x.venture_id,role:x.role,venture:x.ventures}));
+ renderMemberships();show('#ventures');
+}
+function renderMemberships(){
+ const el=$('#ventureList');
+ if(!memberships.length){el.innerHTML='<div class="card muted">No ventures yet. Create one or join with a code.</div>';return}
+ el.innerHTML=memberships.map((m,i)=>'<div class="card venture"><div><h3>'+esc(m.venture.name)+'</h3><div class="muted">'+esc(m.venture.location||'')+'</div><span class="pill">'+esc(m.role)+'</span></div><button class="btn secondary small" data-i="'+i+'">Open ›</button></div>').join('');
+ el.querySelectorAll('button').forEach(b=>b.onclick=()=>openVenture(+b.dataset.i));
+}
+$('#createVenture').onclick=async()=>{
+ const n=$('#newName').value.trim(),l=$('#newLoc').value.trim();if(!n)return;
+ const {data,error}=await sb.rpc('create_venture',{p_name:n,p_location:l});
+ $('#ventureMsg').textContent=error?error.message:'Created. Join code: '+(data?.[0]?.join_code||'');
+ if(!error){$('#newName').value='';$('#newLoc').value='';await loadMemberships()}
+};
+$('#joinVenture').onclick=async()=>{
+ const c=$('#joinCode').value.trim().toUpperCase();if(!c)return;
+ const {error}=await sb.rpc('join_venture',{p_join_code:c});
+ $('#ventureMsg').textContent=error?error.message:'Joined successfully.';
+ if(!error){$('#joinCode').value='';await loadMemberships()}
+};
+
+async function openVenture(i){
+ membership=memberships[i];current=membership.venture;
+ $('#vname').textContent=current.name;$('#vloc').textContent=current.location||'';$('#sub').textContent=current.name;
+ const admin=['owner','manager'].includes(membership.role);
+ $('#uploadLabel').classList.toggle('hidden',!admin);$('#mark').classList.toggle('hidden',!admin);
+ show('#layout');await loadPlots();
+ if(current.layout_storage_path)await loadPdfPath(current.layout_storage_path);else emptyLayout();
+ subscribe();
+}
+$('#back').onclick=()=>{cleanup();current=null;membership=null;$('#sub').textContent='Real-time plot management';show('#ventures')};
+$('#shareCode').onclick=async()=>{
+ const text='Join '+current.name+' in VenturePlot with code: '+current.join_code;
+ if(navigator.share)await navigator.share({title:'VenturePlot',text}).catch(()=>{});
+ else{await navigator.clipboard.writeText(text);toast('Join code copied')}
+};
+
+async function loadPlots(){
+ const {data,error}=await sb.from('plots').select('*').eq('venture_id',current.id).order('plot_no');
+ if(error){toast(error.message);return}
+ plots=data||[];counts();renderOverlay();renderFollowups();
+}
+function counts(){const c=s=>plots.filter(p=>p.status===s).length;$('#ctotal').textContent=plots.length;$('#cavail').textContent=c('available');$('#chold').textContent=c('hold');$('#cbook').textContent=c('booked');$('#csold').textContent=c('sold')+c('registered')}
+function subscribe(){cleanup();channel=sb.channel('venture-'+current.id).on('postgres_changes',{event:'*',schema:'public',table:'plots',filter:'venture_id=eq.'+current.id},()=>loadPlots()).subscribe()}
+function cleanup(){if(channel)sb.removeChannel(channel);channel=null}
+
+$('#pdfInput').onchange=async e=>{
+ const f=e.target.files?.[0];if(!f)return;
+ toast('Uploading PDF…');
+ const path=current.id+'/'+Date.now()+'-'+f.name.replace(/[^\w.\-]+/g,'_');
+ const up=await sb.storage.from('venture-layouts').upload(path,f,{contentType:'application/pdf'});
+ if(up.error){toast(up.error.message);return}
+ const save=await sb.from('ventures').update({layout_storage_path:path}).eq('id',current.id);
+ if(save.error){toast(save.error.message);return}
+ current.layout_storage_path=path;await renderPdf(await f.arrayBuffer());e.target.value='';toast('Layout uploaded');
+};
+async function loadPdfPath(path){
+ try{const r=await sb.storage.from('venture-layouts').download(path);if(r.error)throw r.error;await renderPdf(await r.data.arrayBuffer())}
+ catch(e){console.error(e);emptyLayout();toast('Could not load PDF')}
+}
+async function renderPdf(bytes){const doc=await pdfjsLib.getDocument({data:bytes}).promise;pdfPage=await doc.getPage(1);$('#empty').classList.add('hidden');$('#stage').classList.remove('hidden');await fit()}
+async function drawPdf(){if(!pdfPage)return;const vp=pdfPage.getViewport({scale}),c=$('#canvas'),ctx=c.getContext('2d');c.width=vp.width;c.height=vp.height;$('#stage').style.width=vp.width+'px';$('#stage').style.height=vp.height+'px';await pdfPage.render({canvasContext:ctx,viewport:vp}).promise;renderOverlay()}
+async function fit(){if(!pdfPage)return;const b=pdfPage.getViewport({scale:1});scale=Math.max(.35,Math.min(window.innerWidth-8,900)/b.width);await drawPdf()}
+$('#fit').onclick=fit;$('#zin').onclick=async()=>{if(pdfPage){scale*=1.2;await drawPdf()}};$('#zout').onclick=async()=>{if(pdfPage){scale/=1.2;await drawPdf()}};
+function emptyLayout(){$('#empty').classList.remove('hidden');$('#stage').classList.add('hidden');pdfPage=null}
+
+$('#mark').onclick=()=>{if(!pdfPage){toast('Upload the PDF first');return}marking=true;$('#hint').innerHTML='<b>Mark mode:</b> drag over one plot.';$('#mark').textContent='Drag on layout…'};
+const ov=$('#overlay');
+ov.onpointerdown=e=>{if(!marking)return;e.preventDefault();const r=ov.getBoundingClientRect();start={x:e.clientX-r.left,y:e.clientY-r.top};box=document.createElement('div');box.className='plot';Object.assign(box.style,{left:start.x+'px',top:start.y+'px'});ov.appendChild(box);ov.setPointerCapture?.(e.pointerId)};
+ov.onpointermove=e=>{if(!marking||!box)return;const r=ov.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,l=Math.min(x,start.x),t=Math.min(y,start.y),w=Math.abs(x-start.x),h=Math.abs(y-start.y);Object.assign(box.style,{left:l+'px',top:t+'px',width:w+'px',height:h+'px'})};
+ov.onpointerup=e=>{if(!marking||!box)return;const c=$('#canvas'),l=parseFloat(box.style.left),t=parseFloat(box.style.top),w=parseFloat(box.style.width),h=parseFloat(box.style.height);box.remove();box=null;marking=false;$('#mark').textContent='＋ Mark plot';$('#hint').innerHTML='Tap <b>Mark plot</b> and drag over each plot once.';if(w<8||h<8)return;pending={x_pct:l/c.width,y_pct:t/c.height,w_pct:w/c.width,h_pct:h/c.height};selected=null;openSheet(null)};
+function renderOverlay(){
+ if(!pdfPage)return;const c=$('#canvas');ov.innerHTML='';
+ plots.forEach(p=>{const el=document.createElement('div');el.className='plot '+p.status;Object.assign(el.style,{left:p.x_pct*c.width+'px',top:p.y_pct*c.height+'px',width:p.w_pct*c.width+'px',height:p.h_pct*c.height+'px'});el.innerHTML='<span class="tag">'+esc(p.plot_no)+'</span>';el.onclick=e=>{e.stopPropagation();selected=p;pending=null;openSheet(p)};ov.appendChild(el)})
+}
+
+function openSheet(p){
+ tempStatus=p?.status||'available';$('#sheetTitle').textContent=p?'Plot '+p.plot_no:'New plot';$('#pno').value=p?.plot_no||'';$('#facing').value=p?.facing||'East';$('#width').value=p?.width_ft??'';$('#depth').value=p?.depth_ft??'';$('#road').value=p?.road_width_ft??'';$('#rate').value=p?.rate_per_sqyd??'';$('#cname').value=p?.customer_name||'';$('#mobile').value=p?.customer_mobile||'';$('#paid').value=p?.amount_paid??'';$('#fdate').value=p?.followup_date||'';$('#fnote').value=p?.followup_note||'';$('#del').classList.toggle('hidden',!p||!['owner','manager'].includes(membership.role));$('#plotMsg').textContent='';statusBtns();calcArea();$('#sheet').classList.remove('hidden')
+}
+function closeSheet(){$('#sheet').classList.add('hidden');selected=null;pending=null}
+$('#close').onclick=closeSheet;$('#cancel').onclick=closeSheet;$('#shade').onclick=closeSheet;
+$$('.statuses button').forEach(b=>b.onclick=()=>{tempStatus=b.dataset.s;statusBtns()});
+function statusBtns(){$$('.statuses button').forEach(b=>b.classList.toggle('sel',b.dataset.s===tempStatus))}
+function calcArea(){const w=Number($('#width').value||0),d=Number($('#depth').value||0);$('#area').textContent=w&&d?(w*d/9).toFixed(2)+' sq yd':''}
+$('#width').oninput=calcArea;$('#depth').oninput=calcArea;
+
+$('#save').onclick=async()=>{
+ const plotNo=$('#pno').value.trim();if(!plotNo){$('#plotMsg').textContent='Plot number is required.';return}
+ const payload={venture_id:current.id,plot_no:plotNo,width_ft:num($('#width').value),depth_ft:num($('#depth').value),facing:$('#facing').value,road_width_ft:num($('#road').value),rate_per_sqyd:num($('#rate').value),status:tempStatus,customer_name:txt($('#cname').value),customer_mobile:txt($('#mobile').value),amount_paid:num($('#paid').value)||0,followup_date:txt($('#fdate').value),followup_note:txt($('#fnote').value),updated_by:session.user.id};
+ let r;
+ if(selected&&tempStatus==='hold'&&selected.status!=='hold'){
+   r=await sb.rpc('hold_plot',{p_plot_id:selected.id,p_minutes:30});
+   if(!r.error){const u=await sb.from('plots').update({...payload,status:'hold'}).eq('id',selected.id);if(u.error)r=u}
+ }else if(selected) r=await sb.from('plots').update(payload).eq('id',selected.id);
+ else r=await sb.from('plots').insert({...payload,...pending});
+ if(r.error){$('#plotMsg').textContent=r.error.message;return}
+ closeSheet();await loadPlots();toast('Plot saved');
+};
+$('#del').onclick=async()=>{if(!selected||!confirm('Delete Plot '+selected.plot_no+'?'))return;const r=await sb.from('plots').delete().eq('id',selected.id);if(r.error){$('#plotMsg').textContent=r.error.message;return}closeSheet();await loadPlots();toast('Plot deleted')};
+
+function wa(name,mobile,pno,note){
+ if(!mobile){toast('Add mobile number first');return}
+ let x=mobile.replace(/\D/g,'');if(x.length===10)x='91'+x;
+ const msg='Hi '+(name||'there')+', this is a follow-up regarding Plot '+pno+' at '+current.name+'. '+(note||'Please let us know if you need any details.');
+ window.open('https://wa.me/'+x+'?text='+encodeURIComponent(msg),'_blank');
+}
+$('#whatsapp').onclick=()=>wa($('#cname').value.trim(),$('#mobile').value.trim(),$('#pno').value.trim(),$('#fnote').value.trim());
+
+function renderFollowups(){
+ const a=plots.filter(p=>p.followup_date&&p.customer_name).sort((x,y)=>String(x.followup_date).localeCompare(String(y.followup_date))).slice(0,20),el=$('#followups');
+ if(!a.length){el.innerHTML='<p class="muted">No follow-ups scheduled.</p>';return}
+ el.innerHTML=a.map(p=>{const d=new Date(p.followup_date+'T00:00:00');return '<div class="fitem"><div class="fdate"><b>'+String(d.getDate()).padStart(2,'0')+'</b>'+d.toLocaleString('en',{month:'short'})+'</div><div><strong>Plot '+esc(p.plot_no)+' · '+esc(p.customer_name)+'</strong><small>'+esc(p.followup_note||'Follow-up')+'</small></div><button class="btn wa small" data-id="'+p.id+'">WhatsApp</button></div>'}).join('');
+ el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.id);wa(p.customer_name,p.customer_mobile,p.plot_no,p.followup_note)})
+}
+boot();
+</script>
+</body>
+</html>
