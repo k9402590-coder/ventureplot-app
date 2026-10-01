@@ -427,7 +427,7 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const $=s=>document.querySelector(s), $=s=>[...document.querySelectorAll(s)];
+const $=s=>document.querySelector(s); const qsa=s=>[...document.querySelectorAll(s)];
 const bootFailure=msg=>{
   ['#auth','#ventures','#layout'].forEach(x=>$(x)?.classList.add('hidden'));
   $('#auth')?.classList.remove('hidden');
@@ -672,7 +672,7 @@ function renderDashboard(){
  $('#legendSold').textContent=completed;
 
  const share=v=>total?Math.max(0,(v/total)*100):0;
- const segs=$$('#inventoryStrip span');
+ const segs=qsa('#inventoryStrip span');
  if(segs.length===4){segs[0].style.width=share(available)+'%';segs[1].style.width=share(holds)+'%';segs[2].style.width=share(booked)+'%';segs[3].style.width=share(completed)+'%'}
 
  const inventory=plots.reduce((s,p)=>s+plotValue(p),0);
@@ -728,7 +728,7 @@ function setWorkspaceTab(tab){
  const map={dashboard:'#dashboardPane',plots:'#plotsPane',customers:'#customersPane',follow:'#followPane',more:'#morePane'};
  Object.values(map).forEach(s=>$(s).classList.remove('active'));
  $(map[tab]||map.dashboard).classList.add('active');
- $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ qsa('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
  window.scrollTo({top:0,behavior:'smooth'});
  if(tab==='plots')renderCleanLayout();
  if(tab==='customers')renderCustomers();
@@ -846,8 +846,8 @@ function openSheet(p){
 }
 function closeSheet(){$('#sheet').classList.add('hidden');selected=null;pending=null;if(viewMode==='live')renderCleanLayout()}
 $('#close').onclick=closeSheet;$('#cancel').onclick=closeSheet;$('#shade').onclick=closeSheet;
-$$('.statuses button').forEach(b=>b.onclick=()=>{tempStatus=b.dataset.s;statusBtns()});
-function statusBtns(){$$('.statuses button').forEach(b=>b.classList.toggle('sel',b.dataset.s===tempStatus))}
+qsa('.statuses button').forEach(b=>b.onclick=()=>{tempStatus=b.dataset.s;statusBtns()});
+function statusBtns(){qsa('.statuses button').forEach(b=>b.classList.toggle('sel',b.dataset.s===tempStatus))}
 function calcArea(){const w=Number($('#width').value||0),d=Number($('#depth').value||0);$('#area').textContent=w&&d?(w*d/9).toFixed(2)+' sq yd':''}
 $('#width').oninput=calcArea;$('#depth').oninput=calcArea;
 $('#mobile').oninput=e=>{
