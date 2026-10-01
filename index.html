@@ -128,6 +128,7 @@ $('#forgotPassword').onclick=async()=>{
  const redirectTo=location.origin+location.pathname+'?reset=1';
  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
  if(error){$('#authMsg').textContent=error.message;return}
+ localStorage.setItem('vp_password_recovery_pending','1');
  startResetTimer();
  $('#authMsg').textContent='If this email is registered, a reset email has been sent. Check Inbox and Spam.';
 };
@@ -139,6 +140,7 @@ $('#updatePassword').onclick=async()=>{
  const {error}=await sb.auth.updateUser({password:p});
  if(error){$('#authMsg').textContent=error.message;return}
  history.replaceState({},'',location.pathname);
+ localStorage.removeItem('vp_password_recovery_pending');
  $('#authMsg').textContent='Password updated successfully. Please sign in with the new password.';
  $('#newPassword').value='';$('#confirmPassword').value='';
  await sb.auth.signOut();
@@ -146,24 +148,37 @@ $('#updatePassword').onclick=async()=>{
 };
 $('#resetBack').onclick=async()=>{
  history.replaceState({},'',location.pathname);
+ localStorage.removeItem('vp_password_recovery_pending');
  await sb.auth.signOut();
  show('#auth');
  showAuthForm();
 };
 
 async function boot(){
- const r=await sb.auth.getSession();session=r.data.session;
- const resetRequested=new URLSearchParams(location.search).get('reset')==='1'||location.hash.includes('type=recovery');
+ const resetRequested=
+   new URLSearchParams(location.search).get('reset')==='1' ||
+   location.hash.includes('type=recovery') ||
+   localStorage.getItem('vp_password_recovery_pending')==='1';
+
  sb.auth.onAuthStateChange((event,s)=>{
    session=s;
    if(event==='PASSWORD_RECOVERY'){
+     localStorage.setItem('vp_password_recovery_pending','1');
      $('#logout').classList.add('hidden');
      show('#auth');
      showResetPanel();
      return;
    }
-   if(!s){cleanup();$('#logout').classList.add('hidden');show('#auth')}
+   if(!s){
+     cleanup();
+     $('#logout').classList.add('hidden');
+     show('#auth');
+   }
  });
+
+ const r=await sb.auth.getSession();
+ session=r.data.session;
+
  if(resetRequested&&session){
    $('#logout').classList.add('hidden');
    show('#auth');
@@ -171,7 +186,8 @@ async function boot(){
    return;
  }
  if(!session){show('#auth');return}
- $('#logout').classList.remove('hidden');await loadMemberships();
+ $('#logout').classList.remove('hidden');
+ await loadMemberships();
 }
 $('#authForm').onsubmit=async e=>{
  e.preventDefault();$('#authMsg').textContent='Please wait…';
