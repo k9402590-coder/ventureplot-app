@@ -559,7 +559,7 @@ function setWorkspaceTab(tab){
  const map={dashboard:'#dashboardPane',plots:'#plotsPane',follow:'#followPane',more:'#morePane'};
  Object.values(map).forEach(s=>$(s).classList.remove('active'));
  $(map[tab]||map.dashboard).classList.add('active');
- $('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
  window.scrollTo({top:0,behavior:'smooth'});
  if(tab==='plots')renderCleanLayout();
  if(tab==='follow')renderFollowups();
@@ -720,7 +720,7 @@ function renderFollowups(){
  el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.id);wa(p.customer_name,p.customer_mobile,p.plot_no,p.followup_note)})
 }
 
-$('.navbtn').forEach(b=>b.onclick=()=>setWorkspaceTab(b.dataset.tab));
+$$('.navbtn').forEach(b=>b.onclick=()=>setWorkspaceTab(b.dataset.tab));
 $('#quickPlots').onclick=()=>setWorkspaceTab('plots');
 $('#quickFollow').onclick=()=>setWorkspaceTab('follow');
 $('#quickShare').onclick=()=>$('#shareCode').click();
