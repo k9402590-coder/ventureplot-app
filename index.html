@@ -1176,7 +1176,7 @@ function setWorkspaceTab(tab){
  if(tab==='customers')renderCustomers();
  if(tab==='follow')renderFollowups();
 }
-function subscribe(){cleanup();channel=sb.channel('venture-'+current.id).on('postgres_changes',{event:'*',schema:'public',table:'plots',filter:'venture_id=eq.'+current.id},()=>loadPlots()).on('postgres_changes',{event:'*',schema:'public',table:'venture_enquiries',filter:'venture_id=eq.'+current.id},()=>loadEnquiries()).subscribe()}
+function subscribe(){if(localMode)return;cleanup();channel=sb.channel('venture-'+current.id).on('postgres_changes',{event:'*',schema:'public',table:'plots',filter:'venture_id=eq.'+current.id},()=>loadPlots()).on('postgres_changes',{event:'*',schema:'public',table:'venture_enquiries',filter:'venture_id=eq.'+current.id},()=>loadEnquiries()).subscribe()}
 function cleanup(){if(channel)sb.removeChannel(channel);channel=null}
 
 function setViewMode(mode){
@@ -1364,7 +1364,7 @@ function renderFollowups(){
  }).join('');
  ebox.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openEnquiry(enquiries.find(e=>e.id===b.dataset.edit)));
  ebox.querySelectorAll('[data-ewa]').forEach(b=>b.onclick=()=>{const e=enquiries.find(x=>x.id===b.dataset.ewa);if(e)wa(e.customer_name,e.customer_mobile,e.plot_no||'',e.followup_note||e.requirement)});
- ebox.querySelectorAll('[data-remove]').forEach(b=>b.onclick=async()=>{const e=enquiries.find(x=>x.id===b.dataset.remove);if(!e)return;if(e.followup_date){const r=await sb.from('venture_enquiries').update({followup_date:null,followup_note:null,updated_by:session.user.id}).eq('id',e.id);if(r.error)toast(r.error.message);else{toast('Follow-up removed');await loadEnquiries()}}else if(confirm('Delete this enquiry?')){const r=await sb.from('venture_enquiries').delete().eq('id',e.id);if(r.error)toast(r.error.message);else{toast('Enquiry deleted');await loadEnquiries()}}});
+ ebox.querySelectorAll('[data-remove]').forEach(b=>b.onclick=async()=>{const e=enquiries.find(x=>x.id===b.dataset.remove);if(!e)return;if(localMode){if(e.followup_date){e.followup_date=null;e.followup_note=null;localSaveEnquiries();toast('Follow-up removed')}else if(confirm('Delete this enquiry?')){enquiries=enquiries.filter(x=>x.id!==e.id);localSaveEnquiries();toast('Enquiry deleted')}await loadEnquiries();return}if(e.followup_date){const r=await sb.from('venture_enquiries').update({followup_date:null,followup_note:null,updated_by:session.user.id}).eq('id',e.id);if(r.error)toast(r.error.message);else{toast('Follow-up removed');await loadEnquiries()}}else if(confirm('Delete this enquiry?')){const r=await sb.from('venture_enquiries').delete().eq('id',e.id);if(r.error)toast(r.error.message);else{toast('Enquiry deleted');await loadEnquiries()}}});
  const pbox=$('#followups');
  if(!plotAll.length){pbox.innerHTML='<div class="empty-state"><b>No plot follow-ups</b><span>Follow-ups linked to a specific plot will appear here.</span></div>';return}
  pbox.innerHTML=plotAll.map(p=>{
@@ -1373,7 +1373,7 @@ function renderFollowups(){
  }).join('');
  pbox.querySelectorAll('[data-popen]').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.popen);if(p){selected=p;pending=null;openSheet(p)}});
  pbox.querySelectorAll('[data-pwa]').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.pwa);if(p)wa(p.customer_name,p.customer_mobile,p.plot_no,p.followup_note)});
- pbox.querySelectorAll('[data-premove]').forEach(b=>b.onclick=async()=>{const p=plots.find(x=>x.id===b.dataset.premove);if(!p)return;const r=await sb.from('plots').update({followup_date:null,followup_note:null,updated_by:session.user.id}).eq('id',p.id);if(r.error)toast(r.error.message);else{toast('Follow-up removed');await loadPlots()}});
+ pbox.querySelectorAll('[data-premove]').forEach(b=>b.onclick=async()=>{const p=plots.find(x=>x.id===b.dataset.premove);if(!p)return;if(localMode){p.followup_date=null;p.followup_note=null;p.updated_at=new Date().toISOString();localSavePlots();toast('Follow-up removed');await loadPlots();return}const r=await sb.from('plots').update({followup_date:null,followup_note:null,updated_by:session.user.id}).eq('id',p.id);if(r.error)toast(r.error.message);else{toast('Follow-up removed');await loadPlots()}});
 }
 
 function openEnquiry(e=null){
@@ -1398,12 +1398,18 @@ $('#saveEnquiry').onclick=async()=>{
  const name=$('#eqName').value.trim(),mobile=$('#eqMobile').value.trim();
  if(!name){$('#enquiryMsg').textContent='Customer name is required.';return}
  if(!validIndianMobile(mobile)){ $('#enquiryMsg').textContent='Enter a valid 10-digit Indian mobile number.';return}
- const payload={venture_id:current.id,customer_name:name,customer_mobile:indianE164(mobile),plot_no:txt($('#eqPlot').value),requirement:txt($('#eqRequirement').value),status:$('#eqStatus').value,followup_date:txt($('#eqDate').value),followup_note:txt($('#eqNote').value),updated_by:session.user.id};
+ const payload={venture_id:current.id,customer_name:name,customer_mobile:indianE164(mobile),plot_no:txt($('#eqPlot').value),requirement:txt($('#eqRequirement').value),status:$('#eqStatus').value,followup_date:txt($('#eqDate').value),followup_note:txt($('#eqNote').value),updated_by:localMode?'local-owner':session.user.id,updated_at:new Date().toISOString()};
+ if(localMode){
+   const editing=!!selectedEnquiry;
+   if(selectedEnquiry){const i=enquiries.findIndex(e=>e.id===selectedEnquiry.id);if(i>=0)enquiries[i]={...enquiries[i],...payload}}
+   else enquiries.unshift({id:localId('enquiry'),...payload,created_by:'local-owner',created_at:new Date().toISOString()});
+   localSaveEnquiries();closeEnquiry();toast(editing?'Enquiry updated':'Enquiry added');await loadEnquiries();return;
+ }
  let r;if(selectedEnquiry)r=await sb.from('venture_enquiries').update(payload).eq('id',selectedEnquiry.id);else r=await sb.from('venture_enquiries').insert({...payload,created_by:session.user.id});
  if(r.error){$('#enquiryMsg').textContent=r.error.message;return}
  const editing=!!selectedEnquiry;closeEnquiry();toast(editing?'Enquiry updated':'Enquiry added');await loadEnquiries();
 };
-$('#deleteEnquiry').onclick=async()=>{if(!selectedEnquiry||!confirm('Delete this enquiry?'))return;const id=selectedEnquiry.id;const r=await sb.from('venture_enquiries').delete().eq('id',id);if(r.error){$('#enquiryMsg').textContent=r.error.message;return}closeEnquiry();toast('Enquiry deleted');await loadEnquiries()};
+$('#deleteEnquiry').onclick=async()=>{if(!selectedEnquiry||!confirm('Delete this enquiry?'))return;const id=selectedEnquiry.id;if(localMode){enquiries=enquiries.filter(e=>e.id!==id);localSaveEnquiries();closeEnquiry();toast('Enquiry deleted');await loadEnquiries();return}const r=await sb.from('venture_enquiries').delete().eq('id',id);if(r.error){$('#enquiryMsg').textContent=r.error.message;return}closeEnquiry();toast('Enquiry deleted');await loadEnquiries()};
 
 
 
@@ -1472,6 +1478,6 @@ $('#moreLayout').onclick=()=>{setWorkspaceTab('plots');setTimeout(()=>setViewMod
 ['#enquirySearch','#enquiryStatus'].forEach(s=>$(s).addEventListener('input',renderFollowups));
 boot();
 </script>
-<div id="buildMarker" style="display:none">build-9</div>
+<div id="buildMarker" style="display:none">build-11</div>
 </body>
 </html>
