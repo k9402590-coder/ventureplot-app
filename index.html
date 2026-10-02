@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#087f5b">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>VenturePlot</title>
+<title>Infinity Tech · Real Estate Solutions</title>
 
 <style>
 :root{
@@ -359,6 +359,17 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 .forgot-pin-link{width:100%;text-align:right;margin:-2px 0 2px}
 .recovery-code-box{margin:18px 0;padding:20px;border-radius:18px;background:linear-gradient(135deg,#eefaf6,#f4f7ff);border:1px solid #dce8e4;text-align:center}.recovery-code-box b{display:block;font-size:31px;letter-spacing:.16em;color:#0f6f5d}.recovery-code-box span{display:block;margin-top:9px;font-size:9px;line-height:1.5;color:#748295}
 
+
+/* ===== temporary direct-open mode: no login screen ===== */
+body.public-preview .portal-tools{display:none!important}
+body.public-preview .company-user{display:none!important}
+body.public-preview #drawerEnquiries{display:none!important}
+body.public-preview #drawerLocations{display:none!important}
+body.public-preview #logout{display:none!important}
+.public-main-note{display:flex;align-items:flex-start;gap:12px;padding:18px;border:1px solid #dce8e4;border-radius:18px;background:linear-gradient(135deg,#f4fbf8,#f7f9ff);box-shadow:var(--shadow-sm)}
+.public-main-note .public-main-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#e6f7f1;color:#0f8a6a;font-size:22px;font-weight:900;flex:0 0 auto}
+.public-main-note b{display:block;font-size:14px;margin-bottom:4px}.public-main-note span{display:block;font-size:10px;line-height:1.55;color:#708095}
+
 </style>
 </head>
 <body>
@@ -367,7 +378,7 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 <div id="sideShade" class="side-shade hidden"></div>
 <aside id="sideMenu" class="side-menu">
   <div class="side-head"><div class="side-logo">∞</div><div><span>Infinity Tech</span><small>Real Estate Solutions</small></div><button id="closeMenu" class="side-close">×</button></div>
-  <div class="side-account"><span class="userdot"></span><div><b id="drawerMobile">Signed in</b><small>Company workspace</small></div></div>
+  <div class="side-account"><span class="userdot"></span><div><b id="drawerMobile">Infinity Tech</b><small>Real Estate workspace</small></div></div>
   <nav class="side-nav">
     <button id="drawerHome"><i>⌂</i><span>Home</span></button>
     <button id="drawerVentures"><i>▦</i><span>Ventures</span></button>
@@ -378,7 +389,7 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
   <div class="side-footer"><button id="logout" class="drawer-danger hidden"><i>↪</i><span>Sign out</span></button></div>
 </aside>
 
-<section id="auth">
+<section id="auth" class="hidden">
 <div class="page auth">
   <div class="card otp-login-card">
     <div class="otp-brand"><div class="otp-brandmark">∞</div><div><span>Infinity Tech</span><small>Real Estate Solutions</small></div></div>
@@ -656,8 +667,12 @@ window.addEventListener('unhandledrejection',e=>{
 });
 const bootFailure=msg=>{
   ['#auth','#ventures','#layout'].forEach(x=>$(x)?.classList.add('hidden'));
-  $('#auth')?.classList.remove('hidden');
-  if($('#authMsg')) $('#authMsg').textContent=msg;
+  document.body.classList.add('public-preview');
+  $('#ventures')?.classList.remove('hidden');
+  $('#menuBtn')?.classList.remove('hidden');
+  if($('#ventureList')) $('#ventureList').innerHTML='<div class="public-main-note"><div class="public-main-icon">∞</div><div><b>Infinity Tech workspace</b><span>The company home is available. Live venture data will appear whenever the secure workspace connection is available.</span></div></div>';
+  if($('#portfolioCount')) $('#portfolioCount').textContent='Main workspace';
+  if(typeof startCompanyCarousel==='function') startCompanyCarousel();
 };
 if(!window.supabase){
   bootFailure('Unable to load the secure login service. Please reload once or check your internet connection.');
@@ -869,22 +884,49 @@ $('#createPinUser').onclick=async()=>{
  }
 };
 
+function showDirectMain(){
+ cleanup();
+ current=null;membership=null;selected=null;pending=null;
+ $('#sub').textContent='Real Estate Solutions';
+ $('#auth').classList.add('hidden');
+ $('#layout').classList.add('hidden');
+ $('#logout').classList.add('hidden');
+ $('#menuBtn').classList.remove('hidden');
+ document.body.classList.add('public-preview');
+ $('#who').textContent='';
+ $('#drawerMobile').textContent='Infinity Tech';
+ $('#settingsMobile').textContent='Main workspace';
+ memberships=[];
+ $('#portfolioCount').textContent='Main workspace';
+ $('#ventureList').innerHTML='<div class="public-main-note"><div class="public-main-icon">∞</div><div><b>Welcome to Infinity Tech</b><span>Real Estate Solutions — venture planning, live inventory, enquiries, bookings and sales operations in one workspace.</span></div></div>';
+ renderLocations();
+ show('#ventures');
+ startCompanyCarousel();
+ window.scrollTo({top:0,behavior:'auto'});
+}
+
 async function boot(){
- if(!sb){bootFailure('Secure login service did not load. Please refresh the page.');return}
- sb.auth.onAuthStateChange((event,s)=>{session=s});
- const r=await sb.auth.getSession();session=r.data.session;
- if(session){
-   const mobile=session.user?.user_metadata?.login_mobile?.replace('+91','')||readSavedMobile();
-   if(mobile)saveMobile(mobile);
- }
- resetSignedOutUi();
+ // Temporary mode requested: never show login when the public link opens.
+ if(!sb){showDirectMain();return}
+ try{
+   const r=await sb.auth.getSession();
+   session=r.data.session;
+   if(session){
+     document.body.classList.remove('public-preview');
+     $('#logout').classList.add('hidden');
+     $('#menuBtn').classList.remove('hidden');
+     await loadMemberships();
+     return;
+   }
+ }catch(e){}
+ showDirectMain();
 }
 
 $('#logout').onclick=async()=>{
- closeSideMenu();appUnlocked=false;
- await sb.auth.signOut();
+ closeSideMenu();
+ try{if(sb)await sb.auth.signOut()}catch(e){}
  session=null;
- resetSignedOutUi();
+ showDirectMain();
 };
 
 async function loadMemberships(){
@@ -1292,7 +1334,7 @@ function goCompanyHome(scrollTarget=null){
 }
 $('#drawerHome').onclick=()=>goCompanyHome();
 $('#drawerVentures').onclick=()=>goCompanyHome('.portfolio-head');
-$('#drawerEnquiries').onclick=()=>{closeSideMenu();if(current)setWorkspaceTab('follow');else if(memberships.length)openVenture(0).then(()=>setWorkspaceTab('follow'));else toast('Create or join a venture first')};
+$('#drawerEnquiries').onclick=()=>{closeSideMenu();if(current)setWorkspaceTab('follow');else if(memberships.length)openVenture(0).then(()=>setWorkspaceTab('follow'));else goCompanyHome('.portfolio-head')};
 function openLocations(){closeSideMenu();renderLocations();$('#locationsSheet').classList.remove('hidden')}
 function closeLocations(){$('#locationsSheet').classList.add('hidden')}
 $('#drawerLocations').onclick=openLocations;$('#closeLocations').onclick=closeLocations;$('#locationsShade').onclick=closeLocations;
