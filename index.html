@@ -75,6 +75,9 @@ input::placeholder{color:#a1adbd}
 .phoneprefix{display:flex;align-items:center;justify-content:center;background:#f8fafc;border-right:1px solid var(--line);font-weight:800;color:#334155}
 .phonefield input{border:0!important;border-radius:0!important;box-shadow:none!important}
 .phonehint{font-size:10px;color:var(--muted);margin-top:-3px}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:68px}
+.password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#eef3f8;color:#31506f;border-radius:9px;padding:7px 9px;font-size:10px;font-weight:850}
 .msg{color:#be123c;font-size:12px;min-height:16px;margin-top:8px;line-height:1.35}
 
 /* Dashboard */
@@ -286,8 +289,8 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 <section id="auth">
 <div class="page auth"><div class="card"><div class="big">🏘️</div><h2>Company Login</h2><p class="muted">Owner, manager and employees use the same live system.</p>
 <div class="seg"><button id="loginTab" class="active">Sign in</button><button id="signupTab">Create account</button></div>
-<form id="authForm" class="form"><label>Email</label><input id="email" type="email" required><label>Password</label><input id="password" type="password" minlength="6" required><button id="forgotPassword" class="linkbtn" type="button">Forgot password?</button><button id="authGo" class="btn primary">Sign in</button></form>
-<div id="resetPanel" class="resetbox hidden"><h3>Set a new password</h3><p class="muted">Enter your new password after opening the recovery link from your email.</p><div class="form"><label>New password</label><input id="newPassword" type="password" minlength="6"><label>Confirm new password</label><input id="confirmPassword" type="password" minlength="6"><button id="updatePassword" class="btn primary" type="button">Update password</button><button id="resetBack" class="btn secondary" type="button">Back to sign in</button></div></div>
+<form id="authForm" class="form"><label>Email</label><input id="email" type="email" required autocomplete="email"><label>Password</label><div class="password-wrap"><input id="password" type="password" minlength="6" required autocomplete="current-password"><button id="togglePassword" class="password-toggle" type="button" aria-label="Show password">Show</button></div><button id="forgotPassword" class="linkbtn" type="button">Forgot password?</button><button id="authGo" class="btn primary">Sign in</button></form>
+<div id="resetPanel" class="resetbox hidden"><h3>Set a new password</h3><p class="muted">Enter your new password after opening the recovery link from your email.</p><div class="form"><label>New password</label><div class="password-wrap"><input id="newPassword" type="password" minlength="6" autocomplete="new-password"><button id="toggleNewPassword" class="password-toggle" type="button">Show</button></div><label>Confirm new password</label><div class="password-wrap"><input id="confirmPassword" type="password" minlength="6" autocomplete="new-password"><button id="toggleConfirmPassword" class="password-toggle" type="button">Show</button></div><button id="updatePassword" class="btn primary" type="button">Update password</button><button id="resetBack" class="btn secondary" type="button">Back to sign in</button></div></div>
 <div id="authMsg" class="msg"></div></div></div>
 </section>
 
@@ -489,6 +492,28 @@ function showAuthForm(){
   $('#resetPanel').classList.add('hidden');
   setMode('login');
 }
+function resetSignedOutUi(){
+  cleanup();
+  current=null;membership=null;selected=null;pending=null;
+  $('#sub').textContent='Real-time plot management · v2.2';
+  $('#logout').classList.add('hidden');
+  $('#password').value='';
+  $('#authMsg').textContent='';
+  show('#auth');
+  showAuthForm();
+}
+function wirePasswordToggle(buttonId,inputId){
+  $(buttonId).onclick=()=>{
+    const input=$(inputId);
+    const showing=input.type==='text';
+    input.type=showing?'password':'text';
+    $(buttonId).textContent=showing?'Show':'Hide';
+    $(buttonId).setAttribute('aria-label',showing?'Show password':'Hide password');
+  };
+}
+wirePasswordToggle('#togglePassword','#password');
+wirePasswordToggle('#toggleNewPassword','#newPassword');
+wirePasswordToggle('#toggleConfirmPassword','#confirmPassword');
 $('#loginTab').onclick=()=>{showAuthForm();setMode('login')};$('#signupTab').onclick=()=>{showAuthForm();setMode('signup')};
 let resetCooldown;
 function startResetTimer(){
@@ -558,9 +583,7 @@ async function boot(){
      return;
    }
    if(!s){
-     cleanup();
-     $('#logout').classList.add('hidden');
-     show('#auth');
+     resetSignedOutUi();
    }
  });
 
@@ -583,9 +606,14 @@ $('#authForm').onsubmit=async e=>{
  const r=mode==='login'?await sb.auth.signInWithPassword({email,password}):await sb.auth.signUp({email,password,options:{data:{display_name:email.split('@')[0]},emailRedirectTo:location.origin+location.pathname}});
  if(r.error){$('#authMsg').textContent=r.error.message;return}
  if(mode==='signup'&&!r.data.session){$('#authMsg').textContent='Account created. Check your email to confirm, then sign in.';setMode('login');return}
- session=r.data.session;$('#logout').classList.remove('hidden');await loadMemberships();
+ session=r.data.session;$('#authMsg').textContent='';$('#logout').classList.remove('hidden');await loadMemberships();
 };
-$('#logout').onclick=()=>sb.auth.signOut();
+$('#logout').onclick=async()=>{
+ $('#logout').disabled=true;
+ await sb.auth.signOut();
+ $('#logout').disabled=false;
+ resetSignedOutUi();
+};
 
 async function loadMemberships(){
  $('#who').textContent=session.user.email||'';
