@@ -326,14 +326,25 @@ header .icon{min-width:42px;font-size:18px;padding:8px 11px}
 body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduce-motion .slide-photo{transition-duration:.01ms!important}
 @media(max-width:720px){.slide-copy{padding:18px}.photo-slide .slide-stat{right:13px;bottom:13px}.side-menu{width:min(87vw,330px)}}
 
+
+/* mobile OTP login + venture master-plan showcase */
+.auth-method{margin-bottom:12px}.auth-method button{font-size:11px}
+.otp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.otp-head h3{margin:0 0 3px}.otp-code-wrap input{font-size:25px;font-weight:900;letter-spacing:.32em;text-align:center;padding:14px 12px}.otp-resend{text-align:center!important;width:100%;margin-top:7px}.company-solution{margin-top:2px!important;color:#d6fff3!important;letter-spacing:.08em!important}
+.layout-slide{background:linear-gradient(135deg,#0e2f48,#0b7560)!important}.layout-slide .slide-copy{max-width:57%;position:relative;z-index:4}.layout-slide .slide-stat{z-index:6}
+.layout-art{position:absolute;right:7%;top:14%;width:36%;height:70%;transform:perspective(700px) rotateX(58deg) rotateZ(-20deg);transform-origin:center;border-radius:14px;background:#dfeadf;border:5px solid rgba(255,255,255,.78);box-shadow:0 24px 34px rgba(0,0,0,.28);display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:3px;padding:7px;overflow:hidden;z-index:3}
+.layout-art i{display:block;background:linear-gradient(145deg,#f7f0cf,#d9c986);border:1px solid rgba(78,88,55,.38);border-radius:2px;position:relative}.layout-art i:nth-of-type(3n){background:linear-gradient(145deg,#d9efd0,#a8cf97)}.layout-art i:after{content:"";position:absolute;inset:20% 12%;border:1px solid rgba(77,84,55,.22)}
+.layout-road{position:absolute;background:#707b83;z-index:3}.layout-road.r1{left:47%;top:0;bottom:0;width:11%}.layout-road.r2{left:0;right:0;top:44%;height:12%}.layout-park{position:absolute;right:7px;bottom:7px;width:21%;height:25%;display:grid;place-items:center;background:#81b56f;color:#f4fff0;font-size:6px;font-weight:900;letter-spacing:.08em;z-index:4;border-radius:3px}
+.layout-b{background:#e7e2d4;transform:perspective(700px) rotateX(55deg) rotateZ(17deg)}.layout-b i{background:linear-gradient(145deg,#f4d6b2,#d6b184)}.layout-b i:nth-of-type(4n){background:#cadfb8}
+@media(max-width:720px){.layout-slide .slide-copy{max-width:61%}.layout-art{right:3%;width:38%;height:66%;top:17%}.otp-code-wrap input{font-size:22px}}
+
 </style>
 </head>
 <body>
-<header><div class="brandwrap"><div class="brandlogo">∞</div><div class="brandcopy"><h1>Infinity Tech</h1><small id="sub">Real Estate Venture OS</small></div></div><button id="menuBtn" class="icon hidden" aria-label="Open menu">☰</button></header>
+<header><div class="brandwrap"><div class="brandlogo">∞</div><div class="brandcopy"><h1>Infinity Tech</h1><small id="sub">Real Estate Solutions</small></div></div><button id="menuBtn" class="icon hidden" aria-label="Open menu">☰</button></header>
 
 <div id="sideShade" class="side-shade hidden"></div>
 <aside id="sideMenu" class="side-menu">
-  <div class="side-head"><div class="side-logo">∞</div><div><span>Infinity Tech</span><small>Venture Operations</small></div><button id="closeMenu" class="side-close">×</button></div>
+  <div class="side-head"><div class="side-logo">∞</div><div><span>Infinity Tech</span><small>Real Estate Solutions</small></div><button id="closeMenu" class="side-close">×</button></div>
   <div class="side-account"><span class="userdot"></span><div><b id="drawerEmail">Signed in</b><small>Company workspace</small></div></div>
   <nav class="side-nav">
     <button id="drawerHome"><i>⌂</i><span>Home</span></button>
@@ -346,9 +357,26 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 </aside>
 
 <section id="auth">
-<div class="page auth"><div class="card"><div class="big">🏘️</div><h2>Company Login</h2><p class="muted">Owner, manager and employees use the same live system.</p>
-<div class="seg"><button id="loginTab" class="active">Sign in</button><button id="signupTab">Create account</button></div>
+<div class="page auth"><div class="card"><div class="big">🏘️</div><h2>Company Login</h2><p class="muted">Owners, managers and sales teams can sign in with email or Indian mobile OTP.</p>
+<div class="seg auth-method"><button id="emailMethod" class="active" type="button">Email</button><button id="phoneMethod" type="button">Mobile OTP</button></div>
+<div id="emailAuthWrap">
+<div class="seg"><button id="loginTab" class="active" type="button">Sign in</button><button id="signupTab" type="button">Create account</button></div>
 <form id="authForm" class="form"><label>Email</label><input id="email" type="email" required autocomplete="email"><label>Password</label><div class="password-wrap"><input id="password" type="password" minlength="6" required autocomplete="current-password"><button id="togglePassword" class="password-toggle" type="button" aria-label="Show password">Show</button></div><button id="forgotPassword" class="linkbtn" type="button">Forgot password?</button><button id="authGo" class="btn primary">Sign in</button></form>
+</div>
+<div id="phoneAuthWrap" class="hidden">
+  <div class="form">
+    <label>Indian mobile number</label>
+    <div class="phonefield"><span class="phoneprefix">+91</span><input id="loginMobile" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="10-digit mobile"></div>
+    <div class="phonehint">For a new user, an account is created automatically after OTP verification.</div>
+    <button id="sendLoginOtp" class="btn primary" type="button">Send OTP</button>
+  </div>
+  <div id="otpVerifyPanel" class="resetbox hidden">
+    <div class="otp-head"><div><h3>Verify mobile</h3><p class="muted">Enter the 6-digit code sent to <b id="otpPhoneLabel"></b>.</p></div><button id="changeOtpPhone" class="linkbtn" type="button">Change</button></div>
+    <div class="otp-code-wrap"><input id="loginOtp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></div>
+    <button id="verifyLoginOtp" class="btn primary" type="button">Verify & continue</button>
+    <button id="resendLoginOtp" class="linkbtn otp-resend" type="button">Resend OTP</button>
+  </div>
+</div>
 <div id="resetPanel" class="resetbox hidden"><h3>Set a new password</h3><p class="muted">Enter your new password after opening the recovery link from your email.</p><div class="form"><label>New password</label><div class="password-wrap"><input id="newPassword" type="password" minlength="6" autocomplete="new-password"><button id="toggleNewPassword" class="password-toggle" type="button">Show</button></div><label>Confirm new password</label><div class="password-wrap"><input id="confirmPassword" type="password" minlength="6" autocomplete="new-password"><button id="toggleConfirmPassword" class="password-toggle" type="button">Show</button></div><button id="updatePassword" class="btn primary" type="button">Update password</button><button id="resetBack" class="btn secondary" type="button">Back to sign in</button></div></div>
 <div id="authMsg" class="msg"></div></div></div>
 </section>
@@ -357,19 +385,19 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 <div class="company-home">
   <div class="company-hero">
     <div class="company-user"><span class="userdot"></span><span id="who"></span></div>
-    <div class="company-brandline"><div class="company-mark">∞</div><div><small>Digital Venture Operations</small><h2>Infinity Tech</h2></div></div>
+    <div class="company-brandline"><div class="company-mark">∞</div><div><small>Real Estate Solutions</small><h2>Infinity Tech</h2><small class="company-solution">Real Estate Solutions</small></div></div>
     <div class="company-copy"><span class="eyebrow">Real estate technology</span><h1>One intelligent workspace for every venture.</h1><p>Live plot inventory, customer enquiries, bookings and follow-ups — designed for owners, managers and sales teams.</p>
       <div class="company-actions"><button id="jumpVenture" class="light">Open a venture →</button><button id="jumpEnquiries" class="glass">View enquiries</button></div>
     </div>
   </div>
   <div class="carousel-wrap"><div id="carouselTrack" class="carousel-track">
-    <article class="showcase-slide s1 active"><div class="slide-orb"></div><div class="slide-mini">Infinity Tech · Live Inventory</div><h3>See every plot. Know every status.</h3><p>BookMyShow-style digital layouts make availability instantly understandable for your whole team.</p><div class="slide-stat"><b>LIVE</b><span>venture visibility</span></div></article>
+    <article class="showcase-slide s1 layout-slide active"><div class="slide-orb"></div><div class="slide-copy"><div class="slide-mini">New Venture · Digital Layout</div><h3>Turn a plotted layout into a live sales map.</h3><p>Roads, parks and individual plots become clear, interactive inventory for the sales team.</p></div><div class="layout-art layout-a"><div class="layout-road r1"></div><div class="layout-road r2"></div><div class="layout-park">PARK</div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="slide-stat"><b>LIVE</b><span>plot layout</span></div></article>
 
     <article class="showcase-slide photo-slide"><div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=82')"></div><div class="slide-shade"></div><div class="slide-copy"><div class="slide-mini">Real Estate · Development</div><h3>Premium projects deserve premium presentation.</h3><p>Showcase ventures professionally while your team manages availability, enquiries and bookings live.</p></div><div class="slide-stat"><b>3D</b><span>project showcase</span></div></article>
 
     <article class="showcase-slide photo-slide"><div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1400&q=82')"></div><div class="slide-shade"></div><div class="slide-copy"><div class="slide-mini">Homes · Communities</div><h3>Connect every enquiry to the right opportunity.</h3><p>Track buyers even before they select a plot, then move them naturally from interest to site visit and booking.</p></div><div class="slide-stat"><b>CRM</b><span>buyer journey</span></div></article>
 
-    <article class="showcase-slide s2"><div class="slide-orb"></div><div class="slide-mini">CRM · Enquiries</div><h3>Track interest before a plot is selected.</h3><p>Capture general venture enquiries, requirements, follow-up dates and site-visit stages from one shared workspace.</p><div class="slide-stat"><b>360°</b><span>customer journey</span></div></article>
+    <article class="showcase-slide s2 layout-slide"><div class="slide-orb"></div><div class="slide-copy"><div class="slide-mini">Master Plan · New Launch</div><h3>Present a new venture like a modern digital project.</h3><p>Use a clean master-plan view for site visits, enquiries and live availability.</p></div><div class="layout-art layout-b"><div class="layout-road r1"></div><div class="layout-road r2"></div><div class="layout-park">OPEN</div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="slide-stat"><b>NEW</b><span>venture launch</span></div></article>
 
     <article class="showcase-slide photo-slide"><div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=82')"></div><div class="slide-shade"></div><div class="slide-copy"><div class="slide-mini">Sales · Conversion</div><h3>From first visit to ownership.</h3><p>Keep sales conversations, holds, customer details and registrations connected to the same venture record.</p></div><div class="slide-stat"><b>ONE</b><span>shared system</span></div></article>
 
@@ -595,9 +623,20 @@ const indianLocal=v=>{
 };
 const validIndianMobile=v=>/^[6-9][0-9]{9}$/.test(String(v||''));
 const indianE164=v=>validIndianMobile(v)?'+91'+v:null;
-let session=null,mode='login',memberships=[],membership=null,current=null,plots=[],enquiries=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,selectedEnquiry=null,tempStatus='available',viewMode='live',workspaceTab='dashboard',carouselIndex=0,carouselTimer=null;
+let session=null,mode='login',authMethod='email',memberships=[],membership=null,current=null,plots=[],enquiries=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,selectedEnquiry=null,tempStatus='available',viewMode='live',workspaceTab='dashboard',carouselIndex=0,carouselTimer=null;
 
 function setMode(m){mode=m;$('#loginTab').classList.toggle('active',m==='login');$('#signupTab').classList.toggle('active',m==='signup');$('#authGo').textContent=m==='login'?'Sign in':'Create account';$('#forgotPassword').classList.toggle('hidden',m!=='login');$('#authMsg').textContent=''}
+function setAuthMethod(method){
+ authMethod=method;
+ $('#emailMethod').classList.toggle('active',method==='email');
+ $('#phoneMethod').classList.toggle('active',method==='phone');
+ $('#emailAuthWrap').classList.toggle('hidden',method!=='email');
+ $('#phoneAuthWrap').classList.toggle('hidden',method!=='phone');
+ $('#authMsg').textContent='';
+ if(method==='email'){$('#otpVerifyPanel').classList.add('hidden')}
+}
+$('#emailMethod').onclick=()=>setAuthMethod('email');
+$('#phoneMethod').onclick=()=>setAuthMethod('phone');
 function showResetPanel(){
   $('.seg').classList.add('hidden');
   $('#authForm').classList.add('hidden');
@@ -613,13 +652,14 @@ function showAuthForm(){
 function resetSignedOutUi(){
   cleanup();
   current=null;membership=null;selected=null;pending=null;
-  $('#sub').textContent='Real Estate Venture OS';
+  $('#sub').textContent='Real Estate Solutions';
   $('#logout').classList.add('hidden');
   $('#menuBtn').classList.add('hidden');
   $('#password').value='';
   $('#authMsg').textContent='';
   show('#auth');
   showAuthForm();
+  setAuthMethod('email');
 }
 function wirePasswordToggle(buttonId,inputId){
   $(buttonId).onclick=()=>{
@@ -652,6 +692,41 @@ function startResetTimer(){
   }
  },1000);
 }
+let loginOtpCooldown=null;
+function startLoginOtpTimer(){
+ let left=60,b=$('#resendLoginOtp');
+ clearInterval(loginOtpCooldown);b.disabled=true;b.textContent='Resend in 60s';
+ loginOtpCooldown=setInterval(()=>{left--;if(left<=0){clearInterval(loginOtpCooldown);b.disabled=false;b.textContent='Resend OTP'}else b.textContent='Resend in '+left+'s'},1000);
+}
+$('#loginMobile').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,10);
+$('#loginOtp').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);
+async function sendPhoneOtp(){
+ const mobile=$('#loginMobile').value.trim();
+ if(!validIndianMobile(mobile)){ $('#authMsg').textContent='Enter a valid 10-digit Indian mobile number.';return }
+ const phone='+91'+mobile;
+ $('#authMsg').textContent='Sending OTP…';
+ const {error}=await sb.auth.signInWithOtp({phone,options:{shouldCreateUser:true}});
+ if(error){$('#authMsg').textContent=error.message;return}
+ $('#otpPhoneLabel').textContent='+91 '+mobile;
+ $('#otpVerifyPanel').classList.remove('hidden');
+ $('#authMsg').textContent='OTP sent. Enter the 6-digit SMS code.';
+ startLoginOtpTimer();
+}
+$('#sendLoginOtp').onclick=sendPhoneOtp;
+$('#resendLoginOtp').onclick=sendPhoneOtp;
+$('#changeOtpPhone').onclick=()=>{$('#otpVerifyPanel').classList.add('hidden');$('#loginOtp').value='';$('#authMsg').textContent=''};
+$('#verifyLoginOtp').onclick=async()=>{
+ const mobile=$('#loginMobile').value.trim(),token=$('#loginOtp').value.trim();
+ if(!validIndianMobile(mobile)){ $('#authMsg').textContent='Enter a valid mobile number.';return }
+ if(!/^\d{6}$/.test(token)){ $('#authMsg').textContent='Enter the 6-digit OTP.';return }
+ $('#authMsg').textContent='Verifying OTP…';
+ const {data,error}=await sb.auth.verifyOtp({phone:'+91'+mobile,token,type:'sms'});
+ if(error){$('#authMsg').textContent=error.message;return}
+ session=data.session;
+ $('#authMsg').textContent='';
+ $('#logout').classList.remove('hidden');$('#menuBtn').classList.remove('hidden');
+ await loadMemberships();
+};
 $('#forgotPassword').onclick=async()=>{
  const email=$('#email').value.trim();
  if(!email){$('#authMsg').textContent='Enter the email used for this account.';return}
