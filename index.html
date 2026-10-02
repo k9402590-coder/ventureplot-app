@@ -312,10 +312,38 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 .pipeline-card{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pipe{border:1px solid #edf0f4;border-radius:13px;background:#fafbfc;padding:10px}.pipe b{display:block;font-size:20px}.pipe span{font-size:8px;color:#7e8a99;text-transform:uppercase;font-weight:850}
 @media(max-width:720px){.company-home{padding:12px 12px 34px}.company-hero{padding:19px;border-radius:22px}.company-copy h1{font-size:28px}.company-user{position:static;width:max-content;margin-left:auto;margin-bottom:14px}.showcase-slide{flex-basis:86%;min-height:195px}.carousel-track{padding-left:7%;padding-right:7%}#ventureList.portal-list{grid-template-columns:1fr}.portal-tools{grid-template-columns:1fr}.enquiry-actions{grid-template-columns:1fr 1fr 1fr}}
 
+
+/* ===== navigation drawer, six-slide showcase & settings ===== */
+.side-shade{position:fixed;inset:0;background:rgba(2,12,23,.48);backdrop-filter:blur(3px);z-index:180;opacity:1;transition:.25s}.side-shade.hidden{display:none}
+.side-menu{position:fixed;z-index:190;left:0;top:0;bottom:0;width:min(84vw,340px);background:#fff;transform:translateX(-104%);transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:20px 0 50px rgba(15,23,42,.18);padding:calc(16px + env(safe-area-inset-top)) 14px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+.side-menu.open{transform:translateX(0)}.side-head{display:grid;grid-template-columns:44px 1fr 34px;gap:10px;align-items:center;padding:6px 3px 16px;border-bottom:1px solid #edf1f5}.side-logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#0b725d,#0f8a6a);color:#fff;font-size:22px;font-weight:950}.side-head span{font-size:15px;font-weight:900}.side-head small{display:block;color:#8290a1;font-size:9px;margin-top:2px}.side-close{border:0;width:32px;height:32px;border-radius:10px;background:#f1f5f9;font-size:20px;color:#64748b}
+.side-account{display:flex;align-items:center;gap:9px;padding:13px 10px;margin:13px 0 5px;background:#f7faf9;border:1px solid #e3ece9;border-radius:14px}.side-account b{display:block;font-size:10px;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.side-account small{display:block;font-size:8px;color:#8a96a5;margin-top:2px}
+.side-nav{display:grid;gap:5px;margin-top:6px}.side-nav button,.drawer-danger{width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:0;background:transparent;border-radius:13px;padding:12px;color:#26364a;font-weight:800;font-size:11px}.side-nav button:active{background:#edf8f4}.side-nav i,.drawer-danger i{font-style:normal;width:28px;height:28px;border-radius:9px;background:#f1f5f9;display:grid;place-items:center;font-size:13px}.side-footer{margin-top:auto;border-top:1px solid #edf1f5;padding-top:10px}.drawer-danger{color:#b4233c}.drawer-danger i{background:#fff0f2}.drawer-danger.hidden{display:none}
+header .icon{min-width:42px;font-size:18px;padding:8px 11px}
+.photo-slide{padding:0;background:#0f172a}.slide-photo{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.035);transition:transform 6s ease}.showcase-slide.active .slide-photo{transform:scale(1.09)}.slide-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,12,24,.88) 0%,rgba(3,12,24,.64) 52%,rgba(3,12,24,.20) 100%)}.slide-copy{position:relative;z-index:2;padding:20px}.photo-slide .slide-stat{z-index:3}.carousel-wrap{touch-action:pan-y}.carousel-track.dragging{transition:none}.carousel-track.dragging .showcase-slide{transition:none}
+.location-list{display:grid;gap:9px;margin-top:16px}.location-card{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid #e5eaf0;background:#fff;border-radius:14px}.location-pin{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:#eaf8f3;color:#08785f;font-size:15px}.location-card b{font-size:11px}.location-card small{display:block;font-size:8px;color:#8794a3;margin-top:2px}.location-card button{border:0;background:#eef5f2;color:#08745d;border-radius:9px;padding:7px 9px;font-size:8px;font-weight:850}
+.settings-list{display:grid;gap:10px;margin-top:16px}.settings-account{display:flex;gap:10px;align-items:center;padding:13px;border-radius:14px;background:linear-gradient(135deg,#effaf6,#f2f6ff);border:1px solid #e0ebe7}.settings-avatar{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#0f8a6a;color:#fff;font-size:20px;font-weight:950}.settings-account b{font-size:10px}.settings-account small{display:block;font-size:8px;color:#8190a0;margin-top:2px}.setting-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px;border:1px solid #e5eaf0;border-radius:14px;background:#fff}.setting-row b{font-size:11px}.setting-row small{display:block;font-size:8px;color:#8491a1;margin-top:3px;line-height:1.4}.setting-row input{width:22px;height:22px;accent-color:#0f8a6a;flex:0 0 auto}
+body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduce-motion .slide-photo{transition-duration:.01ms!important}
+@media(max-width:720px){.slide-copy{padding:18px}.photo-slide .slide-stat{right:13px;bottom:13px}.side-menu{width:min(87vw,330px)}}
+
 </style>
 </head>
 <body>
-<header><div class="brandwrap"><div class="brandlogo">V</div><div class="brandcopy"><h1>VenturePlot</h1><small id="sub">Real-time plot management · v2.2</small></div></div><button id="logout" class="icon hidden">Sign out</button></header>
+<header><div class="brandwrap"><div class="brandlogo">∞</div><div class="brandcopy"><h1>Infinity Tech</h1><small id="sub">Real Estate Venture OS</small></div></div><button id="menuBtn" class="icon hidden" aria-label="Open menu">☰</button></header>
+
+<div id="sideShade" class="side-shade hidden"></div>
+<aside id="sideMenu" class="side-menu">
+  <div class="side-head"><div class="side-logo">∞</div><div><span>Infinity Tech</span><small>Venture Operations</small></div><button id="closeMenu" class="side-close">×</button></div>
+  <div class="side-account"><span class="userdot"></span><div><b id="drawerEmail">Signed in</b><small>Company workspace</small></div></div>
+  <nav class="side-nav">
+    <button id="drawerHome"><i>⌂</i><span>Home</span></button>
+    <button id="drawerVentures"><i>▦</i><span>Ventures</span></button>
+    <button id="drawerLocations"><i>⌖</i><span>Locations</span></button>
+    <button id="drawerEnquiries"><i>☑</i><span>Enquiries & follow-ups</span></button>
+    <button id="drawerSettings"><i>⚙</i><span>Settings</span></button>
+  </nav>
+  <div class="side-footer"><button id="logout" class="drawer-danger hidden"><i>↪</i><span>Sign out</span></button></div>
+</aside>
 
 <section id="auth">
 <div class="page auth"><div class="card"><div class="big">🏘️</div><h2>Company Login</h2><p class="muted">Owner, manager and employees use the same live system.</p>
@@ -336,9 +364,19 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
   </div>
   <div class="carousel-wrap"><div id="carouselTrack" class="carousel-track">
     <article class="showcase-slide s1 active"><div class="slide-orb"></div><div class="slide-mini">Infinity Tech · Live Inventory</div><h3>See every plot. Know every status.</h3><p>BookMyShow-style digital layouts make availability instantly understandable for your whole team.</p><div class="slide-stat"><b>LIVE</b><span>venture visibility</span></div></article>
-    <article class="showcase-slide s2"><div class="slide-orb"></div><div class="slide-mini">CRM · Enquiries</div><h3>Track buyers even before they choose a plot.</h3><p>Capture general venture enquiries, schedule follow-ups, record requirements and convert them later.</p><div class="slide-stat"><b>360°</b><span>customer journey</span></div></article>
-    <article class="showcase-slide s3"><div class="slide-orb"></div><div class="slide-mini">Sales Operations</div><h3>From first visit to registration.</h3><p>One shared system for customer conversations, holds, bookings, sales and registrations.</p><div class="slide-stat"><b>15s</b><span>auto showcase</span></div></article>
-  </div><div id="carouselDots" class="carousel-dots"><button class="carousel-dot active" data-slide="0"></button><button class="carousel-dot" data-slide="1"></button><button class="carousel-dot" data-slide="2"></button></div></div>
+
+    <article class="showcase-slide photo-slide"><div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=82')"></div><div class="slide-shade"></div><div class="slide-copy"><div class="slide-mini">Real Estate · Development</div><h3>Premium projects deserve premium presentation.</h3><p>Showcase ventures professionally while your team manages availability, enquiries and bookings live.</p></div><div class="slide-stat"><b>3D</b><span>project showcase</span></div></article>
+
+    <article class="showcase-slide photo-slide"><div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1400&q=82')"></div><div class="slide-shade"></div><div class="slide-copy"><div class="slide-mini">Homes · Communities</div><h3>Connect every enquiry to the right opportunity.</h3><p>Track buyers even before they select a plot, then move them naturally from interest to site visit and booking.</p></div><div class="slide-stat"><b>CRM</b><span>buyer journey</span></div></article>
+
+    <article class="showcase-slide s2"><div class="slide-orb"></div><div class="slide-mini">CRM · Enquiries</div><h3>Track interest before a plot is selected.</h3><p>Capture general venture enquiries, requirements, follow-up dates and site-visit stages from one shared workspace.</p><div class="slide-stat"><b>360°</b><span>customer journey</span></div></article>
+
+    <article class="showcase-slide photo-slide"><div class="slide-photo" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=82')"></div><div class="slide-shade"></div><div class="slide-copy"><div class="slide-mini">Sales · Conversion</div><h3>From first visit to ownership.</h3><p>Keep sales conversations, holds, customer details and registrations connected to the same venture record.</p></div><div class="slide-stat"><b>ONE</b><span>shared system</span></div></article>
+
+    <article class="showcase-slide s3"><div class="slide-orb"></div><div class="slide-mini">Infinity Tech · Operations</div><h3>Run the entire venture from your phone.</h3><p>Owners, managers and sales teams see the same real-time data, with fast access to plots, customers and follow-ups.</p><div class="slide-stat"><b>15s</b><span>auto showcase</span></div></article>
+  </div><div id="carouselDots" class="carousel-dots">
+    <button class="carousel-dot active" data-slide="0"></button><button class="carousel-dot" data-slide="1"></button><button class="carousel-dot" data-slide="2"></button><button class="carousel-dot" data-slide="3"></button><button class="carousel-dot" data-slide="4"></button><button class="carousel-dot" data-slide="5"></button>
+  </div></div>
   <div class="portfolio-head"><div><span class="eyebrow">Portfolio</span><h2>Your ventures</h2><p>Jump directly into a project workspace.</p></div><span id="portfolioCount" class="portfolio-count">0 ventures</span></div>
   <div id="ventureList" class="portal-list"></div>
   <div class="portal-tools">
@@ -480,6 +518,20 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 <div class="sep"><h3>Customer / plot owner</h3><label>Name</label><input id="cname"><label>Mobile number</label><div class="phonefield"><span class="phoneprefix">+91</span><input id="mobile" inputmode="numeric" autocomplete="tel-national" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile"></div><div class="phonehint">Indian mobile number · exactly 10 digits</div><label>Amount paid</label><input id="paid" type="number"></div>
 <div class="sep"><h3>Follow-up</h3><label>Date</label><input id="fdate" type="date"><label>Note</label><textarea id="fnote" rows="2"></textarea></div>
 <div class="actions"><button id="save" class="btn primary">Save</button><button id="whatsapp" class="btn wa">WhatsApp</button><button id="del" class="btn danger">Delete</button><button id="cancel" class="btn secondary">Close</button></div><div id="plotMsg" class="msg"></div></div></div></div>
+<div id="locationsSheet" class="sheet hidden"><div id="locationsShade" class="shade"></div><div class="sheetbox">
+    <div class="sheethead"><div><span class="overline">Portfolio</span><h2>Locations</h2><div class="muted">All venture locations available to your account.</div></div><button id="closeLocations" class="btn secondary">×</button></div>
+    <div id="locationsList" class="location-list"></div>
+  </div></div>
+
+  <div id="settingsSheet" class="sheet hidden"><div id="settingsShade" class="shade"></div><div class="sheetbox">
+    <div class="sheethead"><div><span class="overline">Preferences</span><h2>Settings</h2><div class="muted">Personal display preferences for this device.</div></div><button id="closeSettings" class="btn secondary">×</button></div>
+    <div class="settings-list">
+      <div class="settings-account"><div class="settings-avatar">∞</div><div><b id="settingsEmail">Account</b><small>Infinity Tech user</small></div></div>
+      <label class="setting-row"><div><b>Auto-play showcase</b><small>Move to the next 3D slide every 15 seconds.</small></div><input id="settingAutoplay" type="checkbox" checked></label>
+      <label class="setting-row"><div><b>Reduce motion</b><small>Use simpler transitions on this device.</small></div><input id="settingMotion" type="checkbox"></label>
+    </div>
+  </div></div>
+
 <div id="enquirySheet" class="sheet enquiry-sheet hidden"><div id="enquiryShade" class="shade"></div><div class="sheetbox">
   <div class="sheethead"><div><span class="overline">CRM</span><h2 id="enquiryTitle">Add enquiry</h2><div class="muted">Customer can be interested in the venture without choosing a plot.</div></div><button id="closeEnquiry" class="btn secondary">×</button></div>
   <div class="form">
@@ -561,8 +613,9 @@ function showAuthForm(){
 function resetSignedOutUi(){
   cleanup();
   current=null;membership=null;selected=null;pending=null;
-  $('#sub').textContent='Real-time plot management · v2.2';
+  $('#sub').textContent='Real Estate Venture OS';
   $('#logout').classList.add('hidden');
+  $('#menuBtn').classList.add('hidden');
   $('#password').value='';
   $('#authMsg').textContent='';
   show('#auth');
@@ -644,6 +697,7 @@ async function boot(){
    if(event==='PASSWORD_RECOVERY'){
      localStorage.setItem('vp_password_recovery_pending','1');
      $('#logout').classList.add('hidden');
+     $('#menuBtn').classList.add('hidden');
      show('#auth');
      showResetPanel();
      return;
@@ -658,12 +712,14 @@ async function boot(){
 
  if(resetRequested&&session){
    $('#logout').classList.add('hidden');
+   $('#menuBtn').classList.add('hidden');
    show('#auth');
    showResetPanel();
    return;
  }
  if(!session){show('#auth');return}
  $('#logout').classList.remove('hidden');
+ $('#menuBtn').classList.remove('hidden');
  await loadMemberships();
 }
 $('#authForm').onsubmit=async e=>{
@@ -672,9 +728,10 @@ $('#authForm').onsubmit=async e=>{
  const r=mode==='login'?await sb.auth.signInWithPassword({email,password}):await sb.auth.signUp({email,password,options:{data:{display_name:email.split('@')[0]},emailRedirectTo:location.origin+location.pathname}});
  if(r.error){$('#authMsg').textContent=r.error.message;return}
  if(mode==='signup'&&!r.data.session){$('#authMsg').textContent='Account created. Check your email to confirm, then sign in.';setMode('login');return}
- session=r.data.session;$('#authMsg').textContent='';$('#logout').classList.remove('hidden');await loadMemberships();
+ session=r.data.session;$('#authMsg').textContent='';$('#logout').classList.remove('hidden');$('#menuBtn').classList.remove('hidden');await loadMemberships();
 };
 $('#logout').onclick=async()=>{
+ closeSideMenu();
  $('#logout').disabled=true;
  await sb.auth.signOut();
  $('#logout').disabled=false;
@@ -683,10 +740,12 @@ $('#logout').onclick=async()=>{
 
 async function loadMemberships(){
  $('#who').textContent=session.user.email||'';
+ $('#drawerEmail').textContent=session.user.email||'Signed in';
+ $('#settingsEmail').textContent=session.user.email||'Account';
  const {data,error}=await sb.from('venture_members').select('venture_id,role,ventures(id,name,location,join_code,layout_storage_path)').eq('user_id',session.user.id);
  if(error){toast(error.message);return}
  memberships=(data||[]).map(x=>({venture_id:x.venture_id,role:x.role,venture:x.ventures}));
- $('#sub').textContent='Infinity Tech · Venture Operations'; renderMemberships();show('#ventures'); startCompanyCarousel();
+ $('#sub').textContent='Real Estate Venture OS'; renderMemberships();renderLocations();show('#ventures'); startCompanyCarousel();
 }
 function renderMemberships(){
  const el=$('#ventureList');
@@ -695,6 +754,13 @@ function renderMemberships(){
  el.innerHTML=memberships.map((m,i)=>'<div class="card venture portal-venture"><span class="venture-index">'+String(i+1).padStart(2,'0')+'</span><div><span class="eyebrow">Venture</span><h3>'+esc(m.venture.name)+'</h3><div class="venture-loc">⌖ '+esc(m.venture.location||'Location not set')+'</div><span class="pill">'+esc(m.role)+'</span></div><button class="btn primary small" data-i="'+i+'">Open →</button></div>').join('');
  el.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>openVenture(+b.dataset.i));
 }
+function renderLocations(){
+ const box=$('#locationsList');if(!box)return;
+ if(!memberships.length){box.innerHTML='<div class="empty-state"><b>No locations yet</b><span>Create or join a venture first.</span></div>';return}
+ box.innerHTML=memberships.map((m,i)=>'<div class="location-card"><div class="location-pin">⌖</div><div><b>'+esc(m.venture.location||'Location not set')+'</b><small>'+esc(m.venture.name)+'</small></div><button data-loc="'+i+'">Open</button></div>').join('');
+ box.querySelectorAll('[data-loc]').forEach(b=>b.onclick=()=>{closeLocations();openVenture(+b.dataset.loc)});
+}
+
 $('#createVenture').onclick=async()=>{
  const n=$('#newName').value.trim(),l=$('#newLoc').value.trim();if(!n)return;
  const {data,error}=await sb.rpc('create_venture',{p_name:n,p_location:l});
@@ -710,7 +776,7 @@ $('#joinVenture').onclick=async()=>{
 
 async function openVenture(i){
  membership=memberships[i];current=membership.venture;
- $('#vname').textContent=current.name;$('#vloc').textContent=current.location||'';$('#sub').textContent=current.name;
+ $('#vname').textContent=current.name;$('#vloc').textContent=current.location||'';$('#sub').textContent='Infinity Tech · '+current.name;
  $('#heroName').textContent=current.name;
  $('#heroLocation').textContent=(current.location||'Location not set')+' · Live sales and inventory overview';
  $('#moreAccount').textContent='Signed in as '+(session.user.email||'user')+'.';
@@ -723,7 +789,7 @@ async function openVenture(i){
  setWorkspaceTab('dashboard');
  subscribe();
 }
-$('#back').onclick=()=>{cleanup();current=null;membership=null;$('#sub').textContent='Infinity Tech · Venture Operations';show('#ventures');startCompanyCarousel()};
+$('#back').onclick=()=>goCompanyHome();
 $('#shareCode').onclick=async()=>{
  const text='Join '+current.name+' in VenturePlot with code: '+current.join_code;
  if(navigator.share)await navigator.share({title:'VenturePlot',text}).catch(()=>{});
@@ -1065,6 +1131,27 @@ $('#saveEnquiry').onclick=async()=>{
 $('#deleteEnquiry').onclick=async()=>{if(!selectedEnquiry||!confirm('Delete this enquiry?'))return;const id=selectedEnquiry.id;const r=await sb.from('venture_enquiries').delete().eq('id',id);if(r.error){$('#enquiryMsg').textContent=r.error.message;return}closeEnquiry();toast('Enquiry deleted');await loadEnquiries()};
 
 
+
+function openSideMenu(){$('#sideShade').classList.remove('hidden');$('#sideMenu').classList.add('open')}
+function closeSideMenu(){$('#sideShade').classList.add('hidden');$('#sideMenu').classList.remove('open')}
+$('#menuBtn').onclick=openSideMenu;$('#closeMenu').onclick=closeSideMenu;$('#sideShade').onclick=closeSideMenu;
+function goCompanyHome(scrollTarget=null){
+ closeSideMenu();cleanup();current=null;membership=null;$('#sub').textContent='Real Estate Venture OS';show('#ventures');startCompanyCarousel();
+ if(scrollTarget)setTimeout(()=>document.querySelector(scrollTarget)?.scrollIntoView({behavior:'smooth'}),80);else window.scrollTo({top:0,behavior:'smooth'});
+}
+$('#drawerHome').onclick=()=>goCompanyHome();
+$('#drawerVentures').onclick=()=>goCompanyHome('.portfolio-head');
+$('#drawerEnquiries').onclick=()=>{closeSideMenu();if(current)setWorkspaceTab('follow');else if(memberships.length)openVenture(0).then(()=>setWorkspaceTab('follow'));else toast('Create or join a venture first')};
+function openLocations(){closeSideMenu();renderLocations();$('#locationsSheet').classList.remove('hidden')}
+function closeLocations(){$('#locationsSheet').classList.add('hidden')}
+$('#drawerLocations').onclick=openLocations;$('#closeLocations').onclick=closeLocations;$('#locationsShade').onclick=closeLocations;
+function openSettings(){closeSideMenu();$('#settingAutoplay').checked=localStorage.getItem('it_autoplay')!=='0';$('#settingMotion').checked=localStorage.getItem('it_reduce_motion')==='1';$('#settingsSheet').classList.remove('hidden')}
+function closeSettings(){$('#settingsSheet').classList.add('hidden')}
+$('#drawerSettings').onclick=openSettings;$('#closeSettings').onclick=closeSettings;$('#settingsShade').onclick=closeSettings;
+$('#settingAutoplay').onchange=e=>{localStorage.setItem('it_autoplay',e.target.checked?'1':'0');if(e.target.checked)startCompanyCarousel();else stopCompanyCarousel()};
+$('#settingMotion').onchange=e=>{localStorage.setItem('it_reduce_motion',e.target.checked?'1':'0');document.body.classList.toggle('reduce-motion',e.target.checked)};
+document.body.classList.toggle('reduce-motion',localStorage.getItem('it_reduce_motion')==='1');
+
 function setCarousel(index){
  const slides=qsa('.showcase-slide'),dots=qsa('.carousel-dot');if(!slides.length)return;
  carouselIndex=(index+slides.length)%slides.length;
@@ -1074,9 +1161,21 @@ function setCarousel(index){
  slides.forEach((s,i)=>s.classList.toggle('active',i===carouselIndex));
  dots.forEach((d,i)=>d.classList.toggle('active',i===carouselIndex));
 }
-function startCompanyCarousel(){stopCompanyCarousel();setTimeout(()=>setCarousel(0),80);carouselTimer=setInterval(()=>setCarousel(carouselIndex+1),15000)}
+function startCompanyCarousel(){
+ stopCompanyCarousel();setTimeout(()=>setCarousel(carouselIndex||0),80);
+ if(localStorage.getItem('it_autoplay')==='0')return;
+ carouselTimer=setInterval(()=>setCarousel(carouselIndex+1),15000)
+}
 function stopCompanyCarousel(){if(carouselTimer)clearInterval(carouselTimer);carouselTimer=null}
 qsa('.carousel-dot').forEach(d=>d.onclick=()=>{setCarousel(+d.dataset.slide);startCompanyCarousel()});
+let swipeStartX=0,swipeStartY=0;
+const carousel=$('.carousel-wrap');
+carousel.addEventListener('touchstart',e=>{const t=e.touches[0];swipeStartX=t.clientX;swipeStartY=t.clientY;stopCompanyCarousel()},{passive:true});
+carousel.addEventListener('touchend',e=>{
+ const t=e.changedTouches[0],dx=t.clientX-swipeStartX,dy=t.clientY-swipeStartY;
+ if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){setCarousel(carouselIndex+(dx<0?1:-1))}
+ startCompanyCarousel();
+},{passive:true});
 $('#jumpVenture').onclick=()=>document.querySelector('.portfolio-head')?.scrollIntoView({behavior:'smooth'});
 $('#jumpEnquiries').onclick=()=>{if(memberships.length){openVenture(0).then(()=>setWorkspaceTab('follow'))}else toast('Create or join a venture first')};
 window.addEventListener('resize',()=>{if(!$('#ventures').classList.contains('hidden'))setCarousel(carouselIndex)});
