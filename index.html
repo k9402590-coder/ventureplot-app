@@ -362,13 +362,76 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 
 /* ===== temporary direct-open mode: no login screen ===== */
 body.public-preview .portal-tools{display:none!important}
-body.public-preview .company-user{display:none!important}
 body.public-preview #drawerEnquiries{display:none!important}
 body.public-preview #drawerLocations{display:none!important}
 body.public-preview #logout{display:none!important}
 .public-main-note{display:flex;align-items:flex-start;gap:12px;padding:18px;border:1px solid #dce8e4;border-radius:18px;background:linear-gradient(135deg,#f4fbf8,#f7f9ff);box-shadow:var(--shadow-sm)}
 .public-main-note .public-main-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#e6f7f1;color:#0f8a6a;font-size:22px;font-weight:900;flex:0 0 auto}
 .public-main-note b{display:block;font-size:14px;margin-bottom:4px}.public-main-note span{display:block;font-size:10px;line-height:1.55;color:#708095}
+
+
+/* ===== premium company-home polish ===== */
+.company-home{padding:20px 14px 44px}
+.company-hero{
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 28px 65px rgba(8,45,52,.22),inset 0 1px 0 rgba(255,255,255,.06)
+}
+.company-hero:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.055),transparent 26%,transparent 72%,rgba(255,255,255,.035))
+}
+.company-brandline{gap:14px}
+.company-mark{
+  width:52px;height:52px;border-radius:17px;font-size:23px;
+  box-shadow:0 12px 28px rgba(0,0,0,.18)
+}
+.company-brandline h2{font-size:24px;letter-spacing:-.8px;margin:0}
+.company-brandline .company-solution{margin-top:4px;color:#9be7d2;font-size:8px;letter-spacing:.18em}
+.company-badge{
+  position:absolute;right:18px;top:18px;z-index:3;
+  padding:8px 11px;border-radius:999px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);
+  color:#c9f5e8;font-size:7px;font-weight:900;letter-spacing:.14em;
+  backdrop-filter:blur(12px)
+}
+.company-copy{margin-top:34px}
+.company-copy h1{font-size:35px;line-height:1.055;letter-spacing:-1.45px;max-width:650px}
+.company-copy p{font-size:12.5px;line-height:1.7;max-width:590px}
+.company-actions{margin-top:20px;gap:10px}
+.company-actions button{
+  min-height:44px;padding:12px 16px;border-radius:14px;
+  font-size:10px;letter-spacing:.01em;transition:transform .2s ease,box-shadow .2s ease,background .2s ease
+}
+.company-actions .light{box-shadow:0 10px 24px rgba(0,0,0,.16)}
+.company-actions .glass{backdrop-filter:blur(14px)}
+.hero-trust{
+  position:relative;z-index:2;display:flex;gap:13px;flex-wrap:wrap;
+  margin-top:18px;padding-top:15px;border-top:1px solid rgba(255,255,255,.10)
+}
+.hero-trust span{display:flex;align-items:center;gap:6px;font-size:8px;font-weight:800;color:rgba(255,255,255,.72)}
+.hero-trust i{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 4px rgba(74,222,128,.10)}
+.carousel-wrap{margin-top:20px}
+.showcase-slide{
+  min-height:224px;border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 20px 46px rgba(15,23,42,.18)
+}
+.showcase-slide.active{box-shadow:0 26px 58px rgba(15,23,42,.22)}
+.portfolio-head{margin-top:28px}
+@media (hover:hover) and (pointer:fine){
+  .company-actions button:hover{transform:translateY(-1px)}
+  .company-actions .light:hover{box-shadow:0 14px 28px rgba(0,0,0,.20)}
+}
+@media(max-width:560px){
+  .company-home{padding:14px 12px 38px}
+  .company-hero{padding:20px;border-radius:24px}
+  .company-badge{position:static;display:inline-flex;margin:0 0 17px;padding:7px 10px}
+  .company-brandline{align-items:center}
+  .company-copy{margin-top:30px}
+  .company-copy h1{font-size:34px}
+  .company-copy p{font-size:12px}
+  .hero-trust{gap:10px}
+  .showcase-slide{flex-basis:84%;min-height:230px}
+}
 
 </style>
 </head>
@@ -435,10 +498,11 @@ body.public-preview #logout{display:none!important}
 <section id="ventures" class="hidden">
 <div class="company-home">
   <div class="company-hero">
-    <div class="company-user"><span class="userdot"></span><span id="who"></span></div>
-    <div class="company-brandline"><div class="company-mark">∞</div><div><small>Real Estate Solutions</small><h2>Infinity Tech</h2><small class="company-solution">Real Estate Solutions</small></div></div>
+    <div class="company-badge">PROPERTY OPERATIONS PLATFORM</div>
+    <div class="company-brandline"><div class="company-mark">∞</div><div><h2>Infinity Tech</h2><small class="company-solution">Real Estate Solutions</small></div></div>
     <div class="company-copy"><span class="eyebrow">Real estate technology</span><h1>One intelligent workspace for every venture.</h1><p>Live plot inventory, customer enquiries, bookings and follow-ups — designed for owners, managers and sales teams.</p>
       <div class="company-actions"><button id="jumpVenture" class="light">Open a venture →</button><button id="jumpEnquiries" class="glass">View enquiries</button></div>
+      <div class="hero-trust"><span><i></i>Live inventory</span><span><i></i>Sales CRM</span><span><i></i>Venture operations</span></div>
     </div>
   </div>
   <div class="carousel-wrap"><div id="carouselTrack" class="carousel-track">
