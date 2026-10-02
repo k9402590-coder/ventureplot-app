@@ -772,6 +772,21 @@ const indianLocal=v=>{
 const validIndianMobile=v=>/^[6-9][0-9]{9}$/.test(String(v||''));
 const indianE164=v=>validIndianMobile(v)?'+91'+v:null;
 let session=null,memberships=[],membership=null,current=null,plots=[],enquiries=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,selectedEnquiry=null,tempStatus='available',viewMode='live',workspaceTab='dashboard',carouselIndex=0,carouselTimer=null;
+let localMode=false;
+const LOCAL_PLOTS_KEY='it_siri_chandana_plots';
+const LOCAL_ENQUIRIES_KEY='it_siri_chandana_enquiries';
+function localPlotsDefault(){
+  const xs=[.045,.245,.345,.535,.635,.79,.845],ws=[.09,.075,.075,.075,.075,.05,.05],a=[];
+  for(let i=1;i<=125;i++){const col=Math.min(xs.length-1,Math.floor((i-1)/18)),row=(i-1)%18;a.push({id:'local-'+i,venture_id:'local-siri-chandana',plot_no:String(i),status:i>123?'sold':i>119?'booked':'available',x_pct:xs[col],y_pct:.085+row*.044,w_pct:ws[col],h_pct:.032,width_ft:null,depth_ft:null,area_sqyd:null,facing:null,road_width_ft:null,rate_per_sqyd:null,customer_name:null,customer_mobile:null,amount_paid:0,followup_date:null,followup_note:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()})}
+  return a;
+}
+function localRead(k,fallback){try{const v=JSON.parse(localStorage.getItem(k)||'null');return Array.isArray(v)?v:fallback}catch{return fallback}}
+function localSavePlots(){localStorage.setItem(LOCAL_PLOTS_KEY,JSON.stringify(plots))}
+function localSaveEnquiries(){localStorage.setItem(LOCAL_ENQUIRIES_KEY,JSON.stringify(enquiries))}
+function localId(p){return p+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,7)}
+async function localPdfDb(){return await new Promise((resolve,reject)=>{const r=indexedDB.open('InfinityTechLocal',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('files'))r.result.createObjectStore('files')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
+async function saveLocalPdf(bytes){const db=await localPdfDb();await new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').put(new Blob([bytes],{type:'application/pdf'}),'layout');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)});db.close()}
+async function loadLocalPdf(){try{const db=await localPdfDb();const blob=await new Promise((resolve,reject)=>{const tx=db.transaction('files','readonly');const r=tx.objectStore('files').get('layout');r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>reject(r.error)});db.close();if(blob)await renderPdf(await blob.arrayBuffer());else emptyLayout()}catch(e){emptyLayout()}}
 
 const DEVICE_PIN_KEY='infinitytech_device_pin_v3';
 const PIN_AUTH_URL='https://tylttehklzzmjwdpbxvi.supabase.co/functions/v1/mobile-pin-auth';
@@ -1029,20 +1044,18 @@ $('#joinVenture').onclick=async()=>{
 };
 
 async function openVenture(i){
- membership=memberships[i];current=membership.venture;
+ membership=memberships[i];current=membership.venture;localMode=!!membership.localMode;
  $('#vname').textContent=current.name;$('#vloc').textContent=current.location||'';$('#sub').textContent='Infinity Tech · '+current.name;
  $('#heroName').textContent=current.name;
- $('#heroLocation').textContent=(current.location||'Location not set')+' · Live sales and inventory overview';
- const accountMobile=session.user?.user_metadata?.login_mobile||session.user?.phone||('+91'+readSavedMobile()); $('#moreAccount').textContent='Signed in as '+String(accountMobile||'').replace('+91','+91 ')+'.';
+ $('#heroLocation').textContent=(current.location||'Location not set')+' · '+(localMode?'Device workspace':'Live sales and inventory overview');
+ $('#moreAccount').textContent=localMode?'Temporary no-login mode · saved on this device.':'Signed in.';
  const admin=['owner','manager'].includes(membership.role);
  $('#mapView').classList.toggle('hidden',!admin);
  $('#moreLayout').classList.toggle('hidden',!admin);
- $('#pinAdminCard').classList.toggle('hidden',!admin);
+ $('#pinAdminCard').classList.add('hidden');
  stopCompanyCarousel();show('#layout');await loadPlots();await loadEnquiries();
- if(current.layout_storage_path)await loadPdfPath(current.layout_storage_path);else emptyLayout();
- setViewMode('live');
- setWorkspaceTab('dashboard');
- subscribe();
+ if(localMode)await loadLocalPdf(); else if(current.layout_storage_path)await loadPdfPath(current.layout_storage_path); else emptyLayout();
+ setViewMode('live');setWorkspaceTab('dashboard');if(!localMode)subscribe();
 }
 $('#back').onclick=()=>goCompanyHome();
 $('#shareCode').onclick=async()=>{
@@ -1052,16 +1065,16 @@ $('#shareCode').onclick=async()=>{
 };
 
 async function loadPlots(){
+ if(localMode){plots=localRead(LOCAL_PLOTS_KEY,localPlotsDefault());if(!localStorage.getItem(LOCAL_PLOTS_KEY))localSavePlots();counts();renderDashboard();renderCustomers();renderOverlay();renderCleanLayout();renderFollowups();return}
  const {data,error}=await sb.from('plots').select('*').eq('venture_id',current.id).order('plot_no');
  if(error){toast(error.message);return}
  plots=data||[];counts();renderDashboard();renderCustomers();renderOverlay();renderCleanLayout();renderFollowups();
 }
 async function loadEnquiries(){
+ if(localMode){enquiries=localRead(LOCAL_ENQUIRIES_KEY,[]);renderDashboard();renderFollowups();return}
  const {data,error}=await sb.from('venture_enquiries').select('*').eq('venture_id',current.id).order('created_at',{ascending:false});
  if(error){toast(error.message);return}
- enquiries=data||[];
- renderDashboard();
- renderFollowups();
+ enquiries=data||[];renderDashboard();renderFollowups();
 }
 function counts(){
  const n=s=>plots.filter(p=>p.status===s).length;
