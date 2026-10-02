@@ -659,7 +659,8 @@ const validIndianMobile=v=>/^[6-9][0-9]{9}$/.test(String(v||''));
 const indianE164=v=>validIndianMobile(v)?'+91'+v:null;
 let session=null,memberships=[],membership=null,current=null,plots=[],enquiries=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,selectedEnquiry=null,tempStatus='available',viewMode='live',workspaceTab='dashboard',carouselIndex=0,carouselTimer=null;
 
-const DEVICE_PIN_KEY='infinitytech_device_pin_v2';
+const DEVICE_PIN_KEY='infinitytech_device_pin_v3';
+const PIN_AUTH_URL='https://tylttehklzzmjwdpbxvi.supabase.co/functions/v1/mobile-pin-auth';
 let appUnlocked=false;
 let authView='login';
 
@@ -673,22 +674,8 @@ toggleSecret('#toggleLoginPin','#loginPin');
 toggleSecret('#toggleNewPin','#newPin');
 toggleSecret('#toggleNewPinConfirm','#newPinConfirm');
 
-const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a)));
-async function derivePin(pin,salt){
- const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(pin),'PBKDF2',false,['deriveBits']);
- const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:new TextEncoder().encode(salt),iterations:120000,hash:'SHA-256'},key,256);
- return b64(bits);
-}
-function readDevicePin(){try{return JSON.parse(localStorage.getItem(DEVICE_PIN_KEY)||'null')}catch{return null}}
-async function saveDevicePin(mobile,pin,kind='local'){
- const salt=crypto.randomUUID(),hash=await derivePin(pin,salt);
- localStorage.setItem(DEVICE_PIN_KEY,JSON.stringify({mobile:'+91'+mobile,salt,hash,kind}));
-}
-async function verifyDevicePin(mobile,pin){
- const saved=readDevicePin();if(!saved||saved.mobile!=='+91'+mobile)return false;
- return (await derivePin(pin,saved.salt))===saved.hash;
-}
-const aliasEmail=mobile=>'mobile.'+mobile+'@login.infinitytech.local';
+function readSavedMobile(){try{return localStorage.getItem(DEVICE_PIN_KEY)||''}catch{return ''}}
+function saveMobile(mobile){try{localStorage.setItem(DEVICE_PIN_KEY,mobile)}catch{}}
 
 function setPinAuthView(view){
  authView=view;
@@ -706,14 +693,31 @@ function resetSignedOutUi(){
  $('#sub').textContent='Real Estate Solutions';
  $('#logout').classList.add('hidden');$('#menuBtn').classList.add('hidden');
  $('#loginPin').value='';$('#newPin').value='';$('#newPinConfirm').value='';$('#authMsg').textContent='';
- const saved=readDevicePin();
- $('#loginMobile').value=saved?.mobile?saved.mobile.replace('+91',''):'';
+ $('#loginMobile').value=readSavedMobile();
  setPinAuthView('login');
  show('#auth');
 }
 
-async function finishPinLogin(activeSession){
- session=activeSession;appUnlocked=true;$('#authMsg').textContent='';
+async function pinApi(action,mobile,pin,token=''){
+ const headers={'Content-Type':'application/json'};
+ if(token)headers.Authorization='Bearer '+token;
+ const response=await fetch(PIN_AUTH_URL,{method:'POST',headers,body:JSON.stringify({action,mobile,pin})});
+ let payload={};
+ try{payload=await response.json()}catch{}
+ if(!response.ok)throw new Error(payload.error||'Unable to process request.');
+ return payload;
+}
+
+async function finishPinLogin(data,mobile){
+ const {data:sessionData,error}=await sb.auth.setSession({
+   access_token:data.access_token,
+   refresh_token:data.refresh_token
+ });
+ if(error||!sessionData.session)throw error||new Error('Unable to create session.');
+ session=sessionData.session;
+ saveMobile(mobile);
+ appUnlocked=true;
+ $('#authMsg').textContent='';
  $('#logout').classList.remove('hidden');$('#menuBtn').classList.remove('hidden');
  await loadMemberships();
 }
@@ -724,20 +728,13 @@ $('#unlockApp').onclick=async()=>{
  if(!/^\d{6}$/.test(pin)){ $('#authMsg').textContent='Enter your 6-digit PIN.';return}
  $('#unlockApp').disabled=true;$('#unlockApp').textContent='Signing in…';$('#authMsg').textContent='';
  try{
-   const direct=await sb.auth.signInWithPassword({email:aliasEmail(mobile),password:pin});
-   if(!direct.error&&direct.data.session){
-     await saveDevicePin(mobile,pin,'account');
-     await finishPinLogin(direct.data.session);
-     return;
-   }
-   const current=(await sb.auth.getSession()).data.session;
-   if(current&&await verifyDevicePin(mobile,pin)){
-     await finishPinLogin(current);
-     return;
-   }
-   $('#authMsg').textContent='Incorrect mobile number or PIN.';
- }catch(e){$('#authMsg').textContent=e.message||'Unable to sign in.'}
- finally{$('#unlockApp').disabled=false;$('#unlockApp').textContent='Sign in'}
+   const data=await pinApi('login',mobile,pin);
+   await finishPinLogin(data,mobile);
+ }catch(e){
+   $('#authMsg').textContent=e.message||'Incorrect mobile number or PIN.';
+ }finally{
+   $('#unlockApp').disabled=false;$('#unlockApp').textContent='Sign in';
+ }
 };
 
 $('#createPinUser').onclick=async()=>{
@@ -745,37 +742,15 @@ $('#createPinUser').onclick=async()=>{
  if(!validIndianMobile(mobile)){ $('#authMsg').textContent='Enter a valid 10-digit Indian mobile number.';return}
  if(!/^\d{6}$/.test(pin)){ $('#authMsg').textContent='Create a PIN with exactly 6 digits.';return}
  if(pin!==confirmPin){$('#authMsg').textContent='PIN and Confirm PIN do not match.';return}
+
  $('#createPinUser').disabled=true;$('#createPinUser').textContent='Creating…';$('#authMsg').textContent='';
  try{
    const existing=(await sb.auth.getSession()).data.session;
-
-   // Preserve the current owner's venture access when converting this existing browser to mobile + PIN.
-   if(existing && !String(existing.user?.email||'').endsWith('@login.infinitytech.local')){
-     await saveDevicePin(mobile,pin,'legacy');
-     await finishPinLogin(existing);
-     toast('Mobile PIN created');
-     return;
-   }
-
-   const created=await sb.auth.signUp({
-     email:aliasEmail(mobile),
-     password:pin,
-     options:{data:{login_mobile:'+91'+mobile,pin_login_enabled:true}}
-   });
-   if(created.error)throw created.error;
-
-   let active=created.data.session;
-   if(!active){
-     const signed=await sb.auth.signInWithPassword({email:aliasEmail(mobile),password:pin});
-     if(signed.error||!signed.data.session)throw new Error('Account created but automatic sign-in is unavailable. Please contact the administrator.');
-     active=signed.data.session;
-   }
-   await saveDevicePin(mobile,pin,'account');
-   await finishPinLogin(active);
-   toast('Account created');
+   const data=await pinApi('register',mobile,pin,existing?.access_token||'');
+   await finishPinLogin(data,mobile);
+   toast('Account created successfully');
  }catch(e){
-   const msg=String(e.message||'Unable to create account.');
-   $('#authMsg').textContent=/already|registered|exists/i.test(msg)?'This mobile number is already registered. Use Sign in.':msg;
+   $('#authMsg').textContent=e.message||'Unable to create account.';
  }finally{
    $('#createPinUser').disabled=false;$('#createPinUser').textContent='Create account';
  }
@@ -785,17 +760,22 @@ async function boot(){
  if(!sb){bootFailure('Secure login service did not load. Please refresh the page.');return}
  sb.auth.onAuthStateChange((event,s)=>{session=s});
  const r=await sb.auth.getSession();session=r.data.session;
+ if(session){
+   const mobile=session.user?.user_metadata?.login_mobile?.replace('+91','')||readSavedMobile();
+   if(mobile)saveMobile(mobile);
+ }
  resetSignedOutUi();
 }
 
 $('#logout').onclick=async()=>{
  closeSideMenu();appUnlocked=false;
- $('#logout').classList.add('hidden');$('#menuBtn').classList.add('hidden');
+ await sb.auth.signOut();
+ session=null;
  resetSignedOutUi();
 };
 
 async function loadMemberships(){
- const localIdentity=readDevicePin()?.mobile; const metaMobile=session.user?.user_metadata?.login_mobile; const signedIdentity=(localIdentity||metaMobile)?String(localIdentity||metaMobile).replace('+91','+91 '):(session.user.phone?session.user.phone.replace('+91','+91 '):(session.user.email||'Signed in'));
+ const metaMobile=session.user?.user_metadata?.login_mobile; const signedIdentity=metaMobile?String(metaMobile).replace('+91','+91 '):('+91 '+readSavedMobile());
  $('#who').textContent=signedIdentity;
  $('#drawerEmail').textContent=signedIdentity;
  $('#settingsEmail').textContent=signedIdentity;
