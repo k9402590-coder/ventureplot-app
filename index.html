@@ -1243,13 +1243,15 @@ function renderCleanLayout(){
 
 $('#pdfInput').onchange=async e=>{
  const f=e.target.files?.[0];if(!f)return;
+ const bytes=await f.arrayBuffer();
+ if(localMode){try{toast('Saving layout…');await saveLocalPdf(bytes);await renderPdf(bytes);e.target.value='';toast('Layout saved on this device')}catch(err){console.error(err);toast('Could not save layout')}return}
  toast('Uploading PDF…');
  const path=current.id+'/'+Date.now()+'-'+f.name.replace(/[^\w.\-]+/g,'_');
  const up=await sb.storage.from('venture-layouts').upload(path,f,{contentType:'application/pdf'});
  if(up.error){toast(up.error.message);return}
  const save=await sb.from('ventures').update({layout_storage_path:path}).eq('id',current.id);
  if(save.error){toast(save.error.message);return}
- current.layout_storage_path=path;await renderPdf(await f.arrayBuffer());e.target.value='';toast('Layout uploaded');
+ current.layout_storage_path=path;await renderPdf(bytes);e.target.value='';toast('Layout uploaded');
 };
 async function loadPdfPath(path){
  try{const r=await sb.storage.from('venture-layouts').download(path);if(r.error)throw r.error;await renderPdf(await r.data.arrayBuffer())}
@@ -1311,7 +1313,12 @@ $('#save').onclick=async()=>{
    $('#mobile').focus();
    return;
  }
- const payload={venture_id:current.id,plot_no:plotNo,width_ft:num($('#width').value),depth_ft:num($('#depth').value),facing:$('#facing').value,road_width_ft:num($('#road').value),rate_per_sqyd:num($('#rate').value),status:tempStatus,customer_name:customerName,customer_mobile:indianE164(mobile),amount_paid:num($('#paid').value)||0,followup_date:txt($('#fdate').value),followup_note:txt($('#fnote').value),updated_by:session.user.id};
+ const payload={venture_id:current.id,plot_no:plotNo,width_ft:num($('#width').value),depth_ft:num($('#depth').value),facing:$('#facing').value,road_width_ft:num($('#road').value),rate_per_sqyd:num($('#rate').value),status:tempStatus,customer_name:customerName,customer_mobile:indianE164(mobile),amount_paid:num($('#paid').value)||0,followup_date:txt($('#fdate').value),followup_note:txt($('#fnote').value),updated_by:localMode?'local-owner':session.user.id,updated_at:new Date().toISOString()};
+ if(localMode){
+   if(selected){const i=plots.findIndex(p=>p.id===selected.id);if(i>=0)plots[i]={...plots[i],...payload}}
+   else plots.push({id:localId('plot'),...payload,...pending,created_at:new Date().toISOString()});
+   localSavePlots();closeSheet();await loadPlots();toast('Plot saved');return;
+ }
  let r;
  if(selected&&tempStatus==='hold'&&selected.status!=='hold'){
    r=await sb.rpc('hold_plot',{p_plot_id:selected.id,p_minutes:30});
@@ -1321,7 +1328,7 @@ $('#save').onclick=async()=>{
  if(r.error){$('#plotMsg').textContent=r.error.message;return}
  closeSheet();await loadPlots();toast('Plot saved');
 };
-$('#del').onclick=async()=>{if(!selected||!confirm('Delete Plot '+selected.plot_no+'?'))return;const r=await sb.from('plots').delete().eq('id',selected.id);if(r.error){$('#plotMsg').textContent=r.error.message;return}closeSheet();await loadPlots();toast('Plot deleted')};
+$('#del').onclick=async()=>{if(!selected||!confirm('Delete Plot '+selected.plot_no+'?'))return;if(localMode){plots=plots.filter(p=>p.id!==selected.id);localSavePlots();closeSheet();await loadPlots();toast('Plot deleted');return}const r=await sb.from('plots').delete().eq('id',selected.id);if(r.error){$('#plotMsg').textContent=r.error.message;return}closeSheet();await loadPlots();toast('Plot deleted')};
 
 function wa(name,mobile,pno,note){
  const local=indianLocal(mobile);
