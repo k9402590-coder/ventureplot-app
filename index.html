@@ -281,6 +281,37 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 }
 @media(max-width:390px){.snapshot-grid{gap:7px}.snapshot{gap:7px}.snapshot small{display:none}.quick-modern{grid-template-columns:1fr}.herocta{font-size:9px}.commandhero p{max-width:220px}}
 
+
+/* ===== Infinity Tech company portal + enquiry CRM ===== */
+.company-home{max-width:1120px;margin:0 auto;padding:18px 14px 40px}
+.company-hero{position:relative;overflow:hidden;border-radius:26px;padding:24px;color:#fff;background:
+ radial-gradient(circle at 84% 8%,rgba(110,231,183,.25),transparent 28%),
+ radial-gradient(circle at 12% 95%,rgba(59,130,246,.22),transparent 34%),
+ linear-gradient(135deg,#071d2b 0%,#083f48 42%,#0d745d 100%);box-shadow:0 22px 50px rgba(8,63,72,.20)}
+.company-hero:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-80px;bottom:-130px;box-shadow:0 0 0 34px rgba(255,255,255,.025),0 0 0 70px rgba(255,255,255,.016)}
+.company-brandline{display:flex;align-items:center;gap:12px;position:relative;z-index:2}.company-mark{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#d9fff3);color:#08745c;font-size:21px;font-weight:950;box-shadow:0 8px 25px rgba(0,0,0,.16)}
+.company-brandline small{display:block;color:#8de4cd;font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:900}.company-brandline h2{margin:2px 0 0;font-size:22px;letter-spacing:-.6px}
+.company-copy{position:relative;z-index:2;margin-top:28px;max-width:620px}.company-copy .eyebrow{color:#93e9d0}.company-copy h1{font-size:33px;line-height:1.08;margin:7px 0 10px;letter-spacing:-1.2px}.company-copy p{margin:0;color:rgba(255,255,255,.72);font-size:12px;line-height:1.65}
+.company-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}.company-actions button{border:0;border-radius:13px;padding:11px 13px;font-size:10px;font-weight:900}.company-actions .light{background:#fff;color:#075f50}.company-actions .glass{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);color:#fff}
+.company-user{position:absolute;right:18px;top:18px;z-index:3;display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);font-size:9px;color:#d9fff3}
+.carousel-wrap{margin-top:16px;overflow:hidden;perspective:1200px}.carousel-track{display:flex;gap:15px;transition:transform .85s cubic-bezier(.22,.8,.2,1);will-change:transform;padding:8px 9% 18px}
+.showcase-slide{position:relative;flex:0 0 82%;min-height:210px;border-radius:22px;padding:20px;overflow:hidden;color:#fff;transform:rotateY(6deg) scale(.94);opacity:.62;transition:.8s;box-shadow:0 18px 38px rgba(15,23,42,.17)}
+.showcase-slide.active{transform:rotateY(0) scale(1);opacity:1}.showcase-slide.s1{background:linear-gradient(135deg,#112a46,#1f6fa6)}.showcase-slide.s2{background:linear-gradient(135deg,#1f2937,#0f766e)}.showcase-slide.s3{background:linear-gradient(135deg,#3b1d67,#7c3aed)}
+.slide-orb{position:absolute;width:180px;height:180px;border-radius:50%;right:-50px;top:-48px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.42),rgba(255,255,255,.04) 58%,transparent 60%)}
+.slide-mini{font-size:8px;text-transform:uppercase;letter-spacing:.15em;font-weight:900;color:rgba(255,255,255,.65)}.showcase-slide h3{font-size:23px;line-height:1.08;margin:10px 0 8px;max-width:75%;letter-spacing:-.7px}.showcase-slide p{font-size:10px;line-height:1.55;color:rgba(255,255,255,.74);max-width:72%;margin:0}.slide-stat{position:absolute;right:16px;bottom:16px;background:rgba(255,255,255,.13);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:10px 12px;text-align:right}.slide-stat b{display:block;font-size:21px}.slide-stat span{font-size:8px;color:rgba(255,255,255,.7)}
+.carousel-dots{display:flex;justify-content:center;gap:6px;margin-top:-7px}.carousel-dot{width:7px;height:7px;border-radius:999px;border:0;background:#cbd5e1;padding:0;transition:.3s}.carousel-dot.active{width:22px;background:#0f8a6a}
+.portfolio-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:24px 0 11px}.portfolio-head h2{margin:2px 0 0;font-size:24px;letter-spacing:-.7px}.portfolio-head p{margin:3px 0 0;font-size:10px;color:#7b8797}.portfolio-count{background:#eaf8f3;color:#08765e;border-radius:999px;padding:7px 10px;font-size:9px;font-weight:900}
+#ventureList.portal-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+.portal-venture{min-height:155px;align-items:flex-end;background:linear-gradient(145deg,#fff,#f7fbfa);border-color:#e2ece9}.portal-venture .venture-index{position:absolute;right:15px;top:12px;font-size:42px;font-weight:950;color:#edf2f5;letter-spacing:-2px;z-index:0}.portal-venture h3{font-size:20px}.portal-venture .venture-loc{font-size:10px;color:#718094}.portal-venture button{align-self:flex-end}
+.portal-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.portal-tool{background:#fff;border:1px solid #e4e9ef;border-radius:18px;padding:16px;box-shadow:0 5px 18px rgba(15,23,42,.04)}.portal-tool h3{font-size:14px;margin:0 0 5px}.portal-tool p{font-size:9px;color:#8390a0;margin:0 0 12px}
+.enquiry-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:12px 14px 10px}.enquiry-toolbar h2{margin:2px 0 0;font-size:24px}.enquiry-toolbar p{font-size:9px;color:#7c8999;margin:3px 0 0}.enquiry-add{border:0;border-radius:12px;background:linear-gradient(135deg,#0f8a6a,#0a6d58);color:#fff;padding:10px 12px;font-size:10px;font-weight:900;box-shadow:0 7px 18px rgba(15,138,106,.18)}
+.enquiry-filters{display:flex;gap:7px;overflow-x:auto;padding:0 14px 10px}.enquiry-filters select,.enquiry-filters input{min-width:120px;width:auto;padding:9px 10px;font-size:10px;background:#fff}
+.enquiry-list{display:grid;gap:9px;padding:0 14px 20px}.enquiry-card{background:#fff;border:1px solid #e5eaf0;border-radius:17px;padding:13px;box-shadow:0 5px 18px rgba(15,23,42,.045)}.enquiry-top{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center}.enquiry-avatar{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#e9faf4,#eef4ff);display:grid;place-items:center;font-weight:950;color:#08785f}.enquiry-card h4{margin:0;font-size:12px}.enquiry-meta{font-size:9px;color:#7e8a99;margin-top:3px}.enquiry-note{font-size:9px;line-height:1.45;color:#59687a;background:#f8fafc;border:1px solid #edf1f5;border-radius:11px;padding:9px;margin-top:9px}.enquiry-due{display:inline-flex;margin-top:8px;font-size:8px;font-weight:850;border-radius:999px;padding:5px 7px;background:#eef6ff;color:#265fbd}.enquiry-due.overdue{background:#fff0f2;color:#b4233c}.enquiry-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.enquiry-actions button{border:1px solid #e5eaf0;border-radius:10px;background:#f8fafc;padding:8px 5px;font-size:8px;font-weight:850}.enquiry-actions .ewa{background:#eaf8f3;color:#08785f}.enquiry-actions .eremove{background:#fff4f5;color:#b4233c}
+.enquiry-sheet .sheetbox{max-width:620px}.optional-badge{font-size:8px;color:#7d8998;background:#f1f5f9;padding:3px 6px;border-radius:999px;margin-left:5px}
+.followup-stack-title{margin:16px 14px 8px;font-size:12px;color:#334155}.plot-follow-list{padding:0 14px 90px;display:grid;gap:8px}.plot-follow-card{background:#fff;border:1px solid #e5eaf0;border-radius:15px;padding:11px}.plot-follow-head{display:flex;justify-content:space-between;gap:10px}.plot-follow-head b{font-size:11px}.plot-follow-head span{font-size:8px;color:#6f7d8e}.plot-follow-actions{display:flex;gap:6px;margin-top:8px}.plot-follow-actions button{flex:1;border:1px solid #e3e8ef;border-radius:9px;background:#f8fafc;padding:7px;font-size:8px;font-weight:850}
+.pipeline-card{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pipe{border:1px solid #edf0f4;border-radius:13px;background:#fafbfc;padding:10px}.pipe b{display:block;font-size:20px}.pipe span{font-size:8px;color:#7e8a99;text-transform:uppercase;font-weight:850}
+@media(max-width:720px){.company-home{padding:12px 12px 34px}.company-hero{padding:19px;border-radius:22px}.company-copy h1{font-size:28px}.company-user{position:static;width:max-content;margin-left:auto;margin-bottom:14px}.showcase-slide{flex-basis:86%;min-height:195px}.carousel-track{padding-left:7%;padding-right:7%}#ventureList.portal-list{grid-template-columns:1fr}.portal-tools{grid-template-columns:1fr}.enquiry-actions{grid-template-columns:1fr 1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -294,9 +325,29 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 <div id="authMsg" class="msg"></div></div></div>
 </section>
 
-<section id="ventures" class="hidden"><div class="page"><div class="dashhead"><div><span class="eyebrow">Workspace</span><h2>My Ventures</h2><div class="muted">Manage layouts, bookings and follow-ups from one place.</div></div><div class="userchip"><span class="userdot"></span><span id="who" class="muted"></span></div></div><div id="ventureList"></div>
-<div class="grid2"><div class="card"><h3>Create venture</h3><div class="form"><label>Name</label><input id="newName" placeholder="Green Meadows"><label>Location</label><input id="newLoc" placeholder="Guntur"><button id="createVenture" class="btn primary">Create</button></div></div>
-<div class="card"><h3>Join venture</h3><div class="form"><label>6-character join code</label><input id="joinCode" maxlength="6" placeholder="A1B2C3"><button id="joinVenture" class="btn secondary">Join</button></div></div></div><div id="ventureMsg" class="msg"></div></div></section>
+<section id="ventures" class="hidden">
+<div class="company-home">
+  <div class="company-hero">
+    <div class="company-user"><span class="userdot"></span><span id="who"></span></div>
+    <div class="company-brandline"><div class="company-mark">∞</div><div><small>Digital Venture Operations</small><h2>Infinity Tech</h2></div></div>
+    <div class="company-copy"><span class="eyebrow">Real estate technology</span><h1>One intelligent workspace for every venture.</h1><p>Live plot inventory, customer enquiries, bookings and follow-ups — designed for owners, managers and sales teams.</p>
+      <div class="company-actions"><button id="jumpVenture" class="light">Open a venture →</button><button id="jumpEnquiries" class="glass">View enquiries</button></div>
+    </div>
+  </div>
+  <div class="carousel-wrap"><div id="carouselTrack" class="carousel-track">
+    <article class="showcase-slide s1 active"><div class="slide-orb"></div><div class="slide-mini">Infinity Tech · Live Inventory</div><h3>See every plot. Know every status.</h3><p>BookMyShow-style digital layouts make availability instantly understandable for your whole team.</p><div class="slide-stat"><b>LIVE</b><span>venture visibility</span></div></article>
+    <article class="showcase-slide s2"><div class="slide-orb"></div><div class="slide-mini">CRM · Enquiries</div><h3>Track buyers even before they choose a plot.</h3><p>Capture general venture enquiries, schedule follow-ups, record requirements and convert them later.</p><div class="slide-stat"><b>360°</b><span>customer journey</span></div></article>
+    <article class="showcase-slide s3"><div class="slide-orb"></div><div class="slide-mini">Sales Operations</div><h3>From first visit to registration.</h3><p>One shared system for customer conversations, holds, bookings, sales and registrations.</p><div class="slide-stat"><b>15s</b><span>auto showcase</span></div></article>
+  </div><div id="carouselDots" class="carousel-dots"><button class="carousel-dot active" data-slide="0"></button><button class="carousel-dot" data-slide="1"></button><button class="carousel-dot" data-slide="2"></button></div></div>
+  <div class="portfolio-head"><div><span class="eyebrow">Portfolio</span><h2>Your ventures</h2><p>Jump directly into a project workspace.</p></div><span id="portfolioCount" class="portfolio-count">0 ventures</span></div>
+  <div id="ventureList" class="portal-list"></div>
+  <div class="portal-tools">
+    <div class="portal-tool"><h3>Create a new venture</h3><p>Add another project to Infinity Tech and manage it independently.</p><div class="form"><input id="newName" placeholder="Venture name"><input id="newLoc" placeholder="Location"><button id="createVenture" class="btn primary">Create venture</button></div></div>
+    <div class="portal-tool"><h3>Join an existing venture</h3><p>Use a 6-character company join code to access an assigned venture.</p><div class="form"><input id="joinCode" maxlength="6" placeholder="A1B2C3"><button id="joinVenture" class="btn secondary">Join venture</button></div></div>
+  </div>
+  <div id="ventureMsg" class="msg"></div>
+</div>
+</section>
 
 <section id="layout" class="hidden workspace">
 <div class="topbar"><button id="back" class="btn secondary small">‹ Ventures</button><div><b id="vname"></b><div id="vloc" class="muted"></div></div><button id="shareCode" class="btn secondary small">Share code</button></div>
@@ -344,14 +395,14 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
       <div class="inventory-strip" id="inventoryStrip"><span class="seg-av"></span><span class="seg-hold"></span><span class="seg-book"></span><span class="seg-sold"></span></div>
     </div>
 
-    <div class="premium-card finance-card">
-      <div class="section-title"><div><span class="overline">Finance</span><h3>Business snapshot</h3></div><span class="softbadge">₹ INR</span></div>
-      <div class="finance-hero"><span>Amount collected</span><b id="receivedValue">₹0</b><small id="collectionNote">Recorded across customer plots</small></div>
-      <div class="finance-grid">
-        <div><span>Inventory value</span><b id="inventoryValue">₹0</b></div>
-        <div><span>Committed value</span><b id="bookedValue">₹0</b></div>
-        <div><span>Estimated pending</span><b id="pendingValue">₹0</b></div>
+    <div class="premium-card">
+      <div class="section-title"><div><span class="overline">CRM</span><h3>Enquiry pipeline</h3></div><button id="pipelineOpen" class="textaction">Manage</button></div>
+      <div class="pipeline-card">
+        <div class="pipe"><b id="pipeNew">0</b><span>New</span></div>
+        <div class="pipe"><b id="pipeFollow">0</b><span>Follow-up</span></div>
+        <div class="pipe"><b id="pipeVisit">0</b><span>Site visits</span></div>
       </div>
+      <div class="panel-sub" style="margin:12px 0 0">Includes customers interested in the venture even when no plot has been selected yet.</div>
     </div>
   </div>
 
@@ -398,8 +449,11 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 </div>
 
 <div id="followPane" class="workspacepane">
+  <div class="enquiry-toolbar"><div><span class="overline">CRM</span><h2>Enquiries & follow-ups</h2><p>Plot-specific and general venture enquiries in one place.</p></div><button id="addEnquiry" class="enquiry-add">＋ Add enquiry</button></div>
   <div class="follow-summary"><div class="follow-mini"><b id="followOverdue">0</b><span>Overdue</span></div><div class="follow-mini"><b id="followToday">0</b><span>Today</span></div><div class="follow-mini"><b id="followUpcoming">0</b><span>Upcoming</span></div></div>
-  <div class="follow"><h3>Customer follow-ups · <span style="color:#078b5d;font-size:10px">● Live</span></h3><div id="followups"></div></div>
+  <div class="enquiry-filters"><input id="enquirySearch" placeholder="Search customer / mobile"><select id="enquiryStatus"><option value="">All stages</option><option value="new">New</option><option value="contacted">Contacted</option><option value="interested">Interested</option><option value="site_visit">Site visit</option><option value="converted">Converted</option><option value="not_interested">Not interested</option></select></div>
+  <h3 class="followup-stack-title">Venture enquiries</h3><div id="enquiryList" class="enquiry-list"></div>
+  <h3 class="followup-stack-title">Plot follow-ups</h3><div id="followups" class="plot-follow-list"></div>
 </div>
 
 <div id="morePane" class="workspacepane">
@@ -426,6 +480,18 @@ header>div.brandwrap{display:flex;flex-direction:row;align-items:center;gap:11px
 <div class="sep"><h3>Customer / plot owner</h3><label>Name</label><input id="cname"><label>Mobile number</label><div class="phonefield"><span class="phoneprefix">+91</span><input id="mobile" inputmode="numeric" autocomplete="tel-national" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile"></div><div class="phonehint">Indian mobile number · exactly 10 digits</div><label>Amount paid</label><input id="paid" type="number"></div>
 <div class="sep"><h3>Follow-up</h3><label>Date</label><input id="fdate" type="date"><label>Note</label><textarea id="fnote" rows="2"></textarea></div>
 <div class="actions"><button id="save" class="btn primary">Save</button><button id="whatsapp" class="btn wa">WhatsApp</button><button id="del" class="btn danger">Delete</button><button id="cancel" class="btn secondary">Close</button></div><div id="plotMsg" class="msg"></div></div></div></div>
+<div id="enquirySheet" class="sheet enquiry-sheet hidden"><div id="enquiryShade" class="shade"></div><div class="sheetbox">
+  <div class="sheethead"><div><span class="overline">CRM</span><h2 id="enquiryTitle">Add enquiry</h2><div class="muted">Customer can be interested in the venture without choosing a plot.</div></div><button id="closeEnquiry" class="btn secondary">×</button></div>
+  <div class="form">
+    <label>Customer name *</label><input id="eqName" placeholder="Customer name">
+    <label>Mobile number *</label><div class="phonefield"><span class="phoneprefix">+91</span><input id="eqMobile" inputmode="numeric" maxlength="10" placeholder="10-digit mobile"></div>
+    <div class="grid2"><div><label>Plot number <span class="optional-badge">Optional</span></label><input id="eqPlot" placeholder="Leave blank for general enquiry"></div><div><label>Stage</label><select id="eqStatus"><option value="new">New</option><option value="contacted">Contacted</option><option value="interested">Interested</option><option value="site_visit">Site visit</option><option value="converted">Converted</option><option value="not_interested">Not interested</option></select></div></div>
+    <label>Requirement / interest</label><textarea id="eqRequirement" rows="2" placeholder="Budget, facing, size, site visit request..."></textarea>
+    <div class="grid2"><div><label>Follow-up date <span class="optional-badge">Optional</span></label><input id="eqDate" type="date"></div><div><label>Follow-up note</label><input id="eqNote" placeholder="Call after site visit"></div></div>
+    <div class="actions"><button id="saveEnquiry" class="btn primary">Save enquiry</button><button id="deleteEnquiry" class="btn danger hidden">Delete</button><button id="cancelEnquiry" class="btn secondary">Close</button></div>
+    <div id="enquiryMsg" class="msg"></div>
+  </div>
+</div></div>
 <div id="toast" class="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -477,7 +543,7 @@ const indianLocal=v=>{
 };
 const validIndianMobile=v=>/^[6-9][0-9]{9}$/.test(String(v||''));
 const indianE164=v=>validIndianMobile(v)?'+91'+v:null;
-let session=null,mode='login',memberships=[],membership=null,current=null,plots=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,tempStatus='available',viewMode='live',workspaceTab='dashboard';
+let session=null,mode='login',memberships=[],membership=null,current=null,plots=[],enquiries=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,selectedEnquiry=null,tempStatus='available',viewMode='live',workspaceTab='dashboard',carouselIndex=0,carouselTimer=null;
 
 function setMode(m){mode=m;$('#loginTab').classList.toggle('active',m==='login');$('#signupTab').classList.toggle('active',m==='signup');$('#authGo').textContent=m==='login'?'Sign in':'Create account';$('#forgotPassword').classList.toggle('hidden',m!=='login');$('#authMsg').textContent=''}
 function showResetPanel(){
@@ -620,13 +686,14 @@ async function loadMemberships(){
  const {data,error}=await sb.from('venture_members').select('venture_id,role,ventures(id,name,location,join_code,layout_storage_path)').eq('user_id',session.user.id);
  if(error){toast(error.message);return}
  memberships=(data||[]).map(x=>({venture_id:x.venture_id,role:x.role,venture:x.ventures}));
- renderMemberships();show('#ventures');
+ $('#sub').textContent='Infinity Tech · Venture Operations'; renderMemberships();show('#ventures'); startCompanyCarousel();
 }
 function renderMemberships(){
  const el=$('#ventureList');
- if(!memberships.length){el.innerHTML='<div class="card muted">No ventures yet. Create one or join with a code.</div>';return}
- el.innerHTML=memberships.map((m,i)=>'<div class="card venture"><div><h3>'+esc(m.venture.name)+'</h3><div class="muted">⌖ '+esc(m.venture.location||'Location not set')+'</div><span class="pill">'+esc(m.role)+'</span></div><button class="btn secondary small" data-i="'+i+'">Open workspace →</button></div>').join('');
- el.querySelectorAll('button').forEach(b=>b.onclick=()=>openVenture(+b.dataset.i));
+ $('#portfolioCount').textContent=memberships.length+' '+(memberships.length===1?'venture':'ventures');
+ if(!memberships.length){el.innerHTML='<div class="empty-state"><b>No ventures yet</b><span>Create your first venture below or join using a company code.</span></div>';return}
+ el.innerHTML=memberships.map((m,i)=>'<div class="card venture portal-venture"><span class="venture-index">'+String(i+1).padStart(2,'0')+'</span><div><span class="eyebrow">Venture</span><h3>'+esc(m.venture.name)+'</h3><div class="venture-loc">⌖ '+esc(m.venture.location||'Location not set')+'</div><span class="pill">'+esc(m.role)+'</span></div><button class="btn primary small" data-i="'+i+'">Open →</button></div>').join('');
+ el.querySelectorAll('button[data-i]').forEach(b=>b.onclick=()=>openVenture(+b.dataset.i));
 }
 $('#createVenture').onclick=async()=>{
  const n=$('#newName').value.trim(),l=$('#newLoc').value.trim();if(!n)return;
@@ -650,13 +717,13 @@ async function openVenture(i){
  const admin=['owner','manager'].includes(membership.role);
  $('#mapView').classList.toggle('hidden',!admin);
  $('#moreLayout').classList.toggle('hidden',!admin);
- show('#layout');await loadPlots();
+ stopCompanyCarousel();show('#layout');await loadPlots();await loadEnquiries();
  if(current.layout_storage_path)await loadPdfPath(current.layout_storage_path);else emptyLayout();
  setViewMode('live');
  setWorkspaceTab('dashboard');
  subscribe();
 }
-$('#back').onclick=()=>{cleanup();current=null;membership=null;$('#sub').textContent='Real-time plot management · v2.2';show('#ventures')};
+$('#back').onclick=()=>{cleanup();current=null;membership=null;$('#sub').textContent='Infinity Tech · Venture Operations';show('#ventures');startCompanyCarousel()};
 $('#shareCode').onclick=async()=>{
  const text='Join '+current.name+' in VenturePlot with code: '+current.join_code;
  if(navigator.share)await navigator.share({title:'VenturePlot',text}).catch(()=>{});
@@ -668,11 +735,18 @@ async function loadPlots(){
  if(error){toast(error.message);return}
  plots=data||[];counts();renderDashboard();renderCustomers();renderOverlay();renderCleanLayout();renderFollowups();
 }
+async function loadEnquiries(){
+ const {data,error}=await sb.from('venture_enquiries').select('*').eq('venture_id',current.id).order('created_at',{ascending:false});
+ if(error){toast(error.message);return}
+ enquiries=data||[];
+ renderDashboard();
+ renderFollowups();
+}
 function counts(){
  const n=s=>plots.filter(p=>p.status===s).length;
  $('#ctotal').textContent=plots.length;$('#cavail').textContent=n('available');$('#chold').textContent=n('hold');$('#cbook').textContent=n('booked');$('#csold').textContent=n('sold')+n('registered');
  $('#dashTotal').textContent=plots.length;$('#dashAvailable').textContent=n('available');$('#dashHold').textContent=n('hold');$('#dashBooked').textContent=n('booked');$('#dashSold').textContent=n('sold')+n('registered');
- $('#dashCustomers').textContent=plots.filter(p=>p.customer_name||p.customer_mobile).length;
+ $('#dashCustomers').textContent=plots.filter(p=>p.customer_name||p.customer_mobile).length+enquiries.length;
 }
 
 const formatINR=value=>{
@@ -713,18 +787,14 @@ function renderDashboard(){
  const segs=qsa('#inventoryStrip span');
  if(segs.length===4){segs[0].style.width=share(available)+'%';segs[1].style.width=share(holds)+'%';segs[2].style.width=share(booked)+'%';segs[3].style.width=share(completed)+'%'}
 
- const inventory=plots.reduce((s,p)=>s+plotValue(p),0);
- const committed=plots.filter(p=>['booked','sold','registered'].includes(p.status)).reduce((s,p)=>s+plotValue(p),0);
- const received=plots.reduce((s,p)=>s+Number(p.amount_paid||0),0);
- $('#inventoryValue').textContent=formatINR(inventory);
- $('#bookedValue').textContent=formatINR(committed);
- $('#receivedValue').textContent=formatINR(received);
- $('#pendingValue').textContent=formatINR(Math.max(0,committed-received));
- $('#collectionNote').textContent=(plots.filter(p=>Number(p.amount_paid||0)>0).length||0)+' plots have recorded collections';
+ const newEq=enquiries.filter(e=>e.status==='new').length;
+ const followEq=enquiries.filter(e=>e.followup_date&&e.status!=='converted'&&e.status!=='not_interested').length;
+ const visitEq=enquiries.filter(e=>e.status==='site_visit').length;
+ $('#pipeNew').textContent=newEq;$('#pipeFollow').textContent=followEq;$('#pipeVisit').textContent=visitEq;
 
  const today=localDate();
- const overdue=plots.filter(p=>p.followup_date&&p.followup_date<today&&p.customer_name).length;
- const dueToday=plots.filter(p=>p.followup_date===today&&p.customer_name).length;
+ const overdue=plots.filter(p=>p.followup_date&&p.followup_date<today&&p.customer_name).length+enquiries.filter(e=>e.followup_date&&e.followup_date<today).length;
+ const dueToday=plots.filter(p=>p.followup_date===today&&p.customer_name).length+enquiries.filter(e=>e.followup_date===today).length;
  const missing=plots.filter(p=>['hold','booked','sold','registered'].includes(p.status)&&(!p.customer_name||!validIndianMobile(indianLocal(p.customer_mobile)))).length;
  $('#attentionList').innerHTML=
    '<div class="priority-item"><span class="priority-icon red">!</span><div><b>Overdue follow-ups</b><small>Customers waiting for a callback</small></div><span class="priority-count">'+overdue+'</span></div>'+
@@ -772,7 +842,7 @@ function setWorkspaceTab(tab){
  if(tab==='customers')renderCustomers();
  if(tab==='follow')renderFollowups();
 }
-function subscribe(){cleanup();channel=sb.channel('venture-'+current.id).on('postgres_changes',{event:'*',schema:'public',table:'plots',filter:'venture_id=eq.'+current.id},()=>loadPlots()).subscribe()}
+function subscribe(){cleanup();channel=sb.channel('venture-'+current.id).on('postgres_changes',{event:'*',schema:'public',table:'plots',filter:'venture_id=eq.'+current.id},()=>loadPlots()).on('postgres_changes',{event:'*',schema:'public',table:'venture_enquiries',filter:'venture_id=eq.'+current.id},()=>loadEnquiries()).subscribe()}
 function cleanup(){if(channel)sb.removeChannel(channel);channel=null}
 
 function setViewMode(mode){
@@ -930,20 +1000,91 @@ $('#whatsapp').onclick=()=>wa($('#cname').value.trim(),$('#mobile').value.trim()
 
 function renderFollowups(){
  const today=localDate();
- const all=plots.filter(p=>p.followup_date&&p.customer_name).sort((x,y)=>String(x.followup_date).localeCompare(String(y.followup_date)));
- $('#followOverdue').textContent=all.filter(p=>p.followup_date<today).length;
- $('#followToday').textContent=all.filter(p=>p.followup_date===today).length;
- $('#followUpcoming').textContent=all.filter(p=>p.followup_date>today).length;
- const a=all.slice(0,40),el=$('#followups');
- if(!a.length){el.innerHTML='<p class="muted">No follow-ups scheduled.</p>';return}
- el.innerHTML=a.map(p=>{const d=new Date(p.followup_date+'T00:00:00');const timing=p.followup_date<today?'Overdue':p.followup_date===today?'Today':'Upcoming';return '<div class="fitem"><div class="fdate"><b>'+String(d.getDate()).padStart(2,'0')+'</b>'+d.toLocaleString('en',{month:'short'})+'</div><div><strong>Plot '+esc(p.plot_no)+' · '+esc(p.customer_name)+'</strong><small>'+timing+' · '+esc(p.followup_note||'Follow-up')+'</small></div><button class="btn wa small" data-id="'+p.id+'">WhatsApp</button></div>'}).join('');
- el.querySelectorAll('button').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.id);wa(p.customer_name,p.customer_mobile,p.plot_no,p.followup_note)})
+ const plotAll=plots.filter(p=>p.followup_date&&p.customer_name).sort((x,y)=>String(x.followup_date).localeCompare(String(y.followup_date)));
+ const eqAll=enquiries.filter(e=>e.followup_date).sort((x,y)=>String(x.followup_date).localeCompare(String(y.followup_date)));
+ const combined=[...plotAll.map(x=>({date:x.followup_date})),...eqAll.map(x=>({date:x.followup_date}))];
+ $('#followOverdue').textContent=combined.filter(x=>x.date<today).length;
+ $('#followToday').textContent=combined.filter(x=>x.date===today).length;
+ $('#followUpcoming').textContent=combined.filter(x=>x.date>today).length;
+ const q=($('#enquirySearch')?.value||'').trim().toLowerCase();
+ const sf=$('#enquiryStatus')?.value||'';
+ const eqFiltered=enquiries.filter(e=>{
+   const hay=(String(e.customer_name||'')+' '+String(e.customer_mobile||'')+' '+String(e.plot_no||'')+' '+String(e.requirement||'')).toLowerCase();
+   return (!q||hay.includes(q))&&(!sf||e.status===sf);
+ });
+ const ebox=$('#enquiryList');
+ if(!eqFiltered.length) ebox.innerHTML='<div class="empty-state"><b>No venture enquiries</b><span>Add a customer even if they have not selected a plot yet.</span></div>';
+ else ebox.innerHTML=eqFiltered.map(e=>{
+   const d=e.followup_date?new Date(e.followup_date+'T00:00:00'):null;
+   const due=e.followup_date?(e.followup_date<today?'Overdue':e.followup_date===today?'Today':d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})):'No follow-up';
+   const local=indianLocal(e.customer_mobile);
+   const stage=String(e.status||'new').replace('_',' ');
+   return '<div class="enquiry-card"><div class="enquiry-top"><div class="enquiry-avatar">'+esc((e.customer_name||'C').charAt(0).toUpperCase())+'</div><div><h4>'+esc(e.customer_name)+'</h4><div class="enquiry-meta">+91 '+esc(local)+(e.plot_no?' · Plot '+esc(e.plot_no):' · General venture enquiry')+'</div></div><span class="statuspill '+(e.status==='converted'?'registered':e.status==='not_interested'?'sold':'booked')+'">'+esc(stage)+'</span></div>'+(e.requirement?'<div class="enquiry-note">'+esc(e.requirement)+'</div>':'')+'<span class="enquiry-due '+(e.followup_date&&e.followup_date<today?'overdue':'')+'">'+esc(due)+(e.followup_note?' · '+esc(e.followup_note):'')+'</span><div class="enquiry-actions"><button data-edit="'+e.id+'">Edit</button><button class="ewa" data-ewa="'+e.id+'">WhatsApp</button><button class="eremove" data-remove="'+e.id+'">'+(e.followup_date?'Remove follow-up':'Delete')+'</button></div></div>';
+ }).join('');
+ ebox.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openEnquiry(enquiries.find(e=>e.id===b.dataset.edit)));
+ ebox.querySelectorAll('[data-ewa]').forEach(b=>b.onclick=()=>{const e=enquiries.find(x=>x.id===b.dataset.ewa);if(e)wa(e.customer_name,e.customer_mobile,e.plot_no||'',e.followup_note||e.requirement)});
+ ebox.querySelectorAll('[data-remove]').forEach(b=>b.onclick=async()=>{const e=enquiries.find(x=>x.id===b.dataset.remove);if(!e)return;if(e.followup_date){const r=await sb.from('venture_enquiries').update({followup_date:null,followup_note:null,updated_by:session.user.id}).eq('id',e.id);if(r.error)toast(r.error.message);else{toast('Follow-up removed');await loadEnquiries()}}else if(confirm('Delete this enquiry?')){const r=await sb.from('venture_enquiries').delete().eq('id',e.id);if(r.error)toast(r.error.message);else{toast('Enquiry deleted');await loadEnquiries()}}});
+ const pbox=$('#followups');
+ if(!plotAll.length){pbox.innerHTML='<div class="empty-state"><b>No plot follow-ups</b><span>Follow-ups linked to a specific plot will appear here.</span></div>';return}
+ pbox.innerHTML=plotAll.map(p=>{
+   const timing=p.followup_date<today?'Overdue':p.followup_date===today?'Today':new Date(p.followup_date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+   return '<div class="plot-follow-card"><div class="plot-follow-head"><div><b>Plot '+esc(p.plot_no)+' · '+esc(p.customer_name)+'</b><span>'+esc(p.followup_note||'Follow-up')+'</span></div><span>'+esc(timing)+'</span></div><div class="plot-follow-actions"><button data-popen="'+p.id+'">Open plot</button><button data-pwa="'+p.id+'">WhatsApp</button><button data-premove="'+p.id+'">Remove follow-up</button></div></div>';
+ }).join('');
+ pbox.querySelectorAll('[data-popen]').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.popen);if(p){selected=p;pending=null;openSheet(p)}});
+ pbox.querySelectorAll('[data-pwa]').forEach(b=>b.onclick=()=>{const p=plots.find(x=>x.id===b.dataset.pwa);if(p)wa(p.customer_name,p.customer_mobile,p.plot_no,p.followup_note)});
+ pbox.querySelectorAll('[data-premove]').forEach(b=>b.onclick=async()=>{const p=plots.find(x=>x.id===b.dataset.premove);if(!p)return;const r=await sb.from('plots').update({followup_date:null,followup_note:null,updated_by:session.user.id}).eq('id',p.id);if(r.error)toast(r.error.message);else{toast('Follow-up removed');await loadPlots()}});
 }
 
+function openEnquiry(e=null){
+ selectedEnquiry=e||null;
+ $('#enquiryTitle').textContent=e?'Edit enquiry':'Add enquiry';
+ $('#eqName').value=e?.customer_name||'';
+ $('#eqMobile').value=indianLocal(e?.customer_mobile);
+ $('#eqPlot').value=e?.plot_no||'';
+ $('#eqStatus').value=e?.status||'new';
+ $('#eqRequirement').value=e?.requirement||'';
+ $('#eqDate').value=e?.followup_date||'';
+ $('#eqNote').value=e?.followup_note||'';
+ $('#enquiryMsg').textContent='';
+ $('#deleteEnquiry').classList.toggle('hidden',!e);
+ $('#enquirySheet').classList.remove('hidden');
+}
+function closeEnquiry(){selectedEnquiry=null;$('#enquirySheet').classList.add('hidden')}
+$('#addEnquiry').onclick=()=>openEnquiry();
+$('#closeEnquiry').onclick=closeEnquiry;$('#cancelEnquiry').onclick=closeEnquiry;$('#enquiryShade').onclick=closeEnquiry;
+$('#eqMobile').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,10);
+$('#saveEnquiry').onclick=async()=>{
+ const name=$('#eqName').value.trim(),mobile=$('#eqMobile').value.trim();
+ if(!name){$('#enquiryMsg').textContent='Customer name is required.';return}
+ if(!validIndianMobile(mobile)){ $('#enquiryMsg').textContent='Enter a valid 10-digit Indian mobile number.';return}
+ const payload={venture_id:current.id,customer_name:name,customer_mobile:indianE164(mobile),plot_no:txt($('#eqPlot').value),requirement:txt($('#eqRequirement').value),status:$('#eqStatus').value,followup_date:txt($('#eqDate').value),followup_note:txt($('#eqNote').value),updated_by:session.user.id};
+ let r;if(selectedEnquiry)r=await sb.from('venture_enquiries').update(payload).eq('id',selectedEnquiry.id);else r=await sb.from('venture_enquiries').insert({...payload,created_by:session.user.id});
+ if(r.error){$('#enquiryMsg').textContent=r.error.message;return}
+ const editing=!!selectedEnquiry;closeEnquiry();toast(editing?'Enquiry updated':'Enquiry added');await loadEnquiries();
+};
+$('#deleteEnquiry').onclick=async()=>{if(!selectedEnquiry||!confirm('Delete this enquiry?'))return;const id=selectedEnquiry.id;const r=await sb.from('venture_enquiries').delete().eq('id',id);if(r.error){$('#enquiryMsg').textContent=r.error.message;return}closeEnquiry();toast('Enquiry deleted');await loadEnquiries()};
+
+
+function setCarousel(index){
+ const slides=qsa('.showcase-slide'),dots=qsa('.carousel-dot');if(!slides.length)return;
+ carouselIndex=(index+slides.length)%slides.length;
+ const track=$('#carouselTrack');
+ const step=slides[0].getBoundingClientRect().width+15;
+ track.style.transform='translateX(-'+(carouselIndex*step)+'px)';
+ slides.forEach((s,i)=>s.classList.toggle('active',i===carouselIndex));
+ dots.forEach((d,i)=>d.classList.toggle('active',i===carouselIndex));
+}
+function startCompanyCarousel(){stopCompanyCarousel();setTimeout(()=>setCarousel(0),80);carouselTimer=setInterval(()=>setCarousel(carouselIndex+1),15000)}
+function stopCompanyCarousel(){if(carouselTimer)clearInterval(carouselTimer);carouselTimer=null}
+qsa('.carousel-dot').forEach(d=>d.onclick=()=>{setCarousel(+d.dataset.slide);startCompanyCarousel()});
+$('#jumpVenture').onclick=()=>document.querySelector('.portfolio-head')?.scrollIntoView({behavior:'smooth'});
+$('#jumpEnquiries').onclick=()=>{if(memberships.length){openVenture(0).then(()=>setWorkspaceTab('follow'))}else toast('Create or join a venture first')};
+window.addEventListener('resize',()=>{if(!$('#ventures').classList.contains('hidden'))setCarousel(carouselIndex)});
 qsa('.navbtn').forEach(b=>b.onclick=()=>setWorkspaceTab(b.dataset.tab));
 $('#heroOpenPlots').onclick=()=>setWorkspaceTab('plots');
 $('#statusOpenPlots').onclick=()=>setWorkspaceTab('plots');
 $('#attentionOpen').onclick=()=>setWorkspaceTab('follow');
+$('#pipelineOpen').onclick=()=>setWorkspaceTab('follow');
 $('#quickPlots').onclick=()=>setWorkspaceTab('plots');
 $('#quickCustomers').onclick=()=>setWorkspaceTab('customers');
 $('#quickFollow').onclick=()=>setWorkspaceTab('follow');
@@ -954,6 +1095,7 @@ $('#moreLogout').onclick=()=>$('#logout').click();
 $('#moreLayout').onclick=()=>{setWorkspaceTab('plots');setTimeout(()=>setViewMode('map'),80)};
 ['#plotSearch','#statusFilter','#facingFilter'].forEach(s=>$(s).addEventListener('input',renderCleanLayout));
 ['#customerSearch','#customerStatus'].forEach(s=>$(s).addEventListener('input',renderCustomers));
+['#enquirySearch','#enquiryStatus'].forEach(s=>$(s).addEventListener('input',renderFollowups));
 boot();
 </script>
 </body>
