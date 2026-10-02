@@ -354,6 +354,11 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 .pin-help{font-size:8px;color:#8491a2;line-height:1.45;margin-top:-2px}
 #loginPin,#newPin,#newPinConfirm{font-size:18px;font-weight:850;letter-spacing:.22em}
 
+
+/* ===== PIN recovery and admin reset ===== */
+.forgot-pin-link{width:100%;text-align:right;margin:-2px 0 2px}
+.recovery-code-box{margin:18px 0;padding:20px;border-radius:18px;background:linear-gradient(135deg,#eefaf6,#f4f7ff);border:1px solid #dce8e4;text-align:center}.recovery-code-box b{display:block;font-size:31px;letter-spacing:.16em;color:#0f6f5d}.recovery-code-box span{display:block;margin-top:9px;font-size:9px;line-height:1.5;color:#748295}
+
 </style>
 </head>
 <body>
@@ -391,6 +396,7 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
         <label>PIN</label>
         <div class="password-wrap"><input id="loginPin" type="password" inputmode="numeric" maxlength="6" autocomplete="current-password" placeholder="••••••"><button id="toggleLoginPin" class="password-toggle" type="button">Show</button></div>
         <div class="pin-help">PIN = a 6-digit number created by you for Infinity Tech. It is not an SMS OTP.</div>
+        <button id="forgotPin" class="linkbtn forgot-pin-link" type="button">Forgot PIN?</button>
         <button id="unlockApp" class="btn primary otp-main-btn" type="button">Sign in</button>
       </div>
     </div>
@@ -561,7 +567,8 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
     <div class="morecard"><h3>Venture access</h3><p>Share the company join code with authorized team members.</p><button id="moreShare" class="btn primary">Share join code</button></div>
     <div class="morecard"><h3>Layout administration</h3><p>Owner and manager can maintain the plot geometry and reference PDF.</p><button id="moreLayout" class="btn secondary">Open layout setup</button></div>
     <div class="morecard"><h3>Switch venture</h3><p>Return to your venture portfolio and open another project.</p><button id="moreVentures" class="btn secondary">My ventures</button></div>
-    <div class="morecard"><h3>Account</h3><p id="moreAccount">Signed in to VenturePlot.</p><button id="moreLogout" class="btn danger">Sign out</button></div>
+    <div id="pinAdminCard" class="morecard hidden"><h3>User PIN reset</h3><p>Owner/manager can reset a PIN for a user who belongs to the same venture.</p><button id="openAdminPinReset" class="btn secondary">Reset user PIN</button></div>
+    <div class="morecard"><h3>Account</h3><p id="moreAccount">Signed in to Infinity Tech.</p><button id="moreLogout" class="btn danger">Sign out</button></div>
   </div>
 </div>
 
@@ -593,6 +600,34 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
       <label class="setting-row"><div><b>Reduce motion</b><small>Use simpler transitions on this device.</small></div><input id="settingMotion" type="checkbox"></label>
     </div>
   </div></div>
+
+<div id="forgotPinSheet" class="sheet hidden"><div id="forgotPinShade" class="shade"></div><div class="sheetbox">
+  <div class="sheethead"><div><span class="overline">Account recovery</span><h2>Reset PIN</h2><div class="muted">Use the recovery code saved when your account was created.</div></div><button id="closeForgotPin" class="btn secondary">×</button></div>
+  <div class="form">
+    <label>Mobile number</label><div class="phonefield"><span class="phoneprefix">+91</span><input id="recoverMobile" inputmode="numeric" maxlength="10" placeholder="9876543210"></div>
+    <label>Recovery code</label><input id="recoverCode" inputmode="numeric" maxlength="9" placeholder="1234-5678">
+    <label>New 6-digit PIN</label><div class="password-wrap"><input id="recoverPin" type="password" inputmode="numeric" maxlength="6" placeholder="••••••"><button id="toggleRecoverPin" class="password-toggle" type="button">Show</button></div>
+    <label>Confirm new PIN</label><input id="recoverPin2" type="password" inputmode="numeric" maxlength="6" placeholder="••••••">
+    <button id="doRecoverPin" class="btn primary">Reset PIN & sign in</button>
+    <div id="recoverMsg" class="msg"></div>
+  </div>
+</div></div>
+
+<div id="recoveryCodeSheet" class="sheet hidden"><div id="recoveryCodeShade" class="shade"></div><div class="sheetbox">
+  <div class="sheethead"><div><span class="overline">Important</span><h2>Save your recovery code</h2><div class="muted">You will need this code if you forget your PIN.</div></div></div>
+  <div class="recovery-code-box"><b id="recoveryCodeValue">0000-0000</b><span>Keep this code private. It is shown only after account creation or PIN recovery.</span></div>
+  <div class="actions"><button id="copyRecoveryCode" class="btn secondary">Copy code</button><button id="confirmRecoveryCode" class="btn primary">I saved it</button></div>
+</div></div>
+
+<div id="adminPinSheet" class="sheet hidden"><div id="adminPinShade" class="shade"></div><div class="sheetbox">
+  <div class="sheethead"><div><span class="overline">Owner / manager</span><h2>Reset user PIN</h2><div class="muted">Only users in your ventures can be reset.</div></div><button id="closeAdminPin" class="btn secondary">×</button></div>
+  <div class="form">
+    <label>User mobile number</label><div class="phonefield"><span class="phoneprefix">+91</span><input id="adminResetMobile" inputmode="numeric" maxlength="10" placeholder="9876543210"></div>
+    <label>Temporary 6-digit PIN</label><div class="password-wrap"><input id="adminResetPin" type="password" inputmode="numeric" maxlength="6" placeholder="••••••"><button id="toggleAdminResetPin" class="password-toggle" type="button">Show</button></div>
+    <button id="doAdminPinReset" class="btn primary">Reset user PIN</button>
+    <div id="adminPinMsg" class="msg"></div>
+  </div>
+</div></div>
 
 <div id="enquirySheet" class="sheet enquiry-sheet hidden"><div id="enquiryShade" class="shade"></div><div class="sheetbox">
   <div class="sheethead"><div><span class="overline">CRM</span><h2 id="enquiryTitle">Add enquiry</h2><div class="muted">Customer can be interested in the venture without choosing a plot.</div></div><button id="closeEnquiry" class="btn secondary">×</button></div>
@@ -673,6 +708,47 @@ function toggleSecret(btnSel,inputSel){
 toggleSecret('#toggleLoginPin','#loginPin');
 toggleSecret('#toggleNewPin','#newPin');
 toggleSecret('#toggleNewPinConfirm','#newPinConfirm');
+toggleSecret('#toggleRecoverPin','#recoverPin');
+toggleSecret('#toggleAdminResetPin','#adminResetPin');
+let pendingRecoveryCode='';
+
+onlyDigits($('#recoverMobile'),10);
+onlyDigits($('#recoverPin'),6);
+onlyDigits($('#recoverPin2'),6);
+onlyDigits($('#adminResetMobile'),10);
+onlyDigits($('#adminResetPin'),6);
+$('#recoverCode').oninput=e=>{
+  const d=e.target.value.replace(/\D/g,'').slice(0,8);
+  e.target.value=d.length>4?d.slice(0,4)+'-'+d.slice(4):d;
+};
+
+function openRecoveryCode(code){
+ pendingRecoveryCode=code||'';
+ $('#recoveryCodeValue').textContent=pendingRecoveryCode;
+ $('#recoveryCodeSheet').classList.remove('hidden');
+}
+function closeRecoveryCode(){pendingRecoveryCode='';$('#recoveryCodeSheet').classList.add('hidden')}
+$('#copyRecoveryCode').onclick=async()=>{
+ try{await navigator.clipboard.writeText(pendingRecoveryCode);toast('Recovery code copied')}catch{toast('Please copy the code manually')}
+};
+$('#confirmRecoveryCode').onclick=closeRecoveryCode;
+$('#recoveryCodeShade').onclick=()=>{};
+
+function openForgotPin(){
+ $('#recoverMobile').value=$('#loginMobile').value||readSavedMobile();
+ $('#recoverCode').value='';$('#recoverPin').value='';$('#recoverPin2').value='';$('#recoverMsg').textContent='';
+ $('#forgotPinSheet').classList.remove('hidden');
+}
+function closeForgotPin(){$('#forgotPinSheet').classList.add('hidden')}
+$('#forgotPin').onclick=openForgotPin;$('#closeForgotPin').onclick=closeForgotPin;$('#forgotPinShade').onclick=closeForgotPin;
+
+function openAdminPinReset(){
+ $('#adminResetMobile').value='';$('#adminResetPin').value='';$('#adminPinMsg').textContent='';
+ $('#adminPinSheet').classList.remove('hidden');
+}
+function closeAdminPinReset(){$('#adminPinSheet').classList.add('hidden')}
+$('#openAdminPinReset').onclick=openAdminPinReset;$('#closeAdminPin').onclick=closeAdminPinReset;$('#adminPinShade').onclick=closeAdminPinReset;
+
 
 function readSavedMobile(){try{return localStorage.getItem(DEVICE_PIN_KEY)||''}catch{return ''}}
 function saveMobile(mobile){try{localStorage.setItem(DEVICE_PIN_KEY,mobile)}catch{}}
@@ -707,6 +783,42 @@ async function pinApi(action,mobile,pin,token=''){
  if(!response.ok)throw new Error(payload.error||'Unable to process request.');
  return payload;
 }
+
+$('#doRecoverPin').onclick=async()=>{
+ const mobile=$('#recoverMobile').value.trim(),code=$('#recoverCode').value.trim(),pin=$('#recoverPin').value.trim(),pin2=$('#recoverPin2').value.trim();
+ if(!validIndianMobile(mobile)){ $('#recoverMsg').textContent='Enter a valid 10-digit Indian mobile number.';return}
+ if(!/^\d{4}-?\d{4}$/.test(code)){ $('#recoverMsg').textContent='Enter the 8-digit recovery code.';return}
+ if(!/^\d{6}$/.test(pin)){ $('#recoverMsg').textContent='New PIN must be exactly 6 digits.';return}
+ if(pin!==pin2){$('#recoverMsg').textContent='PIN confirmation does not match.';return}
+ $('#doRecoverPin').disabled=true;$('#doRecoverPin').textContent='Resetting…';$('#recoverMsg').textContent='';
+ try{
+   const response=await fetch(PIN_AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'recover',mobile,recovery_code:code,new_pin:pin,pin})});
+   const payload=await response.json();
+   if(!response.ok)throw new Error(payload.error||'Unable to reset PIN.');
+   await finishPinLogin(payload,mobile);
+   closeForgotPin();
+   if(payload.recovery_code)openRecoveryCode(payload.recovery_code);
+ }catch(e){$('#recoverMsg').textContent=e.message||'Unable to reset PIN.'}
+ finally{$('#doRecoverPin').disabled=false;$('#doRecoverPin').textContent='Reset PIN & sign in'}
+};
+
+$('#doAdminPinReset').onclick=async()=>{
+ const mobile=$('#adminResetMobile').value.trim(),pin=$('#adminResetPin').value.trim();
+ if(!validIndianMobile(mobile)){ $('#adminPinMsg').textContent='Enter a valid 10-digit Indian mobile number.';return}
+ if(!/^\d{6}$/.test(pin)){ $('#adminPinMsg').textContent='Temporary PIN must be exactly 6 digits.';return}
+ const currentSession=(await sb.auth.getSession()).data.session;
+ if(!currentSession){$('#adminPinMsg').textContent='Session expired. Sign in again.';return}
+ $('#doAdminPinReset').disabled=true;$('#doAdminPinReset').textContent='Resetting…';$('#adminPinMsg').textContent='';
+ try{
+   const response=await fetch(PIN_AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+currentSession.access_token},body:JSON.stringify({action:'admin_reset',target_mobile:mobile,new_pin:pin,mobile:mobile,pin:pin})});
+   const payload=await response.json();
+   if(!response.ok)throw new Error(payload.error||'Unable to reset user PIN.');
+   $('#adminPinMsg').textContent='PIN reset successfully. Share the temporary PIN with the user securely.';
+   if(payload.recovery_code){pendingRecoveryCode=payload.recovery_code;toast('User PIN reset')}
+ }catch(e){$('#adminPinMsg').textContent=e.message||'Unable to reset user PIN.'}
+ finally{$('#doAdminPinReset').disabled=false;$('#doAdminPinReset').textContent='Reset user PIN'}
+};
+
 
 async function finishPinLogin(data,mobile){
  const {data:sessionData,error}=await sb.auth.setSession({
@@ -749,6 +861,7 @@ $('#createPinUser').onclick=async()=>{
    const data=await pinApi('register',mobile,pin,existing?.access_token||'');
    await finishPinLogin(data,mobile);
    toast('Account created successfully');
+   if(data.recovery_code)openRecoveryCode(data.recovery_code);
  }catch(e){
    $('#authMsg').textContent=e.message||'Unable to create account.';
  }finally{
@@ -820,6 +933,7 @@ async function openVenture(i){
  const admin=['owner','manager'].includes(membership.role);
  $('#mapView').classList.toggle('hidden',!admin);
  $('#moreLayout').classList.toggle('hidden',!admin);
+ $('#pinAdminCard').classList.toggle('hidden',!admin);
  stopCompanyCarousel();show('#layout');await loadPlots();await loadEnquiries();
  if(current.layout_storage_path)await loadPdfPath(current.layout_storage_path);else emptyLayout();
  setViewMode('live');
