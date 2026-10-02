@@ -959,9 +959,8 @@ function showDirectMain(){
  document.body.classList.add('public-preview');
  if($('#drawerMobile')) $('#drawerMobile').textContent='Infinity Tech';
  if($('#settingsMobile')) $('#settingsMobile').textContent='Main workspace';
- memberships=[];
- if($('#portfolioCount')) $('#portfolioCount').textContent='Main workspace';
- if($('#ventureList')) $('#ventureList').innerHTML='<div class="public-main-note"><div class="public-main-icon">∞</div><div><b>Welcome to Infinity Tech</b><span>Real Estate Solutions — venture planning, live inventory, enquiries, bookings and sales operations in one workspace.</span></div></div>';
+ memberships=[{venture_id:'local-siri-chandana',role:'owner',localMode:true,venture:{id:'local-siri-chandana',name:'Siri Chandana',location:'Kandukur',join_code:'LOCAL',layout_storage_path:null}}];
+ renderMemberships();
  try{renderLocations()}catch(e){}
  show('#ventures');
  try{startCompanyCarousel()}catch(e){}
