@@ -347,6 +347,10 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 .otp-timer{display:flex;justify-content:center;gap:6px;align-items:center;margin:10px 0 14px;font-size:9px;color:#8190a0}.otp-timer b{font-size:10px;color:#0f8a6a;background:#eaf8f3;padding:4px 7px;border-radius:999px}.otp-resend{text-align:center!important;width:100%;margin-top:8px}.otp-security{text-align:center;border-top:1px solid #edf1f5;margin-top:18px;padding-top:13px;color:#93a0af;font-size:8px}
 @media(max-width:720px){.auth{margin-top:14px}.otp-login-card{border-radius:22px!important}.otp-welcome h2,.otp-verify-top h2{font-size:27px}}
 
+
+/* ===== temporary local mobile PIN lock ===== */
+#ownerSetupLink{width:100%;text-align:center;margin-top:10px}.otp-login-card .btn.secondary{margin-top:8px}
+
 </style>
 </head>
 <body>
@@ -370,25 +374,35 @@ body.reduce-motion .carousel-track,body.reduce-motion .showcase-slide,body.reduc
 <div class="page auth">
   <div class="card otp-login-card">
     <div class="otp-brand"><div class="otp-brandmark">∞</div><div><span>Infinity Tech</span><small>Real Estate Solutions</small></div></div>
-    <div id="mobileEntryPanel">
-      <div class="otp-welcome"><span class="eyebrow">Secure access</span><h2>Welcome back</h2><p>Enter your Indian mobile number. We’ll send a one-time password to sign you in.</p></div>
+
+    <div id="pinLoginPanel">
+      <div class="otp-welcome"><span class="eyebrow">Secure access</span><h2>Welcome back</h2><p>Enter your registered mobile number and 6-digit PIN.</p></div>
       <div class="form">
         <label>Mobile number</label>
-        <div class="phonefield otp-phone"><span class="phoneprefix">+91</span><input id="loginMobile" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="9876543210"></div>
-        <div class="phonehint">10-digit Indian mobile number</div>
-        <button id="sendLoginOtp" class="btn primary otp-main-btn" type="button">Send OTP</button>
+        <div class="phonefield otp-phone"><span class="phoneprefix">+91</span><input id="loginMobile" inputmode="numeric" maxlength="10" placeholder="9876543210"></div>
+        <label>6-digit PIN</label>
+        <div class="password-wrap"><input id="loginPin" type="password" inputmode="numeric" maxlength="6" placeholder="••••••"><button id="toggleLoginPin" class="password-toggle" type="button">Show</button></div>
+        <button id="unlockApp" class="btn primary otp-main-btn" type="button">Continue</button>
+      </div>
+      <button id="ownerSetupLink" class="linkbtn" type="button">Existing owner? Set up mobile PIN</button>
+    </div>
+
+    <div id="ownerSetupPanel" class="hidden">
+      <div class="otp-welcome"><span class="eyebrow">One-time setup</span><h2>Connect your owner account</h2><p>Use your existing account once. After this, this device will open with mobile + PIN.</p></div>
+      <div class="form">
+        <label>Existing email</label><input id="setupEmail" type="email" autocomplete="email">
+        <label>Existing password</label>
+        <div class="password-wrap"><input id="setupPassword" type="password" autocomplete="current-password"><button id="toggleSetupPassword" class="password-toggle" type="button">Show</button></div>
+        <label>Mobile number</label><div class="phonefield otp-phone"><span class="phoneprefix">+91</span><input id="setupMobile" inputmode="numeric" maxlength="10" placeholder="9876543210"></div>
+        <label>Create 6-digit PIN</label><div class="password-wrap"><input id="setupPin" type="password" inputmode="numeric" maxlength="6" placeholder="••••••"><button id="toggleSetupPin" class="password-toggle" type="button">Show</button></div>
+        <label>Confirm PIN</label><input id="setupPin2" type="password" inputmode="numeric" maxlength="6" placeholder="••••••">
+        <button id="saveLocalPin" class="btn primary otp-main-btn" type="button">Save mobile PIN</button>
+        <button id="cancelOwnerSetup" class="btn secondary" type="button">Back</button>
       </div>
     </div>
 
-    <div id="otpVerifyPanel" class="hidden">
-      <div class="otp-verify-top"><button id="changeOtpPhone" class="otp-back" type="button">‹</button><div><span class="eyebrow">Verification</span><h2>Enter OTP</h2><p>We sent a 6-digit code to <b id="otpPhoneLabel"></b></p></div></div>
-      <div class="otp-code-wrap"><input id="loginOtp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></div>
-      <div class="otp-timer"><span>Code valid for</span><b id="otpCountdown">60s</b></div>
-      <button id="verifyLoginOtp" class="btn primary otp-main-btn" type="button">Verify & continue</button>
-      <button id="resendLoginOtp" class="linkbtn otp-resend" type="button" disabled>Resend OTP in 60s</button>
-    </div>
     <div id="authMsg" class="msg"></div>
-    <div class="otp-security">🔒 Secure mobile verification powered by Infinity Tech</div>
+    <div class="otp-security">🔒 Temporary secure app lock for this device</div>
   </div>
 </div>
 </section>
@@ -637,135 +651,104 @@ const validIndianMobile=v=>/^[6-9][0-9]{9}$/.test(String(v||''));
 const indianE164=v=>validIndianMobile(v)?'+91'+v:null;
 let session=null,memberships=[],membership=null,current=null,plots=[],enquiries=[],channel=null,pdfPage=null,scale=1,marking=false,start=null,box=null,pending=null,selected=null,selectedEnquiry=null,tempStatus='available',viewMode='live',workspaceTab='dashboard',carouselIndex=0,carouselTimer=null;
 
-let loginOtpCooldown=null;
-let otpPhone='';
+const DEVICE_PIN_KEY='infinitytech_device_pin_v1';
+let appUnlocked=false;
 
-function resetSignedOutUi(){
- cleanup();
- current=null;membership=null;selected=null;pending=null;
- $('#sub').textContent='Real Estate Solutions';
- $('#logout').classList.add('hidden');
- $('#menuBtn').classList.add('hidden');
- $('#loginMobile').value='';
- $('#loginOtp').value='';
- $('#otpVerifyPanel').classList.add('hidden');
- $('#mobileEntryPanel').classList.remove('hidden');
- $('#otpCountdown').textContent='60s';
+function onlyDigits(el,max){el.oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,max)}
+['#loginMobile','#loginPin','#setupMobile','#setupPin','#setupPin2'].forEach((s,i)=>onlyDigits($(s),i===0||i===2?10:6));
+
+function toggleSecret(btnSel,inputSel){
+ $(btnSel).onclick=()=>{const el=$(inputSel),show=el.type==='text';el.type=show?'password':'text';$(btnSel).textContent=show?'Show':'Hide'};
+}
+toggleSecret('#toggleLoginPin','#loginPin');
+toggleSecret('#toggleSetupPassword','#setupPassword');
+toggleSecret('#toggleSetupPin','#setupPin');
+
+const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a)));
+async function derivePin(pin,salt){
+ const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(pin),'PBKDF2',false,['deriveBits']);
+ const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:new TextEncoder().encode(salt),iterations:120000,hash:'SHA-256'},key,256);
+ return b64(bits);
+}
+function readDevicePin(){try{return JSON.parse(localStorage.getItem(DEVICE_PIN_KEY)||'null')}catch{return null}}
+async function saveDevicePin(mobile,pin){
+ const salt=crypto.randomUUID();
+ const hash=await derivePin(pin,salt);
+ localStorage.setItem(DEVICE_PIN_KEY,JSON.stringify({mobile:'+91'+mobile,salt,hash}));
+}
+async function verifyDevicePin(mobile,pin){
+ const saved=readDevicePin();if(!saved)return false;
+ if(saved.mobile!=='+91'+mobile)return false;
+ return (await derivePin(pin,saved.salt))===saved.hash;
+}
+
+function showPinLogin(){
+ $('#ownerSetupPanel').classList.add('hidden');
+ $('#pinLoginPanel').classList.remove('hidden');
  $('#authMsg').textContent='';
- if(loginOtpCooldown)clearInterval(loginOtpCooldown);
  show('#auth');
 }
-
-function startLoginOtpTimer(){
- let left=60;
- const resend=$('#resendLoginOtp'),count=$('#otpCountdown');
- clearInterval(loginOtpCooldown);
- resend.disabled=true;
- resend.textContent='Resend OTP in 60s';
- count.textContent='60s';
- loginOtpCooldown=setInterval(()=>{
-   left--;
-   count.textContent=left+'s';
-   if(left<=0){
-     clearInterval(loginOtpCooldown);
-     count.textContent='Expired';
-     resend.disabled=false;
-     resend.textContent='Resend OTP';
-   }else{
-     resend.textContent='Resend OTP in '+left+'s';
-   }
- },1000);
+function resetSignedOutUi(){
+ cleanup();current=null;membership=null;selected=null;pending=null;appUnlocked=false;
+ $('#sub').textContent='Real Estate Solutions';
+ $('#logout').classList.add('hidden');$('#menuBtn').classList.add('hidden');
+ $('#loginPin').value='';$('#authMsg').textContent='';
+ const saved=readDevicePin();
+ if(saved){$('#loginMobile').value=saved.mobile.replace('+91','');$('#ownerSetupLink').classList.add('hidden')}
+ else {$('#loginMobile').value='';$('#ownerSetupLink').classList.remove('hidden')}
+ showPinLogin();
 }
 
-$('#loginMobile').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,10);
-$('#loginOtp').oninput=e=>{
- e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);
- if(e.target.value.length===6)$('#verifyLoginOtp').focus();
-};
+$('#ownerSetupLink').onclick=()=>{$('#pinLoginPanel').classList.add('hidden');$('#ownerSetupPanel').classList.remove('hidden');$('#authMsg').textContent=''};
+$('#cancelOwnerSetup').onclick=showPinLogin;
 
-async function sendPhoneOtp(){
- const mobile=$('#loginMobile').value.trim();
- if(!validIndianMobile(mobile)){
-   $('#authMsg').textContent='Enter a valid 10-digit Indian mobile number.';
-   $('#loginMobile').focus();
-   return;
- }
- otpPhone='+91'+mobile;
- $('#sendLoginOtp').disabled=true;
- $('#sendLoginOtp').textContent='Sending OTP…';
- $('#authMsg').textContent='';
- const {error}=await sb.auth.signInWithOtp({phone:otpPhone,options:{shouldCreateUser:true}});
- $('#sendLoginOtp').disabled=false;
- $('#sendLoginOtp').textContent='Send OTP';
- if(error){
-   $('#authMsg').textContent=error.message;
-   return;
- }
- $('#otpPhoneLabel').textContent='+91 '+mobile;
- $('#mobileEntryPanel').classList.add('hidden');
- $('#otpVerifyPanel').classList.remove('hidden');
- $('#loginOtp').value='';
- $('#authMsg').textContent='OTP sent successfully.';
- startLoginOtpTimer();
- setTimeout(()=>$('#loginOtp').focus(),120);
-}
-
-$('#sendLoginOtp').onclick=sendPhoneOtp;
-$('#resendLoginOtp').onclick=sendPhoneOtp;
-$('#changeOtpPhone').onclick=()=>{
- if(loginOtpCooldown)clearInterval(loginOtpCooldown);
- $('#otpVerifyPanel').classList.add('hidden');
- $('#mobileEntryPanel').classList.remove('hidden');
- $('#loginOtp').value='';
- $('#authMsg').textContent='';
- setTimeout(()=>$('#loginMobile').focus(),80);
-};
-
-$('#verifyLoginOtp').onclick=async()=>{
- const token=$('#loginOtp').value.trim();
- if(!otpPhone){$('#authMsg').textContent='Enter your mobile number and request an OTP first.';return}
- if(!/^\d{6}$/.test(token)){ $('#authMsg').textContent='Enter the complete 6-digit OTP.';return }
- $('#verifyLoginOtp').disabled=true;
- $('#verifyLoginOtp').textContent='Verifying…';
- $('#authMsg').textContent='';
- const {data,error}=await sb.auth.verifyOtp({phone:otpPhone,token,type:'sms'});
- $('#verifyLoginOtp').disabled=false;
- $('#verifyLoginOtp').textContent='Verify & continue';
- if(error){
-   $('#authMsg').textContent=error.message;
-   return;
- }
- if(loginOtpCooldown)clearInterval(loginOtpCooldown);
+$('#saveLocalPin').onclick=async()=>{
+ const email=$('#setupEmail').value.trim(),password=$('#setupPassword').value,mobile=$('#setupMobile').value.trim(),pin=$('#setupPin').value,pin2=$('#setupPin2').value;
+ if(!email||!password){$('#authMsg').textContent='Enter your existing owner email and password.';return}
+ if(!validIndianMobile(mobile)){ $('#authMsg').textContent='Enter a valid 10-digit Indian mobile number.';return}
+ if(!/^\d{6}$/.test(pin)){ $('#authMsg').textContent='PIN must be exactly 6 digits.';return}
+ if(pin!==pin2){$('#authMsg').textContent='PIN confirmation does not match.';return}
+ $('#saveLocalPin').disabled=true;$('#saveLocalPin').textContent='Connecting…';$('#authMsg').textContent='';
+ const {data,error}=await sb.auth.signInWithPassword({email,password});
+ if(error||!data.session){$('#authMsg').textContent=error?.message||'Unable to sign in.';$('#saveLocalPin').disabled=false;$('#saveLocalPin').textContent='Save mobile PIN';return}
  session=data.session;
- $('#logout').classList.remove('hidden');
- $('#menuBtn').classList.remove('hidden');
+ await saveDevicePin(mobile,pin);
+ appUnlocked=true;
+ $('#logout').classList.remove('hidden');$('#menuBtn').classList.remove('hidden');
+ $('#saveLocalPin').disabled=false;$('#saveLocalPin').textContent='Save mobile PIN';
+ await loadMemberships();
+ toast('Mobile PIN enabled on this device');
+};
+
+$('#unlockApp').onclick=async()=>{
+ const mobile=$('#loginMobile').value.trim(),pin=$('#loginPin').value.trim();
+ if(!validIndianMobile(mobile)){ $('#authMsg').textContent='Enter a valid 10-digit Indian mobile number.';return}
+ if(!/^\d{6}$/.test(pin)){ $('#authMsg').textContent='Enter your 6-digit PIN.';return}
+ const currentSession=(await sb.auth.getSession()).data.session;
+ if(!currentSession){$('#authMsg').textContent='This device session expired. Use Existing owner setup once again.';$('#ownerSetupLink').classList.remove('hidden');return}
+ const ok=await verifyDevicePin(mobile,pin);
+ if(!ok){$('#authMsg').textContent='Incorrect mobile number or PIN.';return}
+ session=currentSession;appUnlocked=true;$('#authMsg').textContent='';
+ $('#logout').classList.remove('hidden');$('#menuBtn').classList.remove('hidden');
  await loadMemberships();
 };
 
 async function boot(){
  if(!sb){bootFailure('Secure login service did not load. Please refresh the page.');return}
- sb.auth.onAuthStateChange((event,s)=>{
-   session=s;
-   if(!s)resetSignedOutUi();
- });
- const r=await sb.auth.getSession();
- session=r.data.session;
- if(!session){resetSignedOutUi();return}
- $('#logout').classList.remove('hidden');
- $('#menuBtn').classList.remove('hidden');
- await loadMemberships();
+ sb.auth.onAuthStateChange((event,s)=>{session=s});
+ const r=await sb.auth.getSession();session=r.data.session;
+ resetSignedOutUi();
 }
 
 $('#logout').onclick=async()=>{
  closeSideMenu();
- $('#logout').disabled=true;
- await sb.auth.signOut();
- $('#logout').disabled=false;
+ appUnlocked=false;
+ $('#logout').classList.add('hidden');$('#menuBtn').classList.add('hidden');
  resetSignedOutUi();
 };
 
 async function loadMemberships(){
- const signedIdentity=session.user.phone?session.user.phone.replace('+91','+91 '):(session.user.email||'Signed in');
+ const localIdentity=readDevicePin()?.mobile; const signedIdentity=localIdentity?localIdentity.replace('+91','+91 '):(session.user.phone?session.user.phone.replace('+91','+91 '):(session.user.email||'Signed in'));
  $('#who').textContent=signedIdentity;
  $('#drawerEmail').textContent=signedIdentity;
  $('#settingsEmail').textContent=signedIdentity;
