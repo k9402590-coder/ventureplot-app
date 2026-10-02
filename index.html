@@ -949,23 +949,22 @@ $('#createPinUser').onclick=async()=>{
 };
 
 function showDirectMain(){
- cleanup();
+ try{cleanup()}catch(e){}
  current=null;membership=null;selected=null;pending=null;
- $('#sub').textContent='Real Estate Solutions';
- $('#auth').classList.add('hidden');
- $('#layout').classList.add('hidden');
- $('#logout').classList.add('hidden');
- $('#menuBtn').classList.remove('hidden');
+ if($('#sub')) $('#sub').textContent='Real Estate Solutions';
+ if($('#auth')) $('#auth').classList.add('hidden');
+ if($('#layout')) $('#layout').classList.add('hidden');
+ if($('#logout')) $('#logout').classList.add('hidden');
+ if($('#menuBtn')) $('#menuBtn').classList.remove('hidden');
  document.body.classList.add('public-preview');
- $('#who').textContent='';
- $('#drawerMobile').textContent='Infinity Tech';
- $('#settingsMobile').textContent='Main workspace';
+ if($('#drawerMobile')) $('#drawerMobile').textContent='Infinity Tech';
+ if($('#settingsMobile')) $('#settingsMobile').textContent='Main workspace';
  memberships=[];
- $('#portfolioCount').textContent='Main workspace';
- $('#ventureList').innerHTML='<div class="public-main-note"><div class="public-main-icon">∞</div><div><b>Welcome to Infinity Tech</b><span>Real Estate Solutions — venture planning, live inventory, enquiries, bookings and sales operations in one workspace.</span></div></div>';
- renderLocations();
+ if($('#portfolioCount')) $('#portfolioCount').textContent='Main workspace';
+ if($('#ventureList')) $('#ventureList').innerHTML='<div class="public-main-note"><div class="public-main-icon">∞</div><div><b>Welcome to Infinity Tech</b><span>Real Estate Solutions — venture planning, live inventory, enquiries, bookings and sales operations in one workspace.</span></div></div>';
+ try{renderLocations()}catch(e){}
  show('#ventures');
- startCompanyCarousel();
+ try{startCompanyCarousel()}catch(e){}
  window.scrollTo({top:0,behavior:'auto'});
 }
 
@@ -995,11 +994,11 @@ $('#logout').onclick=async()=>{
 
 async function loadMemberships(){
  const metaMobile=session.user?.user_metadata?.login_mobile; const signedIdentity=metaMobile?String(metaMobile).replace('+91','+91 '):('+91 '+readSavedMobile());
- $('#who').textContent=signedIdentity;
+ if($('#who')) $('#who').textContent=signedIdentity;
  $('#drawerMobile').textContent=signedIdentity;
  $('#settingsMobile').textContent=signedIdentity;
  const {data,error}=await sb.from('venture_members').select('venture_id,role,ventures(id,name,location,join_code,layout_storage_path)').eq('user_id',session.user.id);
- if(error){toast(error.message);return}
+ if(error){toast(error.message);showDirectMain();return}
  memberships=(data||[]).map(x=>({venture_id:x.venture_id,role:x.role,venture:x.ventures}));
  $('#sub').textContent='Real Estate Solutions'; renderMemberships();renderLocations();show('#ventures'); startCompanyCarousel();
 }
@@ -1454,5 +1453,6 @@ $('#moreLayout').onclick=()=>{setWorkspaceTab('plots');setTimeout(()=>setViewMod
 ['#enquirySearch','#enquiryStatus'].forEach(s=>$(s).addEventListener('input',renderFollowups));
 boot();
 </script>
+<div id="buildMarker" style="display:none">build-9</div>
 </body>
 </html>
